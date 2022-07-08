@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <aifadian>
+        <add key="userId" value="爱发电UserID" />
+        <add key="token" value="爱发电Token" />
+    </aifadian>
+</configuration>

@@ -1,0 +1,176 @@
+﻿<UserControl x:Class="XoW.Views.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:XoW"
+             xmlns:localModel="using:XoW.Models"
+             xmlns:localServices="using:XoW.Services"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <localServices:CookieNameConverter x:Key="CookieNameConverter" />
+        <localServices:CollapseItemWhenListIsEmptyConverter x:Key="CollapseItemWhenListIsEmptyConverter" />
+        <localServices:ShowItemWhenListIsEmptyConverter x:Key="ShowItemWhenListIsEmptyConverter" />
+        <localServices:AiFaDianAvatarToThumbConverter x:Key="AiFaDianAvatarToThumbConverter" />
+    </UserControl.Resources>
+
+    <Grid x:Name="SettingsGrid"
+          HorizontalAlignment="Stretch"
+          Margin="40, 0, 0, 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.5*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="ConfigurationItemsGrid"
+              Grid.Column="0"
+              BorderThickness="0, 0, 1, 0"
+              BorderBrush="Gray"
+              Padding="20">
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontSize="30"
+                           FontWeight="Bold"
+                           Padding="0, 5"
+                           Text="设定" />
+                <TextBlock FontSize="20"
+                           FontWeight="Bold"
+                           Text="常规" />
+                <StackPanel Padding="0, 5"
+                            Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleSwitch x:Name="ToggleSwitchNightMode"
+                                      Header="夜间模式"
+                                      Toggled="OnNightModeSwitchToggled"
+                                      Loaded="OnNightModeSwitchLoaded" />
+                    </StackPanel>
+                </StackPanel>
+                <TextBlock FontSize="20"
+                           FontWeight="Bold"
+                           Text="订阅设定" />
+                <StackPanel Orientation="Vertical">
+                    <TextBox x:Name="TextBoxSubscriptionId"
+                             VerticalAlignment="Stretch"
+                             HorizontalAlignment="Stretch"
+                             IsSpellCheckEnabled="False"
+                             IsTextPredictionEnabled="False"
+                             TextWrapping="Wrap"
+                             Header="{x:Bind local:ComponentContent.SubscriptionId}"
+                             Text="{x:Bind local:GlobalState.ObservableObject.SubscriptionId, Mode=TwoWay}"
+                             TextChanged="OnSubscriptionIdTextBoxTextChanged" />
+                    <TextBlock Text="{x:Bind local:ComponentContent.SubscriptionRecommendation}" />
+                    <TextBlock Text="{x:Bind local:ComponentContent.EmptySubscriptionWarning}" />
+                    <Button x:Name="ButtonGenerateSubscriptionId"
+                            Margin="0, 5"
+                            HorizontalAlignment="Stretch"
+                            Content="{x:Bind local:ComponentContent.GenerateSubscriptionId}"
+                            Click="OnGenerateSubscriptionButtonClicked" />
+                </StackPanel>
+                <TextBlock FontSize="20"
+                           FontWeight="Bold"
+                           Text="饼干管理" />
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="ButtonLoadImage"
+                            Content="从图库选择二维码"
+                            Margin="0, 5, 5, 5"
+                            Click="OnLoadImageButtonClicked" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="当前饼干：" />
+                        <TextBlock VerticalAlignment="Center"
+                                   FontWeight="Bold"
+                                   Text="{x:Bind local:GlobalState.ObservableObject.CurrentCookie, Mode=OneWay, Converter={StaticResource CookieNameConverter}}" />
+                    </StackPanel>
+                </StackPanel>
+                <ListView x:Name="ListViewCookies"
+                          HorizontalAlignment="Stretch"
+                          SelectionMode="None"
+                          ItemsSource="{x:Bind local:GlobalState.Cookies}"
+                          IsItemClickEnabled="True"
+                          ItemClick="OnCookieClicked">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="CookieListViewTemplate"
+                                      x:DataType="localModel:AnoBbsCookie">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal"
+                                            Grid.Column="0">
+                                    <TextBlock VerticalAlignment="Center"
+                                               Text="{x:Bind Name}"
+                                               DataContext="{x:Bind Name}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            FlowDirection="RightToLeft"
+                                            Grid.Column="1">
+                                    <Button x:Name="ButtonDeleteCookie"
+                                            Background="Transparent"
+                                            HorizontalAlignment="Right"
+                                            DataContext="{x:Bind Name}"
+                                            Click="OnDeleteCookieButtonClicked">
+                                        <SymbolIcon Symbol="Delete" />
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1"
+              Padding="20">
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontSize="30"
+                           FontWeight="Bold"
+                           Text="关于" />
+                <TextBlock Text="一个开放源代码的，使用UWP构建的X岛客户端。" />
+                <HyperlinkButton NavigateUri="{x:Bind local:Url.GitHubRepo}">
+                    <TextBlock Text="{x:Bind local:ComponentContent.GitHubRepo}" />
+                </HyperlinkButton>
+                <HyperlinkButton NavigateUri="{x:Bind local:Url.AiFaDianHomepage}">
+                    <TextBlock Text="{x:Bind local:ComponentContent.SponsorOnAiFaDian}" />
+                </HyperlinkButton>
+                <TextBlock FontSize="20"
+                           FontWeight="Bold"
+                           Text="赞助了我的肥肥们" />
+                <ListView x:Name="ListViewSponsorList"
+                          Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
+                          SelectionMode="None"
+                          HorizontalAlignment="Stretch"
+                          IsItemClickEnabled="False"
+                          ItemsSource="{x:Bind local:GlobalState.AiFaDianSponsoredUsers, Mode=OneWay}"
+                          Visibility="{x:Bind local:GlobalState.AiFaDianSponsoredUsers, Mode=OneWay, Converter={StaticResource CollapseItemWhenListIsEmptyConverter}}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="localModel:AiFaDianUser">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0, 2">
+                                <Image Margin="1">
+                                    <Image.Source>
+                                        <BitmapImage
+                                            UriSource="{x:Bind Avatar, Mode=OneWay, Converter={StaticResource AiFaDianAvatarToThumbConverter}}" />
+                                    </Image.Source>
+                                </Image>
+                                <TextBlock Text="{x:Bind Name, Mode=OneWay}"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <TextBlock x:Name="TextBlockNoSponsorYet"
+                           HorizontalAlignment="Center"
+                           Visibility="{x:Bind local:GlobalState.AiFaDianSponsoredUsers, Mode=OneWay, Converter={StaticResource ShowItemWhenListIsEmptyConverter}}"
+                           Text="暂时还没有人赞助呢......" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

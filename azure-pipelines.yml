@@ -1,0 +1,52 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'x86|x64|ARM|ARM64'
+  buildConfiguration: 'Release'
+  appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: DownloadSecureFile@1
+  name: AppConfig
+  displayName: Download AppConfig.xml from Secure File
+  inputs:
+    secureFile: AppConfig.xml
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Agent.TempDirectory)'
+    Contents: AppConfig.xml
+    TargetFolder: '$(Build.SourcesDirectory)\XoW\'
+
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    configuration: '$(buildConfiguration)'
+    msbuildArgs: >- 
+      /p:AppxBundlePlatforms="$(buildPlatform)" 
+      /p:AppxPackageDir="$(appxPackageDir)" 
+      /p:AppxBundle=Always
+      /p:UapAppxPackageBuildMode=StoreUpload
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '**\bin\$(BuildConfiguration)\**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    pathToPublish: '$(build.artifactstagingdirectory)'
