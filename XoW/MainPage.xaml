@@ -1,0 +1,88 @@
+﻿<Page x:Class="XoW.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      xmlns:local="using:XoW"
+      xmlns:localServices="using:XoW.Services"
+      d:DataContext="{d:DesignInstance local:DesignTimeData, IsDesignTimeCreatable=True}"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid x:Name="RootGrid">
+        <Grid x:Name="ContentGrid"
+              HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.5*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal"
+                        x:Name="ThreadTopBar"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Margin="40, 0, 0, 0"
+                        Background="LightGray"
+                        BorderThickness="5, 5, 10, 5"
+                        BorderBrush="LightGray"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FlowDirection="RightToLeft">
+                <Button x:Name="ButtonRefreshThread"
+                        Margin="5, 0, 5, 0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        Click="{x:Bind OnRefreshThreadButtonClicked}"
+                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.RefreshThreadButtonTooltipContent}">
+                    <SymbolIcon Symbol="Refresh" />
+                </Button>
+                <Button x:Name="ButtonCreateThread"
+                        Margin="0, 0, 5, 0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateThreadButtonTooltipContent}">
+                    <SymbolIcon Symbol="Edit" />
+                </Button>
+            </StackPanel>
+
+            <ListView x:Name="ThreadsListView"
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      SelectionMode="Single"
+                      BorderBrush="LightGray"
+                      BorderThickness="10, 0, 10, 10"
+                      HorizontalAlignment="Stretch"
+                      Width="Auto"
+                      Margin="40, 0, 0, 0"
+                      IsItemClickEnabled="True"
+                      ItemClick="{x:Bind OnThreadClicked}">
+            </ListView>
+
+            <ListView x:Name="Replies"
+                      Grid.Column="1"
+                      SelectionMode="None"
+                      BorderBrush="LightGray"
+                      BorderThickness="10"
+                      HorizontalAlignment="Stretch"
+                      Width="Auto"
+                      Visibility="Collapsed">
+            </ListView>
+        </Grid>
+
+        <ProgressBar x:Name="MainPageProgressBar"
+                     IsIndeterminate="True"
+                     VerticalAlignment="Top" />
+
+        <NavigationView Name="ForumListNavigation"
+                        PaneTitle="{x:Bind local:Constants.ForumName, Mode=OneTime}"
+                        PaneDisplayMode="LeftCompact"
+                        IsBackButtonVisible="Collapsed"
+                        ItemInvoked="NavigationItemInvokedAsync"
+                        MenuItemsSource="{x:Bind _navigationItems, Mode=OneWay}"
+                        Grid.ColumnSpan="2" />
+    </Grid>
+</Page>
