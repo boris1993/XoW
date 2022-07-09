@@ -82,7 +82,7 @@ namespace XoW
             else
             {
                 ButtonCreateThread.IsEnabled = true;
-                (await AnonBbsApiClient.GetThreadsAsync(_currentForumId)).ForEach(ft => _threads.Add(ft));
+                (await AnonBbsApiClient.GetThreadsAsync(_currentForumId, _currentThreadPage.CurrentPage)).ForEach(ft => _threads.Add(ft));
                 GenerateThreadsInListView();
             }
 

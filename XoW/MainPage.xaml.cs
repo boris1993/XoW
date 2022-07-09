@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.Globalization.NumberFormatting;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -20,10 +21,20 @@ namespace XoW
         private string _cdnUrl;
         private string _currentForumId = "-1";
         private string _currentThreadId = "";
+        private ObservableCurrentThreadPage _currentThreadPage = new ObservableCurrentThreadPage { CurrentPage = 1 };
 
         public MainPage()
         {
             InitializeComponent();
+
+            ThreadPageNumberTextBox.NumberFormatter = new DecimalFormatter
+            {
+                FractionDigits = 0,
+                NumberRounder = new IncrementNumberRounder
+                {
+                    RoundingAlgorithm = RoundingAlgorithm.RoundDown
+                },
+            };
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -49,7 +60,7 @@ namespace XoW
             if (args.IsSettingsInvoked)
             {
                 // Go to the settings page
-
+                return;
             }
 
             _currentForumId = args.InvokedItemContainer.DataContext.ToString();
@@ -58,6 +69,8 @@ namespace XoW
 
         private async void OnThreadClicked(object sender, ItemClickEventArgs args)
         {
+            MainPageProgressBar.Visibility = Visibility.Visible;
+
             var threadId = ((Grid)args.ClickedItem)
                 .Children
                 .Where(element => element is Grid grid && grid.Name == "threadHeaderGrid")
@@ -75,11 +88,42 @@ namespace XoW
             await RefreshReplies();
             Replies.Visibility = Visibility.Visible;
             ReplyTopBar.Visibility = Visibility.Visible;
+
+            MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
         private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args) => await RefreshThreads();
 
         private async void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => await RefreshReplies();
 
+        private async void OnThreadPrevPageButtonClicked(object sender, RoutedEventArgs args)
+        {
+            ButtonThreadPrevPage.IsEnabled = false;
+            ButtonThreadNextPage.IsEnabled = false;
+
+            _currentThreadPage.CurrentPage--;
+
+            if (_currentThreadPage.CurrentPage > 1)
+            {
+                ButtonThreadPrevPage.IsEnabled = true;
+            }
+
+            ButtonThreadNextPage.IsEnabled = true;
+        }
+
+        private async void OnThreadNextPageButtonClicked(object sender, RoutedEventArgs args)
+        {
+            ButtonThreadPrevPage.IsEnabled = false;
+            ButtonThreadNextPage.IsEnabled = false;
+
+            _currentThreadPage.CurrentPage++;
+
+            if (_currentThreadPage.CurrentPage > 1)
+            {
+                ButtonThreadPrevPage.IsEnabled = true;
+            }
+
+            ButtonThreadNextPage.IsEnabled = true;
+        }
     }
 }

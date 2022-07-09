@@ -130,6 +130,8 @@
     <Compile Include="Models\CdnUrl.cs" />
     <Compile Include="Models\ForumGroup.cs" />
     <Compile Include="Models\ForumThread.cs" />
+    <Compile Include="Models\ObservableCurrentThreadPage.cs" />
+    <Compile Include="Models\ObservableObject.cs" />
     <Compile Include="Models\ThreadReply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleDataForDesigner.cs" />
@@ -183,6 +185,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp">
+      <Version>7.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.UI.Xaml">
       <Version>2.7.1</Version>

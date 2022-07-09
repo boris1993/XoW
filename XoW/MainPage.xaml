@@ -6,8 +6,12 @@
       mc:Ignorable="d"
       xmlns:local="using:XoW"
       xmlns:localServices="using:XoW.Services"
-      d:DataContext="{d:DesignInstance local:DesignTimeData, IsDesignTimeCreatable=True}"
+      xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <localServices:ThreadPrevPageButtonEnableStateConverter x:Key="ThreadPrevPageButtonEnableStateConverter" />
+    </Page.Resources>
 
     <Grid x:Name="RootGrid">
         <Grid x:Name="ContentGrid"
@@ -22,34 +26,78 @@
             </Grid.RowDefinitions>
 
             <!--#region 左边串列表 -->
-            <StackPanel Orientation="Horizontal"
-                        x:Name="ThreadTopBar"
-                        Grid.Column="0"
-                        Grid.Row="0"
-                        Margin="40, 0, 0, 0"
-                        Background="LightGray"
-                        BorderThickness="5, 5, 10, 5"
-                        BorderBrush="LightGray"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        FlowDirection="RightToLeft">
-                <Button x:Name="ButtonRefreshThread"
-                        Margin="5, 0, 5, 0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Stretch"
-                        Click="{x:Bind OnRefreshThreadButtonClicked}"
-                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.RefreshThreadButtonTooltipContent}">
-                    <SymbolIcon Symbol="Refresh" />
-                </Button>
-                <Button x:Name="ButtonCreateThread"
-                        Margin="0, 0, 5, 0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Stretch"
-                        IsEnabled="False"
-                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateThreadButtonTooltipContent}">
-                    <SymbolIcon Symbol="Edit" />
-                </Button>
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="0.5*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal"
+                            x:Name="ThreadPageTopBar"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Margin="40, 0, 0, 0"
+                            Background="LightGray"
+                            BorderThickness="5, 5, 10, 5"
+                            BorderBrush="LightGray"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            FlowDirection="LeftToRight">
+                    <Button x:Name="ButtonThreadPrevPage"
+                            Margin="5, 0, 5, 0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch"
+                            IsEnabled="False"
+                            Click="{x:Bind OnThreadPrevPageButtonClicked}"
+                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.RefreshThreadButtonTooltipContent}">
+                        <SymbolIcon Symbol="Back" />
+                    </Button>
+                    <muxc:NumberBox x:Name="ThreadPageNumberTextBox"
+                                    Margin="0, 0, 5, 0"
+                                    Minimum="1"
+                                    ValidationMode="InvalidInputOverwritten"
+                                    Value="{x:Bind _currentThreadPage.CurrentPage, Mode=TwoWay}" />
+                    <Button x:Name="ButtonThreadNextPage"
+                            Margin="0, 0, 5, 0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch"
+                            Click="{x:Bind OnThreadNextPageButtonClicked}"
+                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateThreadButtonTooltipContent}">
+                        <SymbolIcon Symbol="Forward" />
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            x:Name="ThreadTopBar"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Background="LightGray"
+                            BorderThickness="5, 5, 10, 5"
+                            BorderBrush="LightGray"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            FlowDirection="RightToLeft">
+                    <Button x:Name="ButtonRefreshThread"
+                            Margin="5, 0, 5, 0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch"
+                            Click="{x:Bind OnRefreshThreadButtonClicked}"
+                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.RefreshThreadButtonTooltipContent}">
+                        <SymbolIcon Symbol="Refresh" />
+                    </Button>
+                    <Button x:Name="ButtonCreateThread"
+                            Margin="0, 0, 5, 0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch"
+                            IsEnabled="False"
+                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateThreadButtonTooltipContent}">
+                        <SymbolIcon Symbol="Edit" />
+                    </Button>
+                </StackPanel>
+            </Grid>
 
             <ListView x:Name="ThreadsListView"
                       Grid.Column="0"
@@ -61,6 +109,7 @@
                       Width="Auto"
                       Margin="40, 0, 0, 0"
                       IsItemClickEnabled="True"
+                      DataFetchSize="1"
                       ItemClick="{x:Bind OnThreadClicked}">
             </ListView>
             <!--#endregion-->
