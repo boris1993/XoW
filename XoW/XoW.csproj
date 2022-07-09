@@ -126,6 +126,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainPageHelper.cs" />
     <Compile Include="Models\CdnUrl.cs" />
     <Compile Include="Models\ForumGroup.cs" />
     <Compile Include="Models\ForumThread.cs" />
