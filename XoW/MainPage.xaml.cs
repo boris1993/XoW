@@ -15,6 +15,7 @@ namespace XoW
     {
         private readonly ObservableCollection<NavigationViewItemBase> _navigationItems = new ObservableCollection<NavigationViewItemBase>();
         private readonly ObservableCollection<ForumThread> _threads = new ObservableCollection<ForumThread>();
+        private readonly ObservableCollection<ForumThread> _replies = new ObservableCollection<ForumThread>();
         private readonly Dictionary<string, int> _forumAndIdLookup = new Dictionary<string, int>();
 
         private string _cdnUrl;
@@ -43,11 +44,7 @@ namespace XoW
             localSettings.Values[Constants.SettingsKeyCdn] = _cdnUrl;
         }
 
-        private async Task<string> GetCdnUrl()
-        {
-            var cdnLookup = await AnonBbsApiClient.GetCdnAsync();
-            return cdnLookup.First().Url;
-        }
+        private async Task<string> GetCdnUrl() => (await AnonBbsApiClient.GetCdnAsync()).First().Url;
 
         private async Task RefreshForumsAsync()
         {
@@ -170,12 +167,11 @@ namespace XoW
                 .DataContext
                 .ToString();
 
-            var reply = await AnonBbsApiClient.GetReplies(threadId, 1);
+            var replies = await AnonBbsApiClient.GetReplies(threadId, 1);
+
+
         }
 
-        private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs e)
-        {
-            await RefreshThreads();
-        }
+        private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs e) => await RefreshThreads();
     }
 }

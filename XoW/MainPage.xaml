@@ -44,6 +44,7 @@
                         Margin="0, 0, 5, 0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Stretch"
+                        IsEnabled="False"
                         ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateThreadButtonTooltipContent}">
                     <SymbolIcon Symbol="Edit" />
                 </Button>
