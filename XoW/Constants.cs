@@ -52,6 +52,8 @@
     public static class TooltipContents
     {
         public const string CreateThreadButtonTooltipContent = "创建新串";
+        public const string CreateReplyButtonTooltipContent = "创建回复";
         public const string RefreshThreadButtonTooltipContent = "刷新";
+        public const string AddToFavouritesButtonTooltipContent = "收藏";
     }
 }

@@ -25,7 +25,7 @@ namespace XoW
             // another one for the content
             foreach (var thread in threads)
             {
-                var parentGridForThisThread = BuildThreadParentGrid();
+                var parentGridForThisThread = BuildThreadParentGrid(thread);
 
                 #region 第一行，包括饼干，标题，发串日期
                 var headerGridForThisThread = BuildThreadHeaderGrid(thread, forumLookup);
@@ -38,6 +38,33 @@ namespace XoW
                 #endregion
 
                 gridsInTheListView.Add(parentGridForThisThread);
+            }
+
+            return gridsInTheListView;
+        }
+
+        public static List<Grid> BuildGridForReply(ThreadReply threadReply, string cdnUrl, Dictionary<string, int> forumLookup)
+        {
+            var gridsInTheListView = new List<Grid>();
+
+            var firstThreadGrid = BuildThreadParentGrid(threadReply);
+            var headerGridForTheFirstGrid = BuildThreadHeaderGrid(threadReply, forumLookup);
+            var contentGridForTheFirstGrid = BuildThreadContentGrid(threadReply, cdnUrl);
+            firstThreadGrid.Children.Add(headerGridForTheFirstGrid);
+            firstThreadGrid.Children.Add(contentGridForTheFirstGrid);
+
+            gridsInTheListView.Add(firstThreadGrid);
+
+            foreach (var reply in threadReply.Replies)
+            {
+                var headerGrid = BuildThreadHeaderGrid(reply, forumLookup);
+                var contentGrid = BuildThreadContentGrid(reply, cdnUrl);
+
+                var replyGrid = BuildThreadParentGrid(reply);
+                replyGrid.Children.Add(headerGrid);
+                replyGrid.Children.Add(contentGrid);
+
+                gridsInTheListView.Add(replyGrid);
             }
 
             return gridsInTheListView;
@@ -221,9 +248,13 @@ namespace XoW
             return contentGridForThisThread;
         }
 
-        public static Grid BuildThreadParentGrid()
+        public static Grid BuildThreadParentGrid<T>(T thread) where T : ForumThread
         {
-            var parentGridForThisThread = new Grid { Margin = new Thickness(5) };
+            var parentGridForThisThread = new Grid
+            {
+                Margin = new Thickness(5),
+                DataContext = thread.Id,
+            };
 
             parentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { });
 

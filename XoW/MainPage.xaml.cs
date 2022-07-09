@@ -15,11 +15,11 @@ namespace XoW
     {
         private readonly ObservableCollection<NavigationViewItemBase> _navigationItems = new ObservableCollection<NavigationViewItemBase>();
         private readonly ObservableCollection<ForumThread> _threads = new ObservableCollection<ForumThread>();
-        private readonly ObservableCollection<ForumThread> _replies = new ObservableCollection<ForumThread>();
         private readonly Dictionary<string, int> _forumAndIdLookup = new Dictionary<string, int>();
 
         private string _cdnUrl;
-        private string currentForumId = "-1";
+        private string _currentForumId = "-1";
+        private string _currentThreadId = "";
 
         public MainPage()
         {
@@ -36,7 +36,7 @@ namespace XoW
             // 载入时间线第一页
             await RefreshThreads();
 
-            currentForumId = Constants.TimelineForumId;
+            _currentForumId = Constants.TimelineForumId;
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
 
@@ -108,7 +108,7 @@ namespace XoW
 
             _threads.Clear();
 
-            if (currentForumId == Constants.TimelineForumId)
+            if (_currentForumId == Constants.TimelineForumId)
             {
                 ButtonCreateThread.IsEnabled = false;
                 await LoadTimeline();
@@ -117,11 +117,19 @@ namespace XoW
             else
             {
                 ButtonCreateThread.IsEnabled = true;
-                (await AnonBbsApiClient.GetThreadsAsync(currentForumId)).ForEach(ft => _threads.Add(ft));
+                (await AnonBbsApiClient.GetThreadsAsync(_currentForumId)).ForEach(ft => _threads.Add(ft));
                 GenerateThreadsInListView();
             }
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        private async Task RefreshReplies()
+        {
+            var reply = await AnonBbsApiClient.GetReplies(_currentThreadId, 1);
+
+            var gridsForReplies = ComponentsBuilder.BuildGridForReply(reply, _cdnUrl, _forumAndIdLookup);
+            Replies.ItemsSource = gridsForReplies;
         }
 
         private async Task LoadTimeline()
@@ -149,7 +157,7 @@ namespace XoW
 
             }
 
-            currentForumId = args.InvokedItemContainer.DataContext.ToString();
+            _currentForumId = args.InvokedItemContainer.DataContext.ToString();
             await RefreshThreads();
         }
 
@@ -167,11 +175,15 @@ namespace XoW
                 .DataContext
                 .ToString();
 
-            var replies = await AnonBbsApiClient.GetReplies(threadId, 1);
+            _currentThreadId = threadId;
 
-
+            await RefreshReplies();
+            Replies.Visibility = Visibility.Visible;
+            ReplyTopBar.Visibility = Visibility.Visible;
         }
 
-        private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs e) => await RefreshThreads();
+        private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args) => await RefreshThreads();
+
+        private async void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => await RefreshReplies();
     }
 }

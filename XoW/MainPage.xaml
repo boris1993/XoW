@@ -21,6 +21,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
+            <!--#region 左边串列表 -->
             <StackPanel Orientation="Horizontal"
                         x:Name="ThreadTopBar"
                         Grid.Column="0"
@@ -62,16 +63,55 @@
                       IsItemClickEnabled="True"
                       ItemClick="{x:Bind OnThreadClicked}">
             </ListView>
+            <!--#endregion-->
 
+            <!--#region 右边回复列表 -->
+            <StackPanel Orientation="Horizontal"
+                        x:Name="ReplyTopBar"
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Background="LightGray"
+                        BorderThickness="5, 5, 10, 5"
+                        BorderBrush="LightGray"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        FlowDirection="RightToLeft"
+                        Visibility="Collapsed">
+                <Button x:Name="ButtonRefreshReplies"
+                        Margin="5, 0, 5, 0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        Click="{x:Bind OnRefreshRepliesButtonClicked}"
+                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.RefreshThreadButtonTooltipContent}">
+                    <SymbolIcon Symbol="Refresh" />
+                </Button>
+                <Button x:Name="ButtonCreateReply"
+                        Margin="0, 0, 5, 0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateReplyButtonTooltipContent}">
+                    <SymbolIcon Symbol="Edit" />
+                </Button>
+                <Button x:Name="ButtonAddToFavourites"
+                        Margin="0, 0, 5, 0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.AddToFavouritesButtonTooltipContent}">
+                    <SymbolIcon Symbol="Favorite" />
+                </Button>
+            </StackPanel>
+            
             <ListView x:Name="Replies"
                       Grid.Column="1"
+                      Grid.Row="1"
                       SelectionMode="None"
                       BorderBrush="LightGray"
-                      BorderThickness="10"
+                      BorderThickness="0, 0, 10, 10"
                       HorizontalAlignment="Stretch"
                       Width="Auto"
                       Visibility="Collapsed">
             </ListView>
+            <!--#endregion-->
         </Grid>
 
         <ProgressBar x:Name="MainPageProgressBar"
