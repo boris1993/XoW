@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using Microsoft.Toolkit.Uwp;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using XoW.Models;
 using XoW.Services;
 
 namespace XoW
@@ -13,12 +16,14 @@ namespace XoW
 
         private async Task RefreshForumsAsync()
         {
+            ForumAndIdLookup.Clear();
+
             var forumGroups = await AnonBbsApiClient.GetForumGroupsAsync();
 
             forumGroups
                 .SelectMany(fg => fg.Forums)
                 .ToList()
-                .ForEach(f => _forumAndIdLookup.Add(f.Name, f.Id));
+                .ForEach(f => ForumAndIdLookup.Add(f.Name, f.Id));
 
             // 版面组和版面按照Sort排序，保证以正确的顺序展示
             forumGroups.OrderBy(fg =>
@@ -67,23 +72,19 @@ namespace XoW
             ForumListNavigation.SelectedItem = _navigationItems.Where(item => item is NavigationViewItem).First();
         }
 
-        private async Task RefreshThreads()
+        private void RefreshThreads()
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
-            _threads.Clear();
-
-            if (_currentForumId == Constants.TimelineForumId)
+            if (CurrentForumId == Constants.TimelineForumId)
             {
                 ButtonCreateThread.IsEnabled = false;
-                await LoadTimeline();
-                GenerateThreadsInListView();
+                ThreadsListView.ItemsSource = new IncrementalLoadingCollection<TimelineForumThreadSource, Grid>();
             }
             else
             {
                 ButtonCreateThread.IsEnabled = true;
-                (await AnonBbsApiClient.GetThreadsAsync(_currentForumId, _currentThreadPage.CurrentPage)).ForEach(ft => _threads.Add(ft));
-                GenerateThreadsInListView();
+                ThreadsListView.ItemsSource = new IncrementalLoadingCollection<NormalForumThreadSource, Grid>();
             }
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
@@ -91,27 +92,12 @@ namespace XoW
 
         private async Task RefreshReplies()
         {
-            var reply = await AnonBbsApiClient.GetReplies(_currentThreadId, 1);
-
-            var gridsForReplies = ComponentsBuilder.BuildGridForReply(reply, _cdnUrl, _forumAndIdLookup);
-            Replies.ItemsSource = gridsForReplies;
-        }
-
-        private async Task LoadTimeline()
-        {
-            _threads.Clear();
-
-            var threads = await AnonBbsApiClient.GetTimelineAsync();
-            threads.ForEach(t => _threads.Add(t));
-
-            // 展示时间线的串
-            GenerateThreadsInListView();
+            Replies.ItemsSource = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
         }
 
         private void GenerateThreadsInListView()
         {
-            var gridsInTheListView = ComponentsBuilder.BuildGridForThread(_threads, _cdnUrl, _forumAndIdLookup);
-            ThreadsListView.ItemsSource = gridsInTheListView;
+            ThreadsListView.ItemsSource = new IncrementalLoadingCollection<TimelineForumThreadSource, Grid>();
         }
     }
 }

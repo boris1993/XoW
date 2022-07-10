@@ -70,6 +70,25 @@ namespace XoW
             return gridsInTheListView;
         }
 
+        public static List<Grid> BuildGridForOnlyReplies(List<ForumThread> replies, string cdnUrl, Dictionary<string, int> forumLookup)
+        {
+            var gridsForReplyThreads = new List<Grid>();
+
+            foreach (var reply in replies)
+            {
+                var headerGrid = BuildThreadHeaderGrid(reply, forumLookup);
+                var contentGrid = BuildThreadContentGrid(reply, cdnUrl);
+
+                var replyGrid = BuildThreadParentGrid(reply);
+                replyGrid.Children.Add(headerGrid);
+                replyGrid.Children.Add(contentGrid);
+
+                gridsForReplyThreads.Add(replyGrid);
+            }
+
+            return gridsForReplyThreads;
+        }
+
         /// <summary>
         /// 构建Grid中串头的部分
         /// </summary>
@@ -144,7 +163,7 @@ namespace XoW
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 Foreground = new SolidColorBrush(Colors.Gray),
                 Margin = new Thickness(0, 0, 10, 10),
-                Text = forumName,
+                Text = forumName ?? string.Empty,
             };
             Grid.SetRow(textBlockForumName, 0);
             Grid.SetColumn(textBlockForumName, 3);

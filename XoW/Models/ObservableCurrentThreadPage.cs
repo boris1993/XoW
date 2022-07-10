@@ -2,8 +2,8 @@
 {
     internal class ObservableCurrentThreadPage : ObservableObject
     {
-        private int _currentThreadPage;
-        public int CurrentPage
+        private double _currentThreadPage;
+        public double CurrentPage
         {
             get
             {

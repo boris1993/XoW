@@ -47,6 +47,8 @@
         public const string SettingsKeyCdn = "cdn";
 
         public const string TimelineForumId = "-1";
+
+        public const string PermissionLevelCookieRequired = "2";
     }
 
     public static class TooltipContents

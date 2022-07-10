@@ -6,7 +6,6 @@
       mc:Ignorable="d"
       xmlns:local="using:XoW"
       xmlns:localServices="using:XoW.Services"
-      xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
@@ -28,51 +27,15 @@
             <!--#region 左边串列表 -->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal"
-                            x:Name="ThreadPageTopBar"
-                            Grid.Column="0"
-                            Grid.Row="0"
-                            Margin="40, 0, 0, 0"
-                            Background="LightGray"
-                            BorderThickness="5, 5, 10, 5"
-                            BorderBrush="LightGray"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            FlowDirection="LeftToRight">
-                    <Button x:Name="ButtonThreadPrevPage"
-                            Margin="5, 0, 5, 0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Stretch"
-                            IsEnabled="False"
-                            Click="{x:Bind OnThreadPrevPageButtonClicked}"
-                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.RefreshThreadButtonTooltipContent}">
-                        <SymbolIcon Symbol="Back" />
-                    </Button>
-                    <muxc:NumberBox x:Name="ThreadPageNumberTextBox"
-                                    Margin="0, 0, 5, 0"
-                                    Minimum="1"
-                                    ValidationMode="InvalidInputOverwritten"
-                                    Value="{x:Bind _currentThreadPage.CurrentPage, Mode=TwoWay}" />
-                    <Button x:Name="ButtonThreadNextPage"
-                            Margin="0, 0, 5, 0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Stretch"
-                            Click="{x:Bind OnThreadNextPageButtonClicked}"
-                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateThreadButtonTooltipContent}">
-                        <SymbolIcon Symbol="Forward" />
-                    </Button>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal"
                             x:Name="ThreadTopBar"
-                            Grid.Column="1"
+                            Grid.Column="0"
                             Grid.Row="0"
                             Background="LightGray"
                             BorderThickness="5, 5, 10, 5"
@@ -110,8 +73,8 @@
                       Margin="40, 0, 0, 0"
                       IsItemClickEnabled="True"
                       DataFetchSize="1"
-                      ItemClick="{x:Bind OnThreadClicked}">
-            </ListView>
+                      ItemClick="{x:Bind OnThreadClicked}" />
+
             <!--#endregion-->
 
             <!--#region 右边回复列表 -->
@@ -170,7 +133,7 @@
         <NavigationView Name="ForumListNavigation"
                         PaneTitle="{x:Bind local:Constants.ForumName, Mode=OneTime}"
                         PaneDisplayMode="LeftCompact"
-                        IsBackButtonVisible="Collapsed"
+                        IsBackButtonVisible="Visible"
                         ItemInvoked="NavigationItemInvokedAsync"
                         MenuItemsSource="{x:Bind _navigationItems, Mode=OneWay}"
                         Grid.ColumnSpan="2" />

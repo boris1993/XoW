@@ -61,7 +61,7 @@ namespace XoW.Services
             return threads;
         }
 
-        public static async Task<ThreadReply> GetReplies(string threadId, int pageId = 1)
+        public static async Task<ThreadReply> GetRepliesAsync(string threadId, int pageId = 1)
         {
             var uriBuilder = new UriBuilder(Url.GetReplies);
 

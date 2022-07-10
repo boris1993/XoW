@@ -121,6 +121,9 @@
     </Compile>
     <Compile Include="ApplicationSettings.cs" />
     <Compile Include="ComponentsBuilder.cs" />
+    <Compile Include="ConfigPage.xaml.cs">
+      <DependentUpon>ConfigPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -130,6 +133,7 @@
     <Compile Include="Models\CdnUrl.cs" />
     <Compile Include="Models\ForumGroup.cs" />
     <Compile Include="Models\ForumThread.cs" />
+    <Compile Include="Models\IncrementalLoadingSources.cs" />
     <Compile Include="Models\ObservableCurrentThreadPage.cs" />
     <Compile Include="Models\ObservableObject.cs" />
     <Compile Include="Models\ThreadReply.cs" />
@@ -171,6 +175,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ConfigPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -197,6 +205,9 @@
     </PackageReference>
     <PackageReference Include="System.Configuration.ConfigurationManager">
       <Version>6.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Telerik.UI.for.UniversalWindowsPlatform">
+      <Version>1.0.2.9</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />
