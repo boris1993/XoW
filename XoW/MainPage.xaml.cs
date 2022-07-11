@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.Storage.Pickers;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using XoW.Services;
 
 namespace XoW
 {
@@ -14,11 +17,6 @@ namespace XoW
     {
         private readonly ObservableCollection<NavigationViewItemBase> _navigationItems = new ObservableCollection<NavigationViewItemBase>();
 
-        public static readonly Dictionary<string, int> ForumAndIdLookup = new Dictionary<string, int>();
-        public static string CurrentForumId = Constants.TimelineForumId;
-        public static string CurrentThreadId = "";
-        public static string CdnUrl;
-
         public MainPage()
         {
             InitializeComponent();
@@ -28,7 +26,7 @@ namespace XoW
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
-            CdnUrl = await GetCdnUrl();
+            GlobalState.CdnUrl = await GetCdnUrl();
 
             // 刷新板块列表，完成后默认选定时间线版
             await RefreshForumsAsync();
@@ -36,21 +34,24 @@ namespace XoW
             // 载入时间线第一页
             RefreshThreads();
 
-            MainPageProgressBar.Visibility = Visibility.Collapsed;
+            // 载入已添加的饼干
+            ApplicationConfigurationHelper.LoadAllCookies();
 
-            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            localSettings.Values[Constants.SettingsKeyCdn] = CdnUrl;
+            MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
         private async void NavigationItemInvokedAsync(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.IsSettingsInvoked)
             {
-                Frame.Navigate(typeof(ConfigPage));
+                ContentGrid.Visibility = Visibility.Collapsed;
+                SettingsGrid.Visibility = Visibility.Visible;
                 return;
             }
 
-            CurrentForumId = args.InvokedItemContainer.DataContext.ToString();
+            GlobalState.CurrentForumId = args.InvokedItemContainer.DataContext.ToString();
+            ContentGrid.Visibility = Visibility.Visible;
+            SettingsGrid.Visibility = Visibility.Collapsed;
             RefreshThreads();
         }
 
@@ -70,7 +71,7 @@ namespace XoW
                 .DataContext
                 .ToString();
 
-            CurrentThreadId = threadId;
+            GlobalState.CurrentThreadId = threadId;
 
             await RefreshReplies();
             Replies.Visibility = Visibility.Visible;
@@ -82,5 +83,38 @@ namespace XoW
         private void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args) => RefreshThreads();
 
         private async void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => await RefreshReplies();
+
+        private async void OnScanQRCodeButtonClicked(object sender, RoutedEventArgs args)
+        {
+            var screenSnipResult = await Launcher.LaunchUriAsync(new Uri(Constants.SystemUriStartScreenClip));
+            if (!screenSnipResult)
+            {
+                throw new AppException(ErrorMessage.ScreenSnipFailed);
+            }
+
+            await QrCodeService.DecodeBarcodeFromClipboard();
+        }
+
+        private async void OnLoadImageButtonClicked(object sender, RoutedEventArgs args)
+        {
+            var filePicker = new FileOpenPicker();
+            filePicker.FileTypeFilter.Add("*");
+
+            var storageFile = await filePicker.PickSingleFileAsync();
+
+            var fileMimeType = storageFile.ContentType;
+            if (!fileMimeType.StartsWith("image/"))
+            {
+                throw new AppException(ErrorMessage.FileIsNotImage);
+            }
+
+            var cookie = await QrCodeService.DecodeBarcodeFromStorageFileAsync(storageFile);
+
+            if (!GlobalState.Cookies.Contains(cookie))
+            {
+                GlobalState.Cookies.Add(cookie);
+                ApplicationConfigurationHelper.AddCookie(cookie);
+            }
+        }
     }
 }

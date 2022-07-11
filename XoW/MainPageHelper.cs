@@ -16,14 +16,14 @@ namespace XoW
 
         private async Task RefreshForumsAsync()
         {
-            ForumAndIdLookup.Clear();
+            GlobalState.ForumAndIdLookup.Clear();
 
             var forumGroups = await AnonBbsApiClient.GetForumGroupsAsync();
 
             forumGroups
                 .SelectMany(fg => fg.Forums)
                 .ToList()
-                .ForEach(f => ForumAndIdLookup.Add(f.Name, f.Id));
+                .ForEach(f => GlobalState.ForumAndIdLookup.Add(f.Name, f.Id));
 
             // 版面组和版面按照Sort排序，保证以正确的顺序展示
             forumGroups.OrderBy(fg =>
@@ -76,7 +76,7 @@ namespace XoW
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
-            if (CurrentForumId == Constants.TimelineForumId)
+            if (GlobalState.CurrentForumId == Constants.TimelineForumId)
             {
                 ButtonCreateThread.IsEnabled = false;
                 ThreadsListView.ItemsSource = new IncrementalLoadingCollection<TimelineForumThreadSource, Grid>();

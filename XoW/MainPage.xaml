@@ -6,6 +6,7 @@
       mc:Ignorable="d"
       xmlns:local="using:XoW"
       xmlns:localServices="using:XoW.Services"
+      xmlns:localModel="using:XoW.Models"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
@@ -14,6 +15,7 @@
 
     <Grid x:Name="RootGrid">
         <Grid x:Name="ContentGrid"
+              Visibility="Collapsed"
               HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
@@ -58,6 +60,13 @@
                             IsEnabled="False"
                             ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateThreadButtonTooltipContent}">
                         <SymbolIcon Symbol="Edit" />
+                    </Button>
+                    <Button x:Name="ButtonSearchThread"
+                            Margin="0, 0, 5, 0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch"
+                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.SearchThreadButtonTooltipContent}">
+                        <SymbolIcon Symbol="Find" />
                     </Button>
                 </StackPanel>
             </Grid>
@@ -112,7 +121,7 @@
                     <SymbolIcon Symbol="Favorite" />
                 </Button>
             </StackPanel>
-            
+
             <ListView x:Name="Replies"
                       Grid.Column="1"
                       Grid.Row="1"
@@ -126,6 +135,79 @@
             <!--#endregion-->
         </Grid>
 
+        <Grid x:Name="SettingsGrid"
+              HorizontalAlignment="Stretch"
+              Margin="40, 0, 0, 0"
+              Visibility="Visible">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.5*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid x:Name="ConfigurationItemsGrid"
+                  Grid.Column="0"
+                  BorderThickness="0, 0, 1, 0"
+                  BorderBrush="Gray"
+                  Padding="20">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock FontSize="30"
+                               Padding="0, 5">
+                        <Span><Bold>设定</Bold></Span>
+                    </TextBlock>
+                    <TextBlock FontSize="20">
+                        <Span><Bold>外观</Bold></Span>
+                    </TextBlock>
+                    <StackPanel Padding="0, 5"
+                                Orientation="Horizontal">
+                        <ToggleSwitch x:Name="ToggleSwitchNightMode"
+                                      Header="夜间模式" />
+                    </StackPanel>
+                    <TextBlock FontSize="20">
+                        <Span><Bold>饼干管理</Bold></Span>
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="ButtonScanQRCode"
+                                Content="扫描二维码"
+                                Margin="0, 5, 5, 5"
+                                Click="OnScanQRCodeButtonClicked" />
+                        <Button x:Name="ButtonLoadImage"
+                                Content="从图库选择二维码"
+                                Margin="5"
+                                Click="OnLoadImageButtonClicked"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="当前饼干：" />
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="{x:Bind local:GlobalState.CurrentCookie}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <ListView x:Name="ListViewCookies"
+                              HorizontalAlignment="Stretch"
+                              SelectionMode="Single"
+                              ItemsSource="{x:Bind local:GlobalState.Cookies}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:Name="CookieListViewTemplate"
+                                          x:DataType="localModel:AnonBbsCookie">
+                                <TextBlock Text="{x:Bind Name}" 
+                                           DataContext="{x:Bind Name}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Grid>
+
+            <Grid x:Name="AboutGrid"
+                  Grid.Column="1"
+                  Padding="20">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock FontSize="30">
+                        <Span><Bold>关于</Bold></Span>
+                    </TextBlock>
+                </StackPanel>
+
+            </Grid>
+        </Grid>
+
         <ProgressBar x:Name="MainPageProgressBar"
                      IsIndeterminate="True"
                      VerticalAlignment="Top" />
@@ -133,7 +215,7 @@
         <NavigationView Name="ForumListNavigation"
                         PaneTitle="{x:Bind local:Constants.ForumName, Mode=OneTime}"
                         PaneDisplayMode="LeftCompact"
-                        IsBackButtonVisible="Visible"
+                        IsBackButtonVisible="Collapsed"
                         ItemInvoked="NavigationItemInvokedAsync"
                         MenuItemsSource="{x:Bind _navigationItems, Mode=OneWay}"
                         Grid.ColumnSpan="2" />

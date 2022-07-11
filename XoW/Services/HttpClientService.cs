@@ -4,7 +4,9 @@ namespace XoW.Services
 {
     internal static class HttpClientService
     {
-        private static object _lock = new object();
+        private const string UserAgent = "HavfunClient-UWP";
+
+        private static readonly object _lock = new object();
         private static HttpClient _httpClient;
 
         public static HttpClient GetHttpClientInstance()
@@ -14,7 +16,7 @@ namespace XoW.Services
                 lock (_lock)
                 {
                     var httpClient = new HttpClient();
-                    httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(Constants.UserAgent);
+                    httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(UserAgent);
 
                     _httpClient = httpClient;
                 }
