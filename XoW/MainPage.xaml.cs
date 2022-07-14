@@ -6,6 +6,7 @@ using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using XoW.Models;
 using XoW.Services;
 
 namespace XoW
@@ -37,10 +38,14 @@ namespace XoW
             // 载入已添加的饼干
             ApplicationConfigurationHelper.LoadAllCookies();
 
+            var currentCookieName = ApplicationConfigurationHelper.GetCurrentCookie();
+            var currentCookieValue = GlobalState.Cookies.Where(cookie => cookie.Name == currentCookieName).Single().Cookie;
+            HttpClientService.ApplyCookie(currentCookieValue);
+
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private async void NavigationItemInvokedAsync(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        private void NavigationItemInvokedAsync(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.IsSettingsInvoked)
             {
@@ -55,7 +60,7 @@ namespace XoW
             RefreshThreads();
         }
 
-        private async void OnThreadClicked(object sender, ItemClickEventArgs args)
+        private void OnThreadClicked(object sender, ItemClickEventArgs args)
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
@@ -73,7 +78,7 @@ namespace XoW
 
             GlobalState.CurrentThreadId = threadId;
 
-            await RefreshReplies();
+            RefreshReplies();
             Replies.Visibility = Visibility.Visible;
             ReplyTopBar.Visibility = Visibility.Visible;
 
@@ -82,7 +87,7 @@ namespace XoW
 
         private void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args) => RefreshThreads();
 
-        private async void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => await RefreshReplies();
+        private void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => RefreshReplies();
 
         private async void OnScanQRCodeButtonClicked(object sender, RoutedEventArgs args)
         {
@@ -115,6 +120,16 @@ namespace XoW
                 GlobalState.Cookies.Add(cookie);
                 ApplicationConfigurationHelper.AddCookie(cookie);
             }
+        }
+
+        private void OnCookieClicked(object sender, ItemClickEventArgs args)
+        {
+            var selectedCookie = args.ClickedItem as AnonBbsCookie;
+            var cookieName = selectedCookie.Name;
+            var cookieValue = selectedCookie.Cookie;
+
+            ApplicationConfigurationHelper.SetCurrentCookie(cookieName);
+            HttpClientService.ApplyCookie(cookieValue);
         }
     }
 }

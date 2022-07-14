@@ -1,4 +1,6 @@
 ﻿using Windows.Web.Http;
+using Windows.Web.Http.Filters;
+using Windows.Web.Http.Headers;
 
 namespace XoW.Services
 {
@@ -15,7 +17,7 @@ namespace XoW.Services
             {
                 lock (_lock)
                 {
-                    var httpClient = new HttpClient();
+                    var httpClient = new HttpClient(new HttpBaseProtocolFilter());
                     httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(UserAgent);
 
                     _httpClient = httpClient;
@@ -23,6 +25,14 @@ namespace XoW.Services
             }
 
             return _httpClient;
+        }
+
+        public static void ApplyCookie(string cookieValue)
+        {
+            var cookie = new HttpCookiePairHeaderValue(Constants.CookieNameUserHash);
+            cookie.Value = cookieValue;
+
+            GetHttpClientInstance().DefaultRequestHeaders.Cookie.Add(cookie);
         }
     }
 }

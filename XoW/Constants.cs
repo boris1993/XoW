@@ -5,7 +5,9 @@
         /// <summary>
         /// X岛域名
         /// </summary>
-        public const string BaseUrl = "https://www.nmbxd1.com";
+        public const string DomainName = "www.nmbxd1.com";
+
+        public static string BaseUrl = $"https://{DomainName}";
 
         /// <summary>
         /// 获取CDN列表
@@ -47,6 +49,8 @@
         public const string TimelineForumId = "-1";
 
         public const string PermissionLevelCookieRequired = "2";
+
+        public const string CookieNameUserHash = "userhash";
 
         /// <summary>
         /// 用于启动系统截图功能的URI<br/>

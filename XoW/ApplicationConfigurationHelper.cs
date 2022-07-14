@@ -15,7 +15,7 @@ namespace XoW
 
         public static string GetCurrentCookie()
         {
-            var currentCookie = localSettings.Values[ApplicationSettingsKey.CurrentCookie]?.ToString() ?? Constants.NoCookieSelected;
+            var currentCookie = localSettings.Values[ApplicationSettingsKey.CurrentCookie]?.ToString();
             return currentCookie;
         }
 

@@ -90,14 +90,9 @@ namespace XoW
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private async Task RefreshReplies()
+        private void RefreshReplies()
         {
             Replies.ItemsSource = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
-        }
-
-        private void GenerateThreadsInListView()
-        {
-            ThreadsListView.ItemsSource = new IncrementalLoadingCollection<TimelineForumThreadSource, Grid>();
         }
     }
 }

@@ -10,12 +10,12 @@
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <localServices:ThreadPrevPageButtonEnableStateConverter x:Key="ThreadPrevPageButtonEnableStateConverter" />
+        <localServices:CookieNameConverter x:Key="CookieNameConverter" />
     </Page.Resources>
 
     <Grid x:Name="RootGrid">
         <Grid x:Name="ContentGrid"
-              Visibility="Collapsed"
+              Visibility="Visible"
               HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
@@ -111,14 +111,14 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Stretch"
                         ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateReplyButtonTooltipContent}">
-                    <SymbolIcon Symbol="Edit" />
+                    <SymbolIcon Symbol="Comment" />
                 </Button>
                 <Button x:Name="ButtonAddToFavourites"
                         Margin="0, 0, 5, 0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Stretch"
                         ToolTipService.ToolTip="{x:Bind local:TooltipContents.AddToFavouritesButtonTooltipContent}">
-                    <SymbolIcon Symbol="Favorite" />
+                    <SymbolIcon Symbol="OutlineStar" />
                 </Button>
             </StackPanel>
 
@@ -138,7 +138,7 @@
         <Grid x:Name="SettingsGrid"
               HorizontalAlignment="Stretch"
               Margin="40, 0, 0, 0"
-              Visibility="Visible">
+              Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
                 <ColumnDefinition Width="0.5*" />
@@ -178,13 +178,15 @@
                             <TextBlock VerticalAlignment="Center"
                                        Text="当前饼干：" />
                             <TextBlock VerticalAlignment="Center"
-                                       Text="{x:Bind local:GlobalState.CurrentCookie}" />
+                                       Text="{x:Bind local:GlobalState.CurrentCookie, Converter={StaticResource CookieNameConverter}}" />
                         </StackPanel>
                     </StackPanel>
                     <ListView x:Name="ListViewCookies"
                               HorizontalAlignment="Stretch"
-                              SelectionMode="Single"
-                              ItemsSource="{x:Bind local:GlobalState.Cookies}">
+                              SelectionMode="None"
+                              ItemsSource="{x:Bind local:GlobalState.Cookies}"
+                              IsItemClickEnabled="True"
+                              ItemClick="{x:Bind OnCookieClicked}">
                         <ListView.ItemTemplate>
                             <DataTemplate x:Name="CookieListViewTemplate"
                                           x:DataType="localModel:AnonBbsCookie">
