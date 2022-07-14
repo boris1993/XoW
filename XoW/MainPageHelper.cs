@@ -23,7 +23,7 @@ namespace XoW
             forumGroups
                 .SelectMany(fg => fg.Forums)
                 .ToList()
-                .ForEach(f => GlobalState.ForumAndIdLookup.Add(f.Name, f.Id));
+                .ForEach(f => GlobalState.ForumAndIdLookup.Add(f.Name, (f.Id, f.permissionLevel)));
 
             // 版面组和版面按照Sort排序，保证以正确的顺序展示
             forumGroups.OrderBy(fg =>
@@ -72,7 +72,7 @@ namespace XoW
             ForumListNavigation.SelectedItem = _navigationItems.Where(item => item is NavigationViewItem).First();
         }
 
-        private void RefreshThreads()
+        private async Task RefreshThreads()
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 

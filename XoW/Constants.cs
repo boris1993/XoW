@@ -48,7 +48,7 @@
 
         public const string TimelineForumId = "-1";
 
-        public const string PermissionLevelCookieRequired = "2";
+        public const int PermissionLevelCookieRequired = 2;
 
         public const string CookieNameUserHash = "userhash";
 
@@ -79,5 +79,6 @@
         public const string ScreenSnipFailed = "调用系统截图功能失败";
         public const string FileIsNotImage = "选择的文件不是图片";
         public const string QrCodeDecodeFailed = "饼干二维码解析失败";
+        public const string CookieRequiredForThisForum = "浏览该板块需要拥有饼干";
     }
 }

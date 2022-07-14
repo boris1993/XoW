@@ -16,7 +16,7 @@ namespace XoW
         public const string headerGridName = "threadHeaderGrid";
         public const string contentGridName = "threadContentGrid";
 
-        public static List<Grid> BuildGridForThread(IEnumerable<ForumThread> threads, string cdnUrl, Dictionary<string, int> forumLookup)
+        public static List<Grid> BuildGridForThread(IEnumerable<ForumThread> threads, string cdnUrl, Dictionary<string, (int, int)> forumLookup)
         {
             var gridsInTheListView = new List<Grid>();
 
@@ -43,7 +43,7 @@ namespace XoW
             return gridsInTheListView;
         }
 
-        public static List<Grid> BuildGridForReply(ThreadReply threadReply, string cdnUrl, Dictionary<string, int> forumLookup)
+        public static List<Grid> BuildGridForReply(ThreadReply threadReply, string cdnUrl, Dictionary<string, (int, int)> forumLookup)
         {
             var gridsInTheListView = new List<Grid>();
 
@@ -70,7 +70,7 @@ namespace XoW
             return gridsInTheListView;
         }
 
-        public static List<Grid> BuildGridForOnlyReplies(List<ForumThread> replies, string cdnUrl, Dictionary<string, int> forumLookup)
+        public static List<Grid> BuildGridForOnlyReplies(List<ForumThread> replies, string cdnUrl, Dictionary<string, (int, int)> forumLookup)
         {
             var gridsForReplyThreads = new List<Grid>();
 
@@ -98,7 +98,7 @@ namespace XoW
         /// </param>
         /// <param name="forumLookup">版名与版ID的映射</param>
         /// <returns>一个串头的<see cref="Grid"/></returns>
-        public static Grid BuildThreadHeaderGrid<T>(T thread, Dictionary<string, int> forumLookup) where T : ForumThread
+        public static Grid BuildThreadHeaderGrid<T>(T thread, Dictionary<string, (int forumId, int permissionLevel)> forumLookup) where T : ForumThread
         {
             var headerGridForThisThread = new Grid { Name = headerGridName };
 
@@ -155,7 +155,7 @@ namespace XoW
             Grid.SetRow(textBlockTitle, 0);
             Grid.SetColumn(textBlockTitle, 2);
 
-            var forumName = forumLookup.Where(f => f.Value == thread.FId).Select(f => f.Key).FirstOrDefault();
+            var forumName = forumLookup.Where(f => f.Value.forumId == thread.FId).Select(f => f.Key).FirstOrDefault();
             var textBlockForumName = new TextBlock
             {
                 Name = "textBlockForumName",

@@ -33,19 +33,22 @@ namespace XoW
             await RefreshForumsAsync();
 
             // 载入时间线第一页
-            RefreshThreads();
+            await RefreshThreads();
 
             // 载入已添加的饼干
             ApplicationConfigurationHelper.LoadAllCookies();
 
             var currentCookieName = ApplicationConfigurationHelper.GetCurrentCookie();
-            var currentCookieValue = GlobalState.Cookies.Where(cookie => cookie.Name == currentCookieName).Single().Cookie;
-            HttpClientService.ApplyCookie(currentCookieValue);
+            var currentCookieValue = GlobalState.Cookies.Where(cookie => cookie.Name == currentCookieName).SingleOrDefault()?.Cookie;
+            if (!string.IsNullOrEmpty(currentCookieValue))
+            {
+                HttpClientService.ApplyCookie(currentCookieValue);
+            }
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private void NavigationItemInvokedAsync(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        private async void NavigationItemInvokedAsync(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             if (args.IsSettingsInvoked)
             {
@@ -54,10 +57,30 @@ namespace XoW
                 return;
             }
 
-            GlobalState.CurrentForumId = args.InvokedItemContainer.DataContext.ToString();
+            #region 检查将要访问的版是否要求持有饼干
+            var selectedForumId = args.InvokedItemContainer.DataContext.ToString();
+            var currentForumPermissionLevel = GlobalState.ForumAndIdLookup.Values
+                .Where(value => value.Item1.ToString() == selectedForumId)
+                .Single()
+                .Item2;
+            if (string.IsNullOrEmpty(GlobalState.CurrentCookie) && currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
+            {
+                var errorMessagePopup = new ContentDialog
+                {
+                    Title = "错误",
+                    CloseButtonText = "OK",
+                    Content = ErrorMessage.CookieRequiredForThisForum,
+                };
+                await errorMessagePopup.ShowAsync();
+
+                return;
+            }
+            #endregion
+
+            GlobalState.CurrentForumId = selectedForumId;
             ContentGrid.Visibility = Visibility.Visible;
             SettingsGrid.Visibility = Visibility.Collapsed;
-            RefreshThreads();
+            await RefreshThreads();
         }
 
         private void OnThreadClicked(object sender, ItemClickEventArgs args)
@@ -85,7 +108,7 @@ namespace XoW
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args) => RefreshThreads();
+        private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args) => await RefreshThreads();
 
         private void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => RefreshReplies();
 

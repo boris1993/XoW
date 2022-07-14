@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace XoW.Models
 {
@@ -73,6 +74,15 @@ namespace XoW.Models
         /// 该板块发言间隔
         /// </summary>
         public int Interval { get; set; }
+
+        [JsonProperty("thread_count")]
+        public int threadCount { get; set; }
+
+        [JsonProperty("permission_level")]
+        public int permissionLevel { get; set; }
+
+        [JsonProperty("forum_fuse_id")]
+        public string forumFuseId { get; set; }
         public string CreatedAt { get; set; }
         public string UpdateAt { get; set; }
 
