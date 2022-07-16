@@ -178,7 +178,8 @@
                             <TextBlock VerticalAlignment="Center"
                                        Text="当前饼干：" />
                             <TextBlock VerticalAlignment="Center"
-                                       Text="{x:Bind local:GlobalState.CurrentCookie, Converter={StaticResource CookieNameConverter}}" />
+                                       Text="{x:Bind local:GlobalState.CurrentCookie.CurrentCookie, Mode=OneWay, Converter={StaticResource CookieNameConverter}}"
+                                       FontWeight="Bold"/>
                         </StackPanel>
                     </StackPanel>
                     <ListView x:Name="ListViewCookies"

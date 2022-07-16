@@ -134,7 +134,7 @@
     <Compile Include="Models\ForumGroup.cs" />
     <Compile Include="Models\ForumThread.cs" />
     <Compile Include="Models\IncrementalLoadingSources.cs" />
-    <Compile Include="Models\ObservableCurrentThreadPage.cs" />
+    <Compile Include="Models\ObservableCurrentCookie.cs" />
     <Compile Include="Models\ObservableObject.cs" />
     <Compile Include="Models\ThreadReply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

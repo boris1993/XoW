@@ -11,6 +11,7 @@ namespace XoW
         public static void SetCurrentCookie(string cookie)
         {
             localSettings.Values[ApplicationSettingsKey.CurrentCookie] = cookie;
+            GlobalState.CurrentCookie.CurrentCookie = cookie;
         }
 
         public static string GetCurrentCookie()

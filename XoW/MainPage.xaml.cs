@@ -63,7 +63,7 @@ namespace XoW
                 .Where(value => value.Item1.ToString() == selectedForumId)
                 .Single()
                 .Item2;
-            if (string.IsNullOrEmpty(GlobalState.CurrentCookie) && currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
+            if (string.IsNullOrEmpty(GlobalState.CurrentCookie?.CurrentCookie) && currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
             {
                 var errorMessagePopup = new ContentDialog
                 {
@@ -129,6 +129,11 @@ namespace XoW
             filePicker.FileTypeFilter.Add("*");
 
             var storageFile = await filePicker.PickSingleFileAsync();
+
+            if (storageFile == null)
+            {
+                return;
+            }
 
             var fileMimeType = storageFile.ContentType;
             if (!fileMimeType.StartsWith("image/"))
