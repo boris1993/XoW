@@ -252,7 +252,8 @@ namespace XoW
 
                 var gridForImage = new Grid
                 {
-                    Margin = new Thickness(5)
+                    Margin = new Thickness(5),
+                    VerticalAlignment = VerticalAlignment.Top,
                 };
                 gridForImage.Children.Add(image);
                 Grid.SetColumn(gridForImage, 0);
