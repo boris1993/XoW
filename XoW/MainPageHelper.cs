@@ -34,6 +34,14 @@ namespace XoW
 
             _navigationItems.Clear();
 
+            var favouriteThreadsNavigationItem = new NavigationViewItem
+            {
+                Content = Constants.FavouriteThreadNavigationItemName,
+                Name = Constants.FavouriteThreadNavigationItemName,
+                Icon = new SymbolIcon(Symbol.OutlineStar),
+            };
+            _navigationItems.Add(favouriteThreadsNavigationItem);
+
             forumGroups.ForEach(fg =>
             {
                 // 版面组名作为导航栏Header
@@ -69,7 +77,9 @@ namespace XoW
             });
 
             // 版面导航栏加载完成后，默认选择第一项，即默认展示时间线
-            ForumListNavigation.SelectedItem = _navigationItems.Where(item => item is NavigationViewItem).First();
+            ForumListNavigation.SelectedItem = _navigationItems
+                .Where(item => item is NavigationViewItem && !_nonForumNavigationItems.Contains(item.Name))
+                .First();
         }
 
         private async Task RefreshThreads()

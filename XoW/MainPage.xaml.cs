@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.Storage.Pickers;
@@ -17,6 +18,7 @@ namespace XoW
     public sealed partial class MainPage : Page
     {
         private readonly ObservableCollection<NavigationViewItemBase> _navigationItems = new ObservableCollection<NavigationViewItemBase>();
+        private readonly List<string> _nonForumNavigationItems = new List<string>() { Constants.FavouriteThreadNavigationItemName };
 
         public MainPage()
         {
@@ -54,6 +56,11 @@ namespace XoW
             {
                 ContentGrid.Visibility = Visibility.Collapsed;
                 SettingsGrid.Visibility = Visibility.Visible;
+                return;
+            }
+
+            if (args.InvokedItemContainer.Name == Constants.FavouriteThreadNavigationItemName)
+            {
                 return;
             }
 
