@@ -25,11 +25,13 @@ namespace XoW
             // another one for the content
             foreach (var thread in threads)
             {
+                var threadId = thread.Id;
                 var parentGridForThisThread = BuildThreadParentGrid(thread);
 
                 #region 第一行，包括饼干，标题，发串日期
                 var headerGridForThisThread = BuildThreadHeaderGrid(thread, forumLookup);
                 parentGridForThisThread.Children.Add(headerGridForThisThread);
+                parentGridForThisThread.DataContext = threadId;
                 #endregion
 
                 #region 串的内容

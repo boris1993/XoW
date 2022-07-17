@@ -38,6 +38,13 @@
         /// 参数page为分页页码
         /// </summary>
         public static string GetReplies = $"{BaseUrl}/Api/thread";
+
+        /// <summary>
+        /// 获取订阅
+        /// 参数uuid为订阅ID
+        /// 参数page为分页页码
+        /// </summary>
+        public static string GetSubscription = $"{BaseUrl}/Api/feed";
     }
 
     public static class Constants
@@ -71,8 +78,11 @@
 
     public static class ComponentContent
     {
+        public const string Ok = "知道了";
         public const string Confirm = "我确定！";
         public const string Cancel = "算了吧";
+
+        public const string Error = "错误";
 
         public const string SubscriptionIdLabel = "订阅ID";
         public const string GenerateSubscriptionId = "生成订阅ID";
@@ -98,5 +108,6 @@
         public const string FileIsNotImage = "选择的文件不是图片";
         public const string QrCodeDecodeFailed = "饼干二维码解析失败";
         public const string CookieRequiredForThisForum = "浏览该板块需要拥有饼干";
+        public const string SubscriptionIdRequiredForGettingSubscription = "需要有订阅ID才能获取订阅";
     }
 }

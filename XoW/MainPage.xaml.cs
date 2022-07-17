@@ -66,6 +66,17 @@ namespace XoW
 
             if (args.InvokedItemContainer.Name == Constants.FavouriteThreadNavigationItemName)
             {
+                if (string.IsNullOrEmpty(GlobalState.SubscriptionId.SubscriptionId))
+                {
+                    var errorMessagePopup = new ContentDialog
+                    {
+                        Title = ComponentContent.Error,
+                        CloseButtonText = ComponentContent.Ok,
+                        Content = ErrorMessage.SubscriptionIdRequiredForGettingSubscription,
+                    };
+                    await errorMessagePopup.ShowAsync();
+                }
+
                 return;
             }
 
@@ -79,8 +90,8 @@ namespace XoW
             {
                 var errorMessagePopup = new ContentDialog
                 {
-                    Title = "错误",
-                    CloseButtonText = "OK",
+                    Title = ComponentContent.Error,
+                    CloseButtonText = ComponentContent.Ok,
                     Content = ErrorMessage.CookieRequiredForThisForum,
                 };
                 await errorMessagePopup.ShowAsync();
@@ -99,17 +110,7 @@ namespace XoW
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
-            var threadId = ((Grid)args.ClickedItem)
-                .Children
-                .Where(element => element is Grid grid && grid.Name == "threadHeaderGrid")
-                .Select(grid => grid as Grid)
-                .Single()
-                .Children
-                .Where(element => element is TextBlock block && block.Name == "textBlockThreadId")
-                .Select(tb => tb as TextBlock)
-                .Single()
-                .DataContext
-                .ToString();
+            var threadId = ((Grid)args.ClickedItem).DataContext.ToString();
 
             GlobalState.CurrentThreadId = threadId;
 
