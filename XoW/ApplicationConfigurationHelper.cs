@@ -70,5 +70,16 @@ namespace XoW
 
             parsedCookies.ForEach(cookie => GlobalState.Cookies.Add(cookie));
         }
+
+        public static void SetDarkThemeEnabled(bool isDarkThemeEnabled)
+        {
+            localSettings.Values[ApplicationSettingsKey.DarkThemeSelected] = isDarkThemeEnabled;
+        }
+
+        public static bool IsDarkThemeEnabled()
+        {
+            return localSettings.Values.ContainsKey(ApplicationSettingsKey.DarkThemeSelected) ?
+                (bool)localSettings.Values[ApplicationSettingsKey.DarkThemeSelected] : false;
+        }
     }
 }

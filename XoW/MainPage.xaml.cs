@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.Storage.Pickers;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using XoW.Models;
 using XoW.Services;
@@ -190,9 +192,39 @@ namespace XoW
             }
         }
 
-        private void OnConfirmDeleteCookieButtonClicked(object sender, RoutedEventArgs args)
+        /// <summary>
+        /// 保存是否开启夜间模式的配置，并设定应用全局主题
+        /// </summary>
+        private void OnNightModeSwitchToggled(object sender, RoutedEventArgs args)
         {
+            var isDarkModeEnabled = ((ToggleSwitch)sender).IsOn;
+            ApplicationConfigurationHelper.SetDarkThemeEnabled(isDarkModeEnabled);
 
+            #region 设定应用全局主题
+            var frameworkElementRoot = Window.Current.Content as FrameworkElement;
+            frameworkElementRoot.RequestedTheme = isDarkModeEnabled ? ElementTheme.Dark : ElementTheme.Light;
+            #endregion
+
+            #region 设定部分手动指定颜色的控件的新颜色
+            var borderAndBackgroundColor = isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.LightGray);
+            ThreadTopBar.Background = borderAndBackgroundColor;
+            ThreadTopBar.BorderBrush = borderAndBackgroundColor;
+            ReplyTopBar.Background = borderAndBackgroundColor;
+            ReplyTopBar.BorderBrush = borderAndBackgroundColor;
+            ThreadsListView.BorderBrush = borderAndBackgroundColor;
+            Replies.BorderBrush = borderAndBackgroundColor;
+            #endregion
+        }
+
+        /// <summary>
+        /// 应用加载时会触发此事件，此时载入是否开启夜间模式的设定
+        /// </summary>
+        private void OnNightModeSwitchLoaded(object sender, RoutedEventArgs args)
+        {
+            var isDarkModeEnabled = ApplicationConfigurationHelper.IsDarkThemeEnabled();
+
+            // 该操作会触发 ToggleSwitch 的 Toggled 事件
+            ((ToggleSwitch)sender).IsOn = isDarkModeEnabled;
         }
     }
 }

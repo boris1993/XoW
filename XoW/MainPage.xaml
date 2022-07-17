@@ -160,7 +160,9 @@
                     <StackPanel Padding="0, 5"
                                 Orientation="Horizontal">
                         <ToggleSwitch x:Name="ToggleSwitchNightMode"
-                                      Header="夜间模式" />
+                                      Header="夜间模式"
+                                      Toggled="OnNightModeSwitchToggled"
+                                      Loaded="OnNightModeSwitchLoaded"/>
                     </StackPanel>
                     <TextBlock FontSize="20"
                                FontWeight="Bold"

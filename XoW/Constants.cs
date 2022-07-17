@@ -65,6 +65,7 @@
     {
         public const string CurrentCookie = "current_cookie";
         public const string AllCookies = "all_cookies";
+        public const string DarkThemeSelected = "dark_theme_selected";
     }
 
     public static class ComponentContent
