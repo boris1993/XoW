@@ -13,31 +13,25 @@ namespace XoW
 {
     public static class ComponentsBuilder
     {
-        public const string headerGridName = "threadHeaderGrid";
-        public const string contentGridName = "threadContentGrid";
-
-        public static List<Grid> BuildGridForThread(IEnumerable<ForumThread> threads, string cdnUrl, Dictionary<string, (string, string)> forumLookup)
+        public static List<Grid> BuildGridForThread(
+            IEnumerable<ForumThread> threads,
+            string cdnUrl,
+            Dictionary<string, (string, string)> forumLookup)
         {
             var gridsInTheListView = new List<Grid>();
 
-            // Need 2 Grids here
-            // One for the header
-            // another one for the content
             foreach (var thread in threads)
             {
                 var threadId = thread.Id;
-                var parentGridForThisThread = BuildThreadParentGrid(thread);
 
-                #region 第一行，包括饼干，标题，发串日期
-                var headerGridForThisThread = BuildThreadHeaderGrid(thread, forumLookup);
-                parentGridForThisThread.Children.Add(headerGridForThisThread);
+                // 第一行，包括饼干，标题，发串日期
+                var headerStackPanelForThisThread = BuildThreadHeader(thread, forumLookup);
+
+                // 串的内容
+                var contentGridForThisThread = BuildThreadContent(thread, cdnUrl);
+
+                var parentGridForThisThread = BuildThreadParentGrid(thread, headerStackPanelForThisThread, contentGridForThisThread);
                 parentGridForThisThread.DataContext = threadId;
-                #endregion
-
-                #region 串的内容
-                var contentGridForThisThread = BuildThreadContentGrid(thread, cdnUrl);
-                parentGridForThisThread.Children.Add(contentGridForThisThread);
-                #endregion
 
                 gridsInTheListView.Add(parentGridForThisThread);
             }
@@ -45,26 +39,25 @@ namespace XoW
             return gridsInTheListView;
         }
 
-        public static List<Grid> BuildGridForReply(ThreadReply threadReply, string cdnUrl, Dictionary<string, (string, string)> forumLookup)
+        public static List<Grid> BuildGridForReply(
+            ThreadReply threadReply,
+            string cdnUrl,
+            Dictionary<string, (string, string)> forumLookup)
         {
             var gridsInTheListView = new List<Grid>();
 
-            var firstThreadGrid = BuildThreadParentGrid(threadReply);
-            var headerGridForTheFirstGrid = BuildThreadHeaderGrid(threadReply, forumLookup);
-            var contentGridForTheFirstGrid = BuildThreadContentGrid(threadReply, cdnUrl);
-            firstThreadGrid.Children.Add(headerGridForTheFirstGrid);
-            firstThreadGrid.Children.Add(contentGridForTheFirstGrid);
+            var headerForTheFirstGrid = BuildThreadHeader(threadReply, forumLookup);
+            var contentForTheFirstGrid = BuildThreadContent(threadReply, cdnUrl);
+            var firstThreadGrid = BuildThreadParentGrid(threadReply, headerForTheFirstGrid, contentForTheFirstGrid);
 
             gridsInTheListView.Add(firstThreadGrid);
 
             foreach (var reply in threadReply.Replies)
             {
-                var headerGrid = BuildThreadHeaderGrid(reply, forumLookup);
-                var contentGrid = BuildThreadContentGrid(reply, cdnUrl);
+                var header = BuildThreadHeader(reply, forumLookup);
+                var content = BuildThreadContent(reply, cdnUrl);
 
-                var replyGrid = BuildThreadParentGrid(reply);
-                replyGrid.Children.Add(headerGrid);
-                replyGrid.Children.Add(contentGrid);
+                var replyGrid = BuildThreadParentGrid(reply, header, content);
 
                 gridsInTheListView.Add(replyGrid);
             }
@@ -72,18 +65,19 @@ namespace XoW
             return gridsInTheListView;
         }
 
-        public static List<Grid> BuildGridForOnlyReplies(List<ForumThread> replies, string cdnUrl, Dictionary<string, (string, string)> forumLookup)
+        public static List<Grid> BuildGridForOnlyReplies(
+            List<ForumThread> replies,
+            string cdnUrl,
+            Dictionary<string, (string, string)> forumLookup)
         {
             var gridsForReplyThreads = new List<Grid>();
 
             foreach (var reply in replies)
             {
-                var headerGrid = BuildThreadHeaderGrid(reply, forumLookup);
-                var contentGrid = BuildThreadContentGrid(reply, cdnUrl);
+                var headerStackPanel = BuildThreadHeader(reply, forumLookup);
+                var contentGrid = BuildThreadContent(reply, cdnUrl);
 
-                var replyGrid = BuildThreadParentGrid(reply);
-                replyGrid.Children.Add(headerGrid);
-                replyGrid.Children.Add(contentGrid);
+                var replyGrid = BuildThreadParentGrid(reply, headerStackPanel, contentGrid);
 
                 gridsForReplyThreads.Add(replyGrid);
             }
@@ -92,133 +86,67 @@ namespace XoW
         }
 
         /// <summary>
-        /// 构建Grid中串头的部分
+        /// 构建Grid中串头的部分，即串号、饼干、标题、版名、发串时间、SAGE标识
         /// </summary>
         /// <typeparam name="T">类型限定为<see cref="ForumThread"/>及其派生类</typeparam>
         /// <param name="thread">
         /// 一个串或一个回复的对象，即一个<see cref="ForumThread"/>或一个<see cref="ThreadReply"/>对象
         /// </param>
         /// <param name="forumLookup">版名与版ID的映射</param>
-        /// <returns>一个串头的<see cref="Grid"/></returns>
-        public static Grid BuildThreadHeaderGrid<T>(T thread, Dictionary<string, (string forumId, string permissionLevel)> forumLookup) where T : ForumThread
+        /// <returns>一个串头的<see cref="StackPanel"/></returns>
+        public static StackPanel BuildThreadHeader<T>(
+            T thread,
+            Dictionary<string, (string forumId, string permissionLevel)> forumLookup)
+            where T : ForumThread
         {
-            var headerGridForThisThread = new Grid { Name = headerGridName };
-
-            // 串号
-            headerGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            // 饼干列
-            headerGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            // 标题列
-            headerGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            // 所属板块
-            headerGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            // 发串日期列
-            headerGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            // Sage
-            headerGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            // 串头唯一的一行
-            headerGridForThisThread.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-
-            var textBlockThreadId = new TextBlock
+            var threadHeaderStackPanel = new StackPanel
             {
-                Name = "textBlockThreadId",
-                VerticalAlignment = VerticalAlignment.Top,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Foreground = new SolidColorBrush(Colors.Gray),
-                Margin = new Thickness(0, 0, 10, 10),
-                DataContext = thread.Id,
-                Text = $"No.{thread.Id}",
+                Orientation = Orientation.Horizontal,
             };
-            Grid.SetRow(textBlockThreadId, 0);
-            Grid.SetColumn(textBlockThreadId, 0);
+
+            var textBlockThreadId = CreateTextBlockWithDefaultMargin($"No.{thread.Id}");
+            threadHeaderStackPanel.Children.Add(textBlockThreadId);
 
             var isSentByAdmin = thread.Admin == "1";
-            var textBlockUserHash = new TextBlock
-            {
-                Name = "textBlockUserHash",
-                VerticalAlignment = VerticalAlignment.Top,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Foreground = isSentByAdmin ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.Gray),
-                Margin = new Thickness(0, 0, 10, 0),
-                Text = thread.UserHash,
-            };
-            Grid.SetRow(textBlockUserHash, 0);
-            Grid.SetColumn(textBlockUserHash, 1);
+            var textBlockColor = isSentByAdmin ? Colors.Red : Colors.DimGray;
+            var textBlockUserHash = CreateTextBlockWithDefaultMargin(thread.UserHash, textBlockColor);
+            threadHeaderStackPanel.Children.Add(textBlockUserHash);
 
-            var textBlockTitle = new TextBlock
-            {
-                Name = "textBlockTitle",
-                VerticalAlignment = VerticalAlignment.Top,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Foreground = new SolidColorBrush(Colors.Red),
-                Margin = new Thickness(0, 0, 10, 10),
-                Text = thread.Title,
-            };
-            Grid.SetRow(textBlockTitle, 0);
-            Grid.SetColumn(textBlockTitle, 2);
+            var textBlockTitle = CreateTextBlockWithDefaultMargin(thread.Title, Colors.Red);
+            threadHeaderStackPanel.Children.Add(textBlockTitle);
+
+            var textBlockUserName = CreateTextBlockWithDefaultMargin(thread.Name, Colors.DarkGreen);
+            threadHeaderStackPanel.Children.Add(textBlockUserName);
 
             var forumName = forumLookup.Where(f => f.Value.forumId == thread.FId).Select(f => f.Key).FirstOrDefault();
-            var textBlockForumName = new TextBlock
-            {
-                Name = "textBlockForumName",
-                VerticalAlignment = VerticalAlignment.Top,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Foreground = new SolidColorBrush(Colors.Gray),
-                Margin = new Thickness(0, 0, 10, 10),
-                Text = forumName ?? string.Empty,
-            };
-            Grid.SetRow(textBlockForumName, 0);
-            Grid.SetColumn(textBlockForumName, 3);
+            var textBlockForumName = CreateTextBlockWithDefaultMargin(forumName ?? string.Empty);
+            threadHeaderStackPanel.Children.Add(textBlockForumName);
 
-            var textBlockCreatedTime = new TextBlock
-            {
-                Name = "textBlockCreatedTime",
-                VerticalAlignment = VerticalAlignment.Top,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Foreground = new SolidColorBrush(Colors.Gray),
-                Margin = new Thickness(0, 0, 10, 10),
-                Text = thread.Now,
-            };
-            Grid.SetRow(textBlockCreatedTime, 0);
-            Grid.SetColumn(textBlockCreatedTime, 4);
+            var textBlockCreatedTime = CreateTextBlockWithDefaultMargin(thread.Now);
+            threadHeaderStackPanel.Children.Add(textBlockCreatedTime);
 
             if (thread.Sage == "1")
             {
-                var textBlockSage = new TextBlock
-                {
-                    VerticalAlignment = VerticalAlignment.Top,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    Foreground = new SolidColorBrush(Colors.Red),
-                    Margin = new Thickness(0, 0, 10, 10),
-                    Text = "(SAGE)",
-                };
-                Grid.SetRow(textBlockSage, 0);
-                Grid.SetColumn(textBlockSage, 5);
-                headerGridForThisThread.Children.Add(textBlockSage);
+                var textBlockSage = CreateTextBlockWithDefaultMargin("(SAGE)", Colors.Red);
+                threadHeaderStackPanel.Children.Add(textBlockSage);
             }
 
-            Grid.SetRow(headerGridForThisThread, 0);
-            Grid.SetColumn(headerGridForThisThread, 0);
-            headerGridForThisThread.Children.Add(textBlockUserHash);
-            headerGridForThisThread.Children.Add(textBlockTitle);
-            headerGridForThisThread.Children.Add(textBlockForumName);
-            headerGridForThisThread.Children.Add(textBlockCreatedTime);
-            headerGridForThisThread.Children.Add(textBlockThreadId);
-
-            return headerGridForThisThread;
+            return threadHeaderStackPanel;
         }
 
         /// <summary>
-        /// 
+        /// 构建Grid中串内容的部分，包括图片和正文
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="thread"></param>
-        /// <returns></returns>
-        public static Grid BuildThreadContentGrid<T>(T thread, string cdnUrl) where T : ForumThread
+        /// <typeparam name="T">类型限定为<see cref="ForumThread"/>及其派生类</typeparam>
+        /// <param name="thread">
+        /// 一个串或一个回复的对象，即一个<see cref="ForumThread"/>或一个<see cref="ThreadReply"/>对象
+        /// </param>
+        /// <returns>一个串内容的<see cref="Grid"/></returns>
+        public static Grid BuildThreadContent<T>(T thread, string cdnUrl) where T : ForumThread
         {
             var contentTextBlocks = HtmlParser.ParseHtmlIntoTextBlocks(thread.Content);
 
-            var contentGridForThisThread = new Grid { Name = contentGridName };
+            var contentGridForThisThread = new Grid();
             // 图片列(1/3)
             contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { });
             // 内容列(2/3)
@@ -270,7 +198,11 @@ namespace XoW
             return contentGridForThisThread;
         }
 
-        public static Grid BuildThreadParentGrid<T>(T thread) where T : ForumThread
+        public static Grid BuildThreadParentGrid<T>(
+            T thread,
+            StackPanel headerStackPanel,
+            Grid contentGrid)
+            where T : ForumThread
         {
             var parentGridForThisThread = new Grid
             {
@@ -278,26 +210,39 @@ namespace XoW
                 DataContext = thread.Id,
             };
 
-            parentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { });
+            var stackPanel = new StackPanel
+            {
+                Orientation = Orientation.Vertical,
+            };
+            stackPanel.Children.Add(headerStackPanel);
+            stackPanel.Children.Add(contentGrid);
 
-            // 第一行，包括饼干，标题，发串日期
-            parentGridForThisThread.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            // 串的内容
-            parentGridForThisThread.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            parentGridForThisThread.Children.Add(stackPanel);
 
             return parentGridForThisThread;
         }
 
-        public static TextBlock CreateTextBlock(string content) => CreateTextBlock(content, Colors.DimGray);
+        public static TextBlock CreateTextBlockWithDefaultMargin(string content, Color? color = null) =>
+            CreateTextBlock(content, color, new Thickness(0, 0, 10, 10));
 
-        public static TextBlock CreateTextBlock(string content, Color color) =>
-            new TextBlock
+        public static TextBlock CreateTextBlock(string content, Color? color = null, Thickness? margin = null)
+        {
+            var textBlock = new TextBlock
             {
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Foreground = new SolidColorBrush(color),
+                Foreground = new SolidColorBrush(color != null ? (Color)color : Colors.DimGray),
                 Text = content,
                 TextWrapping = TextWrapping.Wrap
             };
+
+            if (margin != null)
+            {
+                textBlock.Margin = (Thickness)margin;
+            }
+
+            return textBlock;
+        }
+
     }
 }
