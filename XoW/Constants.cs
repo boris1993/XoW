@@ -48,7 +48,7 @@
 
         public const string TimelineForumId = "-1";
 
-        public const int PermissionLevelCookieRequired = 2;
+        public const string PermissionLevelCookieRequired = "2";
 
         public const string CookieNameUserHash = "userhash";
 

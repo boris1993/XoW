@@ -29,8 +29,10 @@ namespace XoW.Services
 
         public static void ApplyCookie(string cookieValue)
         {
-            var cookie = new HttpCookiePairHeaderValue(Constants.CookieNameUserHash);
-            cookie.Value = cookieValue;
+            var cookie = new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
+            {
+                Value = cookieValue
+            };
 
             GetHttpClientInstance().DefaultRequestHeaders.Cookie.Add(cookie);
         }

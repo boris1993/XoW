@@ -16,7 +16,7 @@ namespace XoW
         public const string headerGridName = "threadHeaderGrid";
         public const string contentGridName = "threadContentGrid";
 
-        public static List<Grid> BuildGridForThread(IEnumerable<ForumThread> threads, string cdnUrl, Dictionary<string, (int, int)> forumLookup)
+        public static List<Grid> BuildGridForThread(IEnumerable<ForumThread> threads, string cdnUrl, Dictionary<string, (string, string)> forumLookup)
         {
             var gridsInTheListView = new List<Grid>();
 
@@ -43,7 +43,7 @@ namespace XoW
             return gridsInTheListView;
         }
 
-        public static List<Grid> BuildGridForReply(ThreadReply threadReply, string cdnUrl, Dictionary<string, (int, int)> forumLookup)
+        public static List<Grid> BuildGridForReply(ThreadReply threadReply, string cdnUrl, Dictionary<string, (string, string)> forumLookup)
         {
             var gridsInTheListView = new List<Grid>();
 
@@ -70,7 +70,7 @@ namespace XoW
             return gridsInTheListView;
         }
 
-        public static List<Grid> BuildGridForOnlyReplies(List<ForumThread> replies, string cdnUrl, Dictionary<string, (int, int)> forumLookup)
+        public static List<Grid> BuildGridForOnlyReplies(List<ForumThread> replies, string cdnUrl, Dictionary<string, (string, string)> forumLookup)
         {
             var gridsForReplyThreads = new List<Grid>();
 
@@ -98,7 +98,7 @@ namespace XoW
         /// </param>
         /// <param name="forumLookup">版名与版ID的映射</param>
         /// <returns>一个串头的<see cref="Grid"/></returns>
-        public static Grid BuildThreadHeaderGrid<T>(T thread, Dictionary<string, (int forumId, int permissionLevel)> forumLookup) where T : ForumThread
+        public static Grid BuildThreadHeaderGrid<T>(T thread, Dictionary<string, (string forumId, string permissionLevel)> forumLookup) where T : ForumThread
         {
             var headerGridForThisThread = new Grid { Name = headerGridName };
 
@@ -130,7 +130,7 @@ namespace XoW
             Grid.SetRow(textBlockThreadId, 0);
             Grid.SetColumn(textBlockThreadId, 0);
 
-            var isSentByAdmin = thread.Admin == 1;
+            var isSentByAdmin = thread.Admin == "1";
             var textBlockUserHash = new TextBlock
             {
                 Name = "textBlockUserHash",
@@ -180,7 +180,7 @@ namespace XoW
             Grid.SetRow(textBlockCreatedTime, 0);
             Grid.SetColumn(textBlockCreatedTime, 4);
 
-            if (thread.Sage == 1)
+            if (thread.Sage == "1")
             {
                 var textBlockSage = new TextBlock
                 {

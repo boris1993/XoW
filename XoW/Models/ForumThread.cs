@@ -12,12 +12,12 @@ namespace XoW.Models
         /// <summary>
         /// 串ID
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// 板块ID
         /// </summary>
-        public int FId { get; set; }
+        public string FId { get; set; }
         public int ReplyCount { get; set; }
 
         /// <summary>
@@ -59,13 +59,13 @@ namespace XoW.Models
         /// <summary>
         /// 是否sage
         /// </summary>
-        public int Sage { get; set; }
+        public string Sage { get; set; }
 
         /// <summary>
         /// 是否为炫酷红名
         /// </summary>
-        public int Admin { get; set; }
-        public int Hide { get; set; }
+        public string Admin { get; set; }
+        public string Hide { get; set; }
 
         [JsonIgnore]
         public int RemainReplies { get; set; }

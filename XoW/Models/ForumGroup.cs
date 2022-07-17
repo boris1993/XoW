@@ -43,12 +43,12 @@ namespace XoW.Models
         /// <summary>
         /// 板块ID
         /// </summary>
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// 所属板块组ID
         /// </summary>
-        public int FGroup { get; set; }
+        public string FGroup { get; set; }
 
         /// <summary>
         /// 服务器的排序值，越小优先级越高，若为-1则自动排序
@@ -79,7 +79,7 @@ namespace XoW.Models
         public int threadCount { get; set; }
 
         [JsonProperty("permission_level")]
-        public int permissionLevel { get; set; }
+        public string permissionLevel { get; set; }
 
         [JsonProperty("forum_fuse_id")]
         public string forumFuseId { get; set; }
