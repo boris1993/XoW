@@ -20,6 +20,11 @@ namespace XoW
             return currentCookie;
         }
 
+        public static void RemoveCurrentCookie()
+        {
+            localSettings.Values.Remove(ApplicationSettingsKey.CurrentCookie);
+        }
+
         public static void AddCookie(AnonBbsCookie cookie)
         {
             var cookieListComposite = localSettings.Values[ApplicationSettingsKey.AllCookies] as ApplicationDataCompositeValue;
@@ -34,6 +39,19 @@ namespace XoW
             }
 
             cookieListComposite[cookie.Name] = cookie.Cookie;
+
+            localSettings.Values[ApplicationSettingsKey.AllCookies] = cookieListComposite;
+        }
+
+        public static void DeleteCookie(string cookieName)
+        {
+            var cookieListComposite = localSettings.Values[ApplicationSettingsKey.AllCookies] as ApplicationDataCompositeValue;
+            if (cookieListComposite == null)
+            {
+                return;
+            }
+
+            cookieListComposite.Remove(cookieName);
 
             localSettings.Values[ApplicationSettingsKey.AllCookies] = cookieListComposite;
         }

@@ -166,5 +166,33 @@ namespace XoW
             ApplicationConfigurationHelper.SetCurrentCookie(cookieName);
             HttpClientService.ApplyCookie(cookieValue);
         }
+
+        private async void OnDeleteCookieButtonClicked(object sender, RoutedEventArgs args)
+        {
+            var dialog = new ContentDialog
+            {
+                PrimaryButtonText = ComponentContent.Confirm,
+                SecondaryButtonText = ComponentContent.Cancel,
+                DefaultButton = ContentDialogButton.Primary,
+                Title = ConfirmationMessage.DeleteCookieConfirmation,
+            };
+
+            var result = await dialog.ShowAsync();
+
+            switch (result)
+            {
+                case ContentDialogResult.Primary:
+                    var cookieName = ((Button)sender).DataContext?.ToString();
+                    DeleteCookie(cookieName);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnConfirmDeleteCookieButtonClicked(object sender, RoutedEventArgs args)
+        {
+
+        }
     }
 }

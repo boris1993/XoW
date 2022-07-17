@@ -104,5 +104,17 @@ namespace XoW
         {
             Replies.ItemsSource = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
         }
+
+        private void DeleteCookie(string cookieName)
+        {
+            if (cookieName == GlobalState.CurrentCookie.CurrentCookie)
+            {
+                ApplicationConfigurationHelper.RemoveCurrentCookie();
+                GlobalState.CurrentCookie.CurrentCookie = null;
+            }
+
+            ApplicationConfigurationHelper.DeleteCookie(cookieName);
+            GlobalState.Cookies.Remove(GlobalState.Cookies.Where(cookie => cookie.Name == cookieName).Single());
+        }
     }
 }

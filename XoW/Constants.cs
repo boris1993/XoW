@@ -61,19 +61,27 @@
         public const string SystemUriStartScreenClip = "ms-screenclip:edit?clippingMode=Rectangle";
     }
 
-    public static class TooltipContents
-    {
-        public const string CreateThreadButtonTooltipContent = "创建新串";
-        public const string CreateReplyButtonTooltipContent = "创建回复";
-        public const string RefreshThreadButtonTooltipContent = "刷新";
-        public const string AddToFavouritesButtonTooltipContent = "收藏";
-        public const string SearchThreadButtonTooltipContent = "搜索串";
-    }
-
     public static class ApplicationSettingsKey
     {
         public const string CurrentCookie = "current_cookie";
         public const string AllCookies = "all_cookies";
+    }
+
+    public static class ComponentContent
+    {
+        public const string Confirm = "我确定！";
+        public const string Cancel = "算了吧";
+
+        public const string CreateThreadButtonTooltip = "创建新串";
+        public const string CreateReplyButtonTooltip = "创建回复";
+        public const string RefreshThreadButtonTooltip = "刷新";
+        public const string AddToFavouritesButtonTooltip = "收藏";
+        public const string SearchThreadButtonTooltip = "搜索串";
+    }
+
+    public static class ConfirmationMessage
+    {
+        public const string DeleteCookieConfirmation = "真的要删掉这块饼干吗？\n并不会真的碎饼哦，你随时还可以再添加进来~";
     }
 
     public static class ErrorMessage

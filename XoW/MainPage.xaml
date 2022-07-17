@@ -50,7 +50,7 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
                             Click="{x:Bind OnRefreshThreadButtonClicked}"
-                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.RefreshThreadButtonTooltipContent}">
+                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThreadButtonTooltip}">
                         <SymbolIcon Symbol="Refresh" />
                     </Button>
                     <Button x:Name="ButtonCreateThread"
@@ -58,14 +58,14 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
                             IsEnabled="False"
-                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateThreadButtonTooltipContent}">
+                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
                         <SymbolIcon Symbol="Edit" />
                     </Button>
                     <Button x:Name="ButtonSearchThread"
                             Margin="0, 0, 5, 0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
-                            ToolTipService.ToolTip="{x:Bind local:TooltipContents.SearchThreadButtonTooltipContent}">
+                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.SearchThreadButtonTooltip}">
                         <SymbolIcon Symbol="Find" />
                     </Button>
                 </StackPanel>
@@ -103,21 +103,21 @@
                         HorizontalAlignment="Right"
                         VerticalAlignment="Stretch"
                         Click="{x:Bind OnRefreshRepliesButtonClicked}"
-                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.RefreshThreadButtonTooltipContent}">
+                        ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThreadButtonTooltip}">
                     <SymbolIcon Symbol="Refresh" />
                 </Button>
                 <Button x:Name="ButtonCreateReply"
                         Margin="0, 0, 5, 0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Stretch"
-                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.CreateReplyButtonTooltipContent}">
+                        ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReplyButtonTooltip}">
                     <SymbolIcon Symbol="Comment" />
                 </Button>
                 <Button x:Name="ButtonAddToFavourites"
                         Margin="0, 0, 5, 0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Stretch"
-                        ToolTipService.ToolTip="{x:Bind local:TooltipContents.AddToFavouritesButtonTooltipContent}">
+                        ToolTipService.ToolTip="{x:Bind local:ComponentContent.AddToFavouritesButtonTooltip}">
                     <SymbolIcon Symbol="OutlineStar" />
                 </Button>
             </StackPanel>
@@ -151,20 +151,20 @@
                   Padding="20">
                 <StackPanel Orientation="Vertical">
                     <TextBlock FontSize="30"
-                               Padding="0, 5">
-                        <Span><Bold>设定</Bold></Span>
-                    </TextBlock>
-                    <TextBlock FontSize="20">
-                        <Span><Bold>外观</Bold></Span>
-                    </TextBlock>
+                               FontWeight="Bold"
+                               Padding="0, 5"
+                               Text="设定" />
+                    <TextBlock FontSize="20"
+                               FontWeight="Bold"
+                               Text="外观" />
                     <StackPanel Padding="0, 5"
                                 Orientation="Horizontal">
                         <ToggleSwitch x:Name="ToggleSwitchNightMode"
                                       Header="夜间模式" />
                     </StackPanel>
-                    <TextBlock FontSize="20">
-                        <Span><Bold>饼干管理</Bold></Span>
-                    </TextBlock>
+                    <TextBlock FontSize="20"
+                               FontWeight="Bold"
+                               Text="饼干管理" />
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="ButtonScanQRCode"
                                 Content="扫描二维码"
@@ -173,13 +173,13 @@
                         <Button x:Name="ButtonLoadImage"
                                 Content="从图库选择二维码"
                                 Margin="5"
-                                Click="OnLoadImageButtonClicked"/>
+                                Click="OnLoadImageButtonClicked" />
                         <StackPanel Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center"
                                        Text="当前饼干：" />
                             <TextBlock VerticalAlignment="Center"
-                                       Text="{x:Bind local:GlobalState.CurrentCookie.CurrentCookie, Mode=OneWay, Converter={StaticResource CookieNameConverter}}"
-                                       FontWeight="Bold"/>
+                                       FontWeight="Bold"
+                                       Text="{x:Bind local:GlobalState.CurrentCookie.CurrentCookie, Mode=OneWay, Converter={StaticResource CookieNameConverter}}" />
                         </StackPanel>
                     </StackPanel>
                     <ListView x:Name="ListViewCookies"
@@ -191,8 +191,18 @@
                         <ListView.ItemTemplate>
                             <DataTemplate x:Name="CookieListViewTemplate"
                                           x:DataType="localModel:AnonBbsCookie">
-                                <TextBlock Text="{x:Bind Name}" 
-                                           DataContext="{x:Bind Name}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center"
+                                               Text="{x:Bind Name}"
+                                               DataContext="{x:Bind Name}" />
+                                    <Button x:Name="ButtonDeleteCookie"
+                                            Background="Transparent"
+                                            HorizontalAlignment="Right"
+                                            DataContext="{x:Bind Name}"
+                                            Click="OnDeleteCookieButtonClicked">
+                                        <SymbolIcon Symbol="Delete" />
+                                    </Button>
+                                </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
