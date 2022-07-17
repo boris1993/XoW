@@ -116,5 +116,17 @@ namespace XoW
             ApplicationConfigurationHelper.DeleteCookie(cookieName);
             GlobalState.Cookies.Remove(GlobalState.Cookies.Where(cookie => cookie.Name == cookieName).Single());
         }
+
+        private void GenerateNewSubscriptionId()
+        {
+            var newSubscriptionId = Guid.NewGuid().ToString();
+            UpdateSubscriptionId(newSubscriptionId);
+        }
+
+        private void UpdateSubscriptionId(string newSubscriptionId)
+        {
+            GlobalState.SubscriptionId.SubscriptionId = newSubscriptionId;
+            ApplicationConfigurationHelper.SetSubscriptionId(newSubscriptionId);
+        }
     }
 }

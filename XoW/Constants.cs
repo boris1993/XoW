@@ -66,12 +66,17 @@
         public const string CurrentCookie = "current_cookie";
         public const string AllCookies = "all_cookies";
         public const string DarkThemeSelected = "dark_theme_selected";
+        public const string SubscriptionId = "subscription_id";
     }
 
     public static class ComponentContent
     {
         public const string Confirm = "我确定！";
         public const string Cancel = "算了吧";
+
+        public const string SubscriptionIdLabel = "订阅ID";
+        public const string GenerateSubscriptionId = "生成订阅ID";
+        public const string SubscriptionRecommendation = "建议在不同设备间使用相同订阅ID，以同步收藏";
 
         public const string CreateThreadButtonTooltip = "创建新串";
         public const string CreateReplyButtonTooltip = "创建回复";
@@ -83,6 +88,8 @@
     public static class ConfirmationMessage
     {
         public const string DeleteCookieConfirmation = "真的要删掉这块饼干吗？\n并不会真的碎饼哦，你随时还可以再添加进来~";
+        public const string GenerateNewSubscriptionIdConfirmationTitle = "确定要生成新的订阅ID吗？";
+        public const string GenerateNewSubscriptionIdConfirmationContent = "如果没有备份的话，你将会永久丢失当前的订阅ID！";
     }
 
     public static class ErrorMessage

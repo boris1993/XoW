@@ -42,6 +42,9 @@ namespace XoW
             // 载入已添加的饼干
             ApplicationConfigurationHelper.LoadAllCookies();
 
+            // 加载订阅ID
+            GlobalState.SubscriptionId.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
+
             var currentCookieName = ApplicationConfigurationHelper.GetCurrentCookie();
             var currentCookieValue = GlobalState.Cookies.Where(cookie => cookie.Name == currentCookieName).SingleOrDefault()?.Cookie;
             if (!string.IsNullOrEmpty(currentCookieValue))
@@ -225,6 +228,39 @@ namespace XoW
 
             // 该操作会触发 ToggleSwitch 的 Toggled 事件
             ((ToggleSwitch)sender).IsOn = isDarkModeEnabled;
+        }
+
+        private async void OnGenerateSubscriptionButtonClicked(object sender, RoutedEventArgs args)
+        {
+            if (!string.IsNullOrEmpty(GlobalState.SubscriptionId?.SubscriptionId))
+            {
+                var dialog = new ContentDialog
+                {
+                    PrimaryButtonText = ComponentContent.Confirm,
+                    SecondaryButtonText = ComponentContent.Cancel,
+                    DefaultButton = ContentDialogButton.Primary,
+                    Title = ConfirmationMessage.GenerateNewSubscriptionIdConfirmationTitle,
+                    Content = ConfirmationMessage.GenerateNewSubscriptionIdConfirmationContent,
+                    Foreground = new SolidColorBrush(Colors.Red),
+                };
+
+                var result = await dialog.ShowAsync();
+
+                switch (result)
+                {
+                    case ContentDialogResult.Primary:
+                        GenerateNewSubscriptionId();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void OnSubscriptionIdTextBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var newSubscriptionId = TextBoxSubscriptionId.Text;
+            UpdateSubscriptionId(newSubscriptionId);
         }
     }
 }

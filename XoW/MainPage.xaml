@@ -156,13 +156,30 @@
                                Text="设定" />
                     <TextBlock FontSize="20"
                                FontWeight="Bold"
-                               Text="外观" />
+                               Text="常规" />
                     <StackPanel Padding="0, 5"
-                                Orientation="Horizontal">
-                        <ToggleSwitch x:Name="ToggleSwitchNightMode"
-                                      Header="夜间模式"
-                                      Toggled="OnNightModeSwitchToggled"
-                                      Loaded="OnNightModeSwitchLoaded"/>
+                                Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <ToggleSwitch x:Name="ToggleSwitchNightMode"
+                                          Header="夜间模式"
+                                          Toggled="OnNightModeSwitchToggled"
+                                          Loaded="OnNightModeSwitchLoaded" />
+                        </StackPanel>
+                        <TextBox x:Name="TextBoxSubscriptionId"
+                                 VerticalAlignment="Stretch"
+                                 HorizontalAlignment="Stretch"
+                                 IsSpellCheckEnabled="False"
+                                 IsTextPredictionEnabled="False"
+                                 TextWrapping="Wrap"
+                                 Header="{x:Bind local:ComponentContent.SubscriptionIdLabel}"
+                                 Text="{x:Bind local:GlobalState.SubscriptionId.SubscriptionId, Mode=TwoWay}"
+                                 TextChanged="OnSubscriptionIdTextBoxTextChanged"/>
+                        <TextBlock Text="{x:Bind local:ComponentContent.SubscriptionRecommendation}" />
+                        <Button x:Name="ButtonGenerateSubscriptionId"
+                                Margin="0, 5"
+                                HorizontalAlignment="Stretch"
+                                Content="{x:Bind local:ComponentContent.GenerateSubscriptionId}"
+                                Click="OnGenerateSubscriptionButtonClicked" />
                     </StackPanel>
                     <TextBlock FontSize="20"
                                FontWeight="Bold"

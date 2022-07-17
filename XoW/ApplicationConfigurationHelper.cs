@@ -81,5 +81,16 @@ namespace XoW
             return localSettings.Values.ContainsKey(ApplicationSettingsKey.DarkThemeSelected) ?
                 (bool)localSettings.Values[ApplicationSettingsKey.DarkThemeSelected] : false;
         }
+
+        public static void SetSubscriptionId(string subscriptionId)
+        {
+            localSettings.Values[ApplicationSettingsKey.SubscriptionId] = subscriptionId;
+        }
+
+        public static string GetSubscriptionId()
+        {
+            return localSettings.Values.ContainsKey(ApplicationSettingsKey.SubscriptionId) ?
+                localSettings.Values[ApplicationSettingsKey.SubscriptionId].ToString() : null;
+        }
     }
 }
