@@ -140,7 +140,7 @@
     <Compile Include="Models\ThreadReply.cs" />
     <Compile Include="Models\ThreadSubscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AnonBbsApiClient.cs" />
+    <Compile Include="Services\AnoBbsApiClient.cs" />
     <Compile Include="Services\Converter.cs" />
     <Compile Include="Services\HtmlParser.cs" />
     <Compile Include="Services\HttpClientService.cs" />

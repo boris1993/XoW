@@ -18,6 +18,7 @@ namespace XoW.Models
         /// 板块ID
         /// </summary>
         public string FId { get; set; }
+
         public int ReplyCount { get; set; }
 
         /// <summary>

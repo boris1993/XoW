@@ -8,6 +8,7 @@ namespace XoW.Services
 {
     public static class HtmlParser
     {
+        private const string AttributeHyperlink = "href";
         private const string XPathBrNode = "//br";
 
         public static List<TextBlock> ParseHtmlIntoTextBlocks(string htmlString)

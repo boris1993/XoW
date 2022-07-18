@@ -12,13 +12,13 @@ namespace XoW
 {
     partial class MainPage : Page
     {
-        private async Task<string> GetCdnUrl() => (await AnonBbsApiClient.GetCdnAsync()).First().Url;
+        private async Task<string> GetCdnUrl() => (await AnoBbsApiClient.GetCdnAsync()).First().Url;
 
         private async Task RefreshForumsAsync()
         {
             GlobalState.ForumAndIdLookup.Clear();
 
-            var forumGroups = await AnonBbsApiClient.GetForumGroupsAsync();
+            var forumGroups = await AnoBbsApiClient.GetForumGroupsAsync();
 
             forumGroups
                 .SelectMany(fg => fg.Forums)
@@ -127,6 +127,18 @@ namespace XoW
         {
             GlobalState.SubscriptionId.SubscriptionId = newSubscriptionId;
             ApplicationConfigurationHelper.SetSubscriptionId(newSubscriptionId);
+        }
+
+        private void ShowSettingsGrid()
+        {
+            ContentGrid.Visibility = Visibility.Collapsed;
+            SettingsGrid.Visibility = Visibility.Visible;
+        }
+
+        private void ShowContentGrid()
+        {
+            ContentGrid.Visibility = Visibility.Visible;
+            SettingsGrid.Visibility = Visibility.Collapsed;
         }
     }
 }

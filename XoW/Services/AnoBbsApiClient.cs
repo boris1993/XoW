@@ -9,9 +9,10 @@ using XoW.Models;
 
 namespace XoW.Services
 {
-    internal static class AnonBbsApiClient
+    internal static class AnoBbsApiClient
     {
         private const string QueryParamId = "id";
+        private const string QueryParamUuid = "uuid";
         private const string QueryParamPageId = "page";
 
         public static async Task<List<CdnUrl>> GetCdnAsync()
@@ -66,7 +67,7 @@ namespace XoW.Services
             var uriBuilder = new UriBuilder(Url.GetReplies);
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[QueryParamId] = threadId.ToString();
+            query[QueryParamId] = threadId;
             query[QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
@@ -74,6 +75,21 @@ namespace XoW.Services
             var reply = JsonConvert.DeserializeObject<ThreadReply>(responseString);
 
             return reply;
+        }
+
+        public static async Task<List<ThreadSubscription>> GetSubscriptionsAsync(string subscriptionId, int pageId = 1)
+        {
+            var uriBuilder = new UriBuilder(Url.GetSubscription);
+
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query[QueryParamUuid] = subscriptionId;
+            query[QueryParamPageId] = pageId.ToString();
+            uriBuilder.Query = query.ToString();
+
+            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
+            var subscriptions = JsonConvert.DeserializeObject<List<ThreadSubscription>>(responseString);
+
+            return subscriptions;
         }
 
         private static async Task<string> GetStringResponseAsync(string url)

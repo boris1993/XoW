@@ -59,13 +59,14 @@ namespace XoW
         {
             if (args.IsSettingsInvoked)
             {
-                ContentGrid.Visibility = Visibility.Collapsed;
-                SettingsGrid.Visibility = Visibility.Visible;
+                ShowSettingsGrid();
                 return;
             }
 
             if (args.InvokedItemContainer.Name == Constants.FavouriteThreadNavigationItemName)
             {
+                ShowContentGrid();
+
                 if (string.IsNullOrEmpty(GlobalState.SubscriptionId.SubscriptionId))
                 {
                     var errorMessagePopup = new ContentDialog
@@ -101,8 +102,7 @@ namespace XoW
             #endregion
 
             GlobalState.CurrentForumId = selectedForumId;
-            ContentGrid.Visibility = Visibility.Visible;
-            SettingsGrid.Visibility = Visibility.Collapsed;
+            ShowContentGrid();
             await RefreshThreads();
         }
 
