@@ -177,23 +177,16 @@ namespace XoW
                 var image = new Image
                 {
                     Source = new BitmapImage { UriSource = new Uri($"{cdnUrl}/thumb/{thread.Img}{thread.Ext}") },
-                    Stretch = Stretch.Uniform
-                };
-
-                var gridForImage = new Grid
-                {
-                    Margin = new Thickness(5),
+                    Stretch = Stretch.None,
                     VerticalAlignment = VerticalAlignment.Top,
                 };
-                gridForImage.Children.Add(image);
-                Grid.SetColumn(gridForImage, 0);
-                Grid.SetRowSpan(gridForImage, contentGridForThisThread.RowDefinitions.Count);
 
-                contentGridForThisThread.Children.Add(gridForImage);
+                Grid.SetColumn(image, 0);
+                Grid.SetRow(image, 0);
+                Grid.SetRowSpan(image, contentGridForThisThread.RowDefinitions.Count);
+
+                contentGridForThisThread.Children.Add(image);
             }
-
-            Grid.SetRow(contentGridForThisThread, 1);
-            Grid.SetColumn(contentGridForThisThread, 0);
 
             return contentGridForThisThread;
         }
