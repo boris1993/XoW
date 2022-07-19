@@ -97,6 +97,11 @@ namespace XoW
                 ThreadsListView.ItemsSource = new IncrementalLoadingCollection<NormalForumThreadSource, Grid>();
             }
 
+            GlobalState.CurrentForumName.ForumName = GlobalState.ForumAndIdLookup
+                    .Where(lookup => lookup.Value.Item1 == GlobalState.CurrentForumId)
+                    .Single()
+                    .Key;
+
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 

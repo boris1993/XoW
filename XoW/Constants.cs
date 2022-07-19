@@ -93,6 +93,7 @@
         public const string RefreshThreadButtonTooltip = "刷新";
         public const string AddToFavouritesButtonTooltip = "收藏";
         public const string SearchThreadButtonTooltip = "搜索串";
+        public const string GotoThreadTooltip = "跳转到串";
     }
 
     public static class ConfirmationMessage

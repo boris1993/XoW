@@ -27,5 +27,10 @@ namespace XoW
             {
                 SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId()
             };
+
+        public static ObservableForumName CurrentForumName = new ObservableForumName
+        {
+            ForumName = ""
+        };
     }
 }

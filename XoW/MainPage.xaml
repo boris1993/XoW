@@ -15,6 +15,7 @@
 
     <Grid x:Name="RootGrid">
         <Grid x:Name="ContentGrid"
+              Margin="40, 0, 0, 0"
               Visibility="Visible"
               HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
@@ -27,21 +28,34 @@
             </Grid.RowDefinitions>
 
             <!--#region 左边串列表 -->
-            <Grid>
+            <Grid Background="LightGray">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="0.5*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal"
-                            x:Name="ThreadTopBar"
+                            x:Name="InfoTopBar"
                             Grid.Column="0"
                             Grid.Row="0"
-                            Background="LightGray"
+                            Margin="10, 0"
                             BorderThickness="5, 5, 10, 5"
-                            BorderBrush="LightGray"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            FlowDirection="LeftToRight">
+                    <TextBlock FontWeight="Bold"
+                               FontSize="20"
+                               Text="{x:Bind local:GlobalState.CurrentForumName.ForumName, Mode=OneWay}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            x:Name="ThreadButtonTopBar"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            BorderThickness="5, 5, 10, 5"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
                             FlowDirection="RightToLeft">
@@ -68,6 +82,13 @@
                             ToolTipService.ToolTip="{x:Bind local:ComponentContent.SearchThreadButtonTooltip}">
                         <SymbolIcon Symbol="Find" />
                     </Button>
+                    <Button x:Name="ButtonGotoThread"
+                            Margin="0, 0, 5, 0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch"
+                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.GotoThreadTooltip}">
+                        <SymbolIcon Symbol="Go" />
+                    </Button>
                 </StackPanel>
             </Grid>
 
@@ -79,7 +100,6 @@
                       BorderThickness="10, 0, 10, 10"
                       HorizontalAlignment="Stretch"
                       Width="Auto"
-                      Margin="40, 0, 0, 0"
                       IsItemClickEnabled="True"
                       DataFetchSize="1"
                       ItemClick="{x:Bind OnThreadClicked}" />
@@ -173,7 +193,7 @@
                                  TextWrapping="Wrap"
                                  Header="{x:Bind local:ComponentContent.SubscriptionIdLabel}"
                                  Text="{x:Bind local:GlobalState.SubscriptionId.SubscriptionId, Mode=TwoWay}"
-                                 TextChanged="OnSubscriptionIdTextBoxTextChanged"/>
+                                 TextChanged="OnSubscriptionIdTextBoxTextChanged" />
                         <TextBlock Text="{x:Bind local:ComponentContent.SubscriptionRecommendation}" />
                         <Button x:Name="ButtonGenerateSubscriptionId"
                                 Margin="0, 5"

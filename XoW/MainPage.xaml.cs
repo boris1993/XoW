@@ -79,6 +79,7 @@ namespace XoW
                 }
 
                 RefreshSubscriptions();
+                GlobalState.CurrentForumName.ForumName = Constants.FavouriteThreadNavigationItemName;
 
                 return;
             }
@@ -222,8 +223,8 @@ namespace XoW
 
             #region 设定部分手动指定颜色的控件的新颜色
             var borderAndBackgroundColor = isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.LightGray);
-            ThreadTopBar.Background = borderAndBackgroundColor;
-            ThreadTopBar.BorderBrush = borderAndBackgroundColor;
+            ThreadButtonTopBar.Background = borderAndBackgroundColor;
+            ThreadButtonTopBar.BorderBrush = borderAndBackgroundColor;
             ReplyTopBar.Background = borderAndBackgroundColor;
             ReplyTopBar.BorderBrush = borderAndBackgroundColor;
             ThreadsListView.BorderBrush = borderAndBackgroundColor;
