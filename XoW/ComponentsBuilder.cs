@@ -18,23 +18,7 @@ namespace XoW
             string cdnUrl,
             Dictionary<string, (string, string)> forumLookup)
         {
-            var gridsInTheListView = new List<Grid>();
-
-            foreach (var thread in threads)
-            {
-                var threadId = thread.Id;
-
-                // 第一行，包括饼干，标题，发串日期
-                var headerStackPanelForThisThread = BuildThreadHeader(thread, forumLookup);
-
-                // 串的内容
-                var contentGridForThisThread = BuildThreadContent(thread, cdnUrl);
-
-                var parentGridForThisThread = BuildThreadParentGrid(thread, headerStackPanelForThisThread, contentGridForThisThread);
-                parentGridForThisThread.DataContext = threadId;
-
-                gridsInTheListView.Add(parentGridForThisThread);
-            }
+            var gridsInTheListView = BuildGrids(threads, cdnUrl, forumLookup);
 
             return gridsInTheListView;
         }
@@ -46,21 +30,17 @@ namespace XoW
         {
             var gridsInTheListView = new List<Grid>();
 
+            #region 渲染第一条串
             var headerForTheFirstGrid = BuildThreadHeader(threadReply, forumLookup);
             var contentForTheFirstGrid = BuildThreadContent(threadReply, cdnUrl);
             var firstThreadGrid = BuildThreadParentGrid(threadReply, headerForTheFirstGrid, contentForTheFirstGrid);
 
             gridsInTheListView.Add(firstThreadGrid);
+            #endregion
 
-            foreach (var reply in threadReply.Replies)
-            {
-                var header = BuildThreadHeader(reply, forumLookup);
-                var content = BuildThreadContent(reply, cdnUrl);
-
-                var replyGrid = BuildThreadParentGrid(reply, header, content);
-
-                gridsInTheListView.Add(replyGrid);
-            }
+            #region 渲染回复串
+            gridsInTheListView.AddRange(BuildGrids(threadReply.Replies, cdnUrl, forumLookup));
+            #endregion
 
             return gridsInTheListView;
         }
@@ -68,21 +48,28 @@ namespace XoW
         public static List<Grid> BuildGridForOnlyReplies(
             List<ForumThread> replies,
             string cdnUrl,
+            Dictionary<string, (string, string)> forumLookup) => BuildGrids(replies, cdnUrl, forumLookup);
+
+        public static List<Grid> BuildGrids(
+            IEnumerable<ForumThread> threads,
+            string cdnUrl,
             Dictionary<string, (string, string)> forumLookup)
         {
-            var gridsForReplyThreads = new List<Grid>();
+            var grids = new List<Grid>();
 
-            foreach (var reply in replies)
+            foreach (var thread in threads)
             {
-                var headerStackPanel = BuildThreadHeader(reply, forumLookup);
-                var contentGrid = BuildThreadContent(reply, cdnUrl);
+                var threadId = thread.Id;
+                var headerStackPanel = BuildThreadHeader(thread, forumLookup);
+                var contentGrid = BuildThreadContent(thread, cdnUrl);
 
-                var replyGrid = BuildThreadParentGrid(reply, headerStackPanel, contentGrid);
+                var grid = BuildThreadParentGrid(thread, headerStackPanel, contentGrid);
+                grid.DataContext = threadId;
 
-                gridsForReplyThreads.Add(replyGrid);
+                grids.Add(grid);
             }
 
-            return gridsForReplyThreads;
+            return grids;
         }
 
         /// <summary>

@@ -78,6 +78,8 @@ namespace XoW
                     await errorMessagePopup.ShowAsync();
                 }
 
+                RefreshSubscriptions();
+
                 return;
             }
 
@@ -121,7 +123,16 @@ namespace XoW
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args) => await RefreshThreads();
+        private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args)
+        {
+            if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name == Constants.FavouriteThreadNavigationItemName)
+            {
+                RefreshSubscriptions();
+                return;
+            }
+
+            await RefreshThreads();
+        }
 
         private void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => RefreshReplies();
 

@@ -105,6 +105,15 @@ namespace XoW
             Replies.ItemsSource = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
         }
 
+        public void RefreshSubscriptions()
+        {
+            MainPageProgressBar.Visibility = Visibility.Visible;
+
+            ThreadsListView.ItemsSource = new IncrementalLoadingCollection<SubscriptionSource, Grid>();
+
+            MainPageProgressBar.Visibility = Visibility.Collapsed;
+        }
+
         private void DeleteCookie(string cookieName)
         {
             if (cookieName == GlobalState.CurrentCookie.CurrentCookie)
