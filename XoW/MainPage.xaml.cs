@@ -116,11 +116,12 @@ namespace XoW
             var dataContext = ((Grid)args.ClickedItem).DataContext as ThreadDataContext;
 
             GlobalState.CurrentThreadId = dataContext.ThreadId;
+            GlobalState.CurrentThreadIdDisplay.ThreadId = dataContext.ThreadId;
             GlobalState.CurrentThreadAuthorUserHash = dataContext.ThreadAuthorUserHash;
 
             RefreshReplies();
             Replies.Visibility = Visibility.Visible;
-            ReplyTopBar.Visibility = Visibility.Visible;
+            ReplyTopBarGrid.Visibility = Visibility.Visible;
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }

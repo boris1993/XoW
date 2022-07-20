@@ -131,6 +131,7 @@
     <Compile Include="MainPageHelper.cs" />
     <Compile Include="Models\CdnUrl.cs" />
     <Compile Include="Models\AnonBbsCookie.cs" />
+    <Compile Include="Models\ObservableCurrentThreadId.cs" />
     <Compile Include="Models\ObservableForumName.cs" />
     <Compile Include="Models\ObservableSubscriptionId.cs" />
     <Compile Include="Models\ForumGroup.cs" />

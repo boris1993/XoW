@@ -30,9 +30,8 @@ namespace XoW
                 SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId()
             };
 
-        public static ObservableForumName CurrentForumName = new ObservableForumName
-        {
-            ForumName = ""
-        };
+        public static ObservableForumName CurrentForumName = new ObservableForumName();
+
+        public static ObservableCurrentThreadId CurrentThreadIdDisplay = new ObservableCurrentThreadId();
     }
 }
