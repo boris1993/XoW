@@ -40,6 +40,13 @@
         public static string GetReplies = $"{BaseUrl}/Api/thread";
 
         /// <summary>
+        /// 只看po
+        /// 参数id为串号
+        /// 参数page为分页页码
+        /// </summary>
+        public static string GetPoOnlyReplies = $"{BaseUrl}/Api/po";
+
+        /// <summary>
         /// 获取订阅
         /// 参数uuid为订阅ID
         /// 参数page为分页页码
@@ -94,6 +101,7 @@
         public const string AddToFavouritesButtonTooltip = "收藏";
         public const string SearchThreadButtonTooltip = "搜索串";
         public const string GotoThreadTooltip = "跳转到串";
+        public const string PoOnlyTooltip = "只看PO";
     }
 
     public static class ConfirmationMessage

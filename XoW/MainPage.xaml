@@ -28,7 +28,9 @@
             </Grid.RowDefinitions>
 
             <!--#region 左边串列表 -->
-            <Grid Background="LightGray">
+            <Grid Background="LightGray"
+                  Grid.Column="0"
+                  Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="0.5*" />
@@ -103,7 +105,6 @@
                       IsItemClickEnabled="True"
                       DataFetchSize="1"
                       ItemClick="{x:Bind OnThreadClicked}" />
-
             <!--#endregion-->
 
             <!--#region 右边回复列表 -->
@@ -140,6 +141,15 @@
                         ToolTipService.ToolTip="{x:Bind local:ComponentContent.AddToFavouritesButtonTooltip}">
                     <SymbolIcon Symbol="OutlineStar" />
                 </Button>
+                <ToggleButton x:Name="ButtonPoOnly"
+                              Margin="0, 0, 5, 0"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Stretch"
+                              Checked="{x:Bind OnPoOnlyButtonClicked}"
+                              Unchecked="{x:Bind RefreshReplies}"
+                              ToolTipService.ToolTip="{x:Bind local:ComponentContent.PoOnlyTooltip}"
+                              Content="PO" />
+
             </StackPanel>
 
             <ListView x:Name="Replies"
@@ -150,8 +160,7 @@
                       BorderThickness="0, 0, 10, 10"
                       HorizontalAlignment="Stretch"
                       Width="Auto"
-                      Visibility="Collapsed">
-            </ListView>
+                      Visibility="Collapsed" />
             <!--#endregion-->
         </Grid>
 

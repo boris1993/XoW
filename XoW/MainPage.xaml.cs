@@ -137,6 +137,8 @@ namespace XoW
 
         private void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => RefreshReplies();
 
+        private void OnPoOnlyButtonClicked(object sender, RoutedEventArgs args) => RefreshPoOnlyReplies();
+
         private async void OnScanQRCodeButtonClicked(object sender, RoutedEventArgs args)
         {
             var screenSnipResult = await Launcher.LaunchUriAsync(new Uri(Constants.SystemUriStartScreenClip));

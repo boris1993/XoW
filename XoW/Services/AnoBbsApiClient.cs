@@ -77,6 +77,20 @@ namespace XoW.Services
             return reply;
         }
 
+        public static async Task<ThreadReply> GetPoOnlyRepliesAsync(string threadId, int pageId = 1)
+        {
+            var uriBuilder = new UriBuilder(Url.GetPoOnlyReplies);
+
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query[QueryParamId] = threadId;
+            query[QueryParamPageId] = pageId.ToString();
+            uriBuilder.Query = query.ToString();
+
+            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
+            var reply = JsonConvert.DeserializeObject<ThreadReply>(responseString);
+
+            return reply;
+        }
         public static async Task<List<ThreadSubscription>> GetSubscriptionsAsync(string subscriptionId, int pageId = 1)
         {
             var uriBuilder = new UriBuilder(Url.GetSubscription);

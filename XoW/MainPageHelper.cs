@@ -110,6 +110,11 @@ namespace XoW
             Replies.ItemsSource = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
         }
 
+        private void RefreshPoOnlyReplies()
+        {
+            Replies.ItemsSource = new IncrementalLoadingCollection<PoOnlyThreadReplySource, Grid>();
+        }
+
         public void RefreshSubscriptions()
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
