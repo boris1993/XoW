@@ -31,7 +31,7 @@ namespace XoW
             var gridsInTheListView = new List<Grid>();
 
             #region 渲染第一条串
-            var headerForTheFirstGrid = BuildThreadHeader(threadReply, forumLookup);
+            var headerForTheFirstGrid = BuildThreadHeader(threadReply, forumLookup, true);
             var contentForTheFirstGrid = BuildThreadContent(threadReply, cdnUrl);
             var firstThreadGrid = BuildThreadParentGrid(threadReply, headerForTheFirstGrid, contentForTheFirstGrid);
 
@@ -39,7 +39,7 @@ namespace XoW
             #endregion
 
             #region 渲染回复串
-            gridsInTheListView.AddRange(BuildGrids(threadReply.Replies, cdnUrl, forumLookup));
+            gridsInTheListView.AddRange(BuildGrids(threadReply.Replies, cdnUrl, forumLookup, true));
             #endregion
 
             return gridsInTheListView;
@@ -48,18 +48,19 @@ namespace XoW
         public static List<Grid> BuildGridForOnlyReplies(
             List<ForumThread> replies,
             string cdnUrl,
-            Dictionary<string, (string, string)> forumLookup) => BuildGrids(replies, cdnUrl, forumLookup);
+            Dictionary<string, (string, string)> forumLookup) => BuildGrids(replies, cdnUrl, forumLookup, true);
 
         public static List<Grid> BuildGrids(
             IEnumerable<ForumThread> threads,
             string cdnUrl,
-            Dictionary<string, (string, string)> forumLookup)
+            Dictionary<string, (string, string)> forumLookup,
+            bool isForReplies = false)
         {
             var grids = new List<Grid>();
 
             foreach (var thread in threads)
             {
-                var headerStackPanel = BuildThreadHeader(thread, forumLookup);
+                var headerStackPanel = BuildThreadHeader(thread, forumLookup, isForReplies);
                 var contentGrid = BuildThreadContent(thread, cdnUrl);
 
                 var grid = BuildThreadParentGrid(thread, headerStackPanel, contentGrid);
@@ -81,7 +82,8 @@ namespace XoW
         /// <returns>一个串头的<see cref="StackPanel"/></returns>
         public static StackPanel BuildThreadHeader<T>(
             T thread,
-            Dictionary<string, (string forumId, string permissionLevel)> forumLookup)
+            Dictionary<string, (string forumId, string permissionLevel)> forumLookup,
+            bool isForReplies = false)
             where T : ForumThread
         {
             var threadHeaderStackPanel = new StackPanel
@@ -98,7 +100,7 @@ namespace XoW
             threadHeaderStackPanel.Children.Add(textBlockUserHash);
 
             var isPo = thread.UserHash == GlobalState.CurrentThreadAuthorUserHash;
-            if (isPo)
+            if (isPo && isForReplies)
             {
                 var textBlockPoMark = CreateTextBlockWithDefaultMargin(Constants.Po, Colors.Red);
                 threadHeaderStackPanel.Children.Add(textBlockPoMark);
