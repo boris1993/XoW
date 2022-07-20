@@ -12,8 +12,10 @@ namespace XoW
         /// </summary>
         public static readonly Dictionary<string, (string, string)> ForumAndIdLookup = new Dictionary<string, (string, string)>();
         public static string CurrentForumId = Constants.TimelineForumId;
-        public static string CurrentThreadId = "";
+        public static string CurrentThreadId = default;
+        public static string CurrentThreadAuthorUserHash = default;
         public static string CdnUrl;
+
         public static ObservableCollection<AnonBbsCookie> Cookies = new ObservableCollection<AnonBbsCookie>();
 
         public static ObservableCurrentCookie CurrentCookie =

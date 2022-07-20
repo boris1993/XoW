@@ -59,12 +59,10 @@ namespace XoW
 
             foreach (var thread in threads)
             {
-                var threadId = thread.Id;
                 var headerStackPanel = BuildThreadHeader(thread, forumLookup);
                 var contentGrid = BuildThreadContent(thread, cdnUrl);
 
                 var grid = BuildThreadParentGrid(thread, headerStackPanel, contentGrid);
-                grid.DataContext = threadId;
 
                 grids.Add(grid);
             }
@@ -98,6 +96,13 @@ namespace XoW
             var textBlockColor = isSentByAdmin ? Colors.Red : Colors.DimGray;
             var textBlockUserHash = CreateTextBlockWithDefaultMargin(thread.UserHash, textBlockColor);
             threadHeaderStackPanel.Children.Add(textBlockUserHash);
+
+            var isPo = thread.UserHash == GlobalState.CurrentThreadAuthorUserHash;
+            if (isPo)
+            {
+                var textBlockPoMark = CreateTextBlockWithDefaultMargin(Constants.Po, Colors.Red);
+                threadHeaderStackPanel.Children.Add(textBlockPoMark);
+            }
 
             var textBlockTitle = CreateTextBlockWithDefaultMargin(thread.Title, Colors.Red);
             threadHeaderStackPanel.Children.Add(textBlockTitle);
@@ -187,7 +192,11 @@ namespace XoW
             var parentGridForThisThread = new Grid
             {
                 Margin = new Thickness(5),
-                DataContext = thread.Id,
+                DataContext = new ThreadDataContext
+                {
+                    ThreadId = thread.Id,
+                    ThreadAuthorUserHash = thread.UserHash,
+                },
             };
 
             var stackPanel = new StackPanel

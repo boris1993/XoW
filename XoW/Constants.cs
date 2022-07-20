@@ -68,6 +68,8 @@
 
         public const string FavouriteThreadNavigationItemName = "收藏";
 
+        public const string Po = "(PO)";
+
         /// <summary>
         /// 用于启动系统截图功能的URI<br/>
         /// 文档：<see href="https://docs.microsoft.com/zh-cn/windows/uwp/launch-resume/launch-screen-snipping"/>

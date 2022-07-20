@@ -138,6 +138,7 @@
     <Compile Include="Models\IncrementalLoadingSources.cs" />
     <Compile Include="Models\ObservableCurrentCookie.cs" />
     <Compile Include="Models\ObservableObject.cs" />
+    <Compile Include="Models\ThreadDataContext.cs" />
     <Compile Include="Models\ThreadReply.cs" />
     <Compile Include="Models\ThreadSubscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

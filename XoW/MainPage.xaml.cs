@@ -113,9 +113,10 @@ namespace XoW
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
-            var threadId = ((Grid)args.ClickedItem).DataContext.ToString();
+            var dataContext = ((Grid)args.ClickedItem).DataContext as ThreadDataContext;
 
-            GlobalState.CurrentThreadId = threadId;
+            GlobalState.CurrentThreadId = dataContext.ThreadId;
+            GlobalState.CurrentThreadAuthorUserHash = dataContext.ThreadAuthorUserHash;
 
             RefreshReplies();
             Replies.Visibility = Visibility.Visible;
