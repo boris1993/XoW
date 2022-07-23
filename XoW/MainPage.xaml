@@ -102,8 +102,14 @@
                       HorizontalAlignment="Stretch"
                       Width="Auto"
                       IsItemClickEnabled="True"
-                      DataFetchSize="1"
-                      ItemClick="{x:Bind OnThreadClicked}" />
+                      ItemClick="{x:Bind OnThreadClicked}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
             <!--#endregion-->
 
             <!--#region 右边回复列表 -->
@@ -157,6 +163,7 @@
                             Margin="0, 0, 5, 0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
+                            Click="{x:Bind OnAddSubscriptionButtonClicked}"
                             ToolTipService.ToolTip="{x:Bind local:ComponentContent.AddToFavouritesButtonTooltip}">
                         <SymbolIcon Symbol="OutlineStar" />
                     </Button>
@@ -168,6 +175,13 @@
                                   Unchecked="{x:Bind RefreshReplies}"
                                   ToolTipService.ToolTip="{x:Bind local:ComponentContent.PoOnlyTooltip}"
                                   Content="PO" />
+                    <Button x:Name="ButtonReportThread"
+                            Margin="0, 0, 5, 0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch"
+                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.ReportThread}">
+                        <SymbolIcon Symbol="Flag" />
+                    </Button>
 
                 </StackPanel>
             </Grid>

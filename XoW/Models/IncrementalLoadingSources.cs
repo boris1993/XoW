@@ -1,8 +1,8 @@
-﻿using Microsoft.Toolkit.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Collections;
 using Windows.UI.Xaml.Controls;
 using XoW.Services;
 
@@ -76,7 +76,7 @@ namespace XoW.Models
         {
             var actualPageIndex = pageIndex + 1;
             var subscriptions = await AnoBbsApiClient.GetSubscriptionsAsync(GlobalState.SubscriptionId.SubscriptionId, actualPageIndex);
-            var grids = ComponentsBuilder.BuildGrids(subscriptions, GlobalState.CdnUrl, GlobalState.ForumAndIdLookup);
+            var grids = ComponentsBuilder.BuildGrids(subscriptions, GlobalState.CdnUrl, GlobalState.ForumAndIdLookup, isForSubscription: true);
 
             return grids;
         }

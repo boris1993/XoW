@@ -5,6 +5,7 @@ using System.Linq;
 using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -140,6 +141,17 @@ namespace XoW
         private void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => RefreshReplies();
 
         private void OnPoOnlyButtonClicked(object sender, RoutedEventArgs args) => RefreshPoOnlyReplies();
+
+        private async void OnAddSubscriptionButtonClicked(object sender, RoutedEventArgs args)
+        {
+            var subscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
+            var threadId = GlobalState.CurrentThreadId;
+
+            var result = await AnoBbsApiClient.AddSubscriptionAsync(subscriptionId, threadId);
+
+            var messageDialog = new MessageDialog(result);
+            await messageDialog.ShowAsync();
+        }
 
         private async void OnScanQRCodeButtonClicked(object sender, RoutedEventArgs args)
         {

@@ -54,13 +54,14 @@ namespace XoW
             IEnumerable<ForumThread> threads,
             string cdnUrl,
             Dictionary<string, (string, string)> forumLookup,
-            bool isForReplies = false)
+            bool isForReplies = false,
+            bool isForSubscription = false)
         {
             var grids = new List<Grid>();
 
             foreach (var thread in threads)
             {
-                var headerStackPanel = BuildThreadHeader(thread, forumLookup, isForReplies);
+                var headerStackPanel = BuildThreadHeader(thread, forumLookup, isForReplies, isForSubscription);
                 var contentGrid = BuildThreadContent(thread, cdnUrl);
 
                 var grid = BuildThreadParentGrid(thread, headerStackPanel, contentGrid);
@@ -80,16 +81,19 @@ namespace XoW
         /// </param>
         /// <param name="forumLookup">版名与版ID的映射</param>
         /// <returns>一个串头的<see cref="StackPanel"/></returns>
-        public static StackPanel BuildThreadHeader<T>(
+        public static Grid BuildThreadHeader<T>(
             T thread,
             Dictionary<string, (string forumId, string permissionLevel)> forumLookup,
-            bool isForReplies = false)
+            bool isForReplies = false,
+            bool isForSubscription = false)
             where T : ForumThread
         {
             var threadHeaderStackPanel = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
             };
+            Grid.SetColumn(threadHeaderStackPanel, 0);
 
             var textBlockThreadId = CreateTextBlockWithDefaultMargin($"No.{thread.Id}");
             threadHeaderStackPanel.Children.Add(textBlockThreadId);
@@ -125,7 +129,37 @@ namespace XoW
                 threadHeaderStackPanel.Children.Add(textBlockSage);
             }
 
-            return threadHeaderStackPanel;
+            var headerParentGrid = new Grid
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+            };
+            headerParentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            headerParentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            headerParentGrid.Children.Add(threadHeaderStackPanel);
+
+            if (isForSubscription)
+            {
+                var buttonDeleteSubscription = new Button
+                {
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Content = new SymbolIcon { Symbol = Symbol.Delete },
+                    DataContext = thread.Id,
+                };
+
+                var stackPanelForDeleteButton = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    FlowDirection = FlowDirection.RightToLeft,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                };
+                Grid.SetColumn(stackPanelForDeleteButton, 1);
+                stackPanelForDeleteButton.Children.Add(buttonDeleteSubscription);
+
+                headerParentGrid.Children.Add(stackPanelForDeleteButton);
+            }
+
+            return headerParentGrid;
         }
 
         /// <summary>
@@ -173,6 +207,7 @@ namespace XoW
                     Source = new BitmapImage { UriSource = new Uri($"{cdnUrl}/thumb/{thread.Img}{thread.Ext}") },
                     Stretch = Stretch.None,
                     VerticalAlignment = VerticalAlignment.Top,
+                    Margin = new Thickness(10, 0, 10, 0),
                 };
 
                 Grid.SetColumn(image, 0);
@@ -187,7 +222,7 @@ namespace XoW
 
         public static Grid BuildThreadParentGrid<T>(
             T thread,
-            StackPanel headerStackPanel,
+            Grid header,
             Grid contentGrid)
             where T : ForumThread
         {
@@ -204,8 +239,9 @@ namespace XoW
             var stackPanel = new StackPanel
             {
                 Orientation = Orientation.Vertical,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
             };
-            stackPanel.Children.Add(headerStackPanel);
+            stackPanel.Children.Add(header);
             stackPanel.Children.Add(contentGrid);
 
             parentGridForThisThread.Children.Add(stackPanel);

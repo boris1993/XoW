@@ -52,6 +52,13 @@
         /// 参数page为分页页码
         /// </summary>
         public static string GetSubscription = $"{BaseUrl}/Api/feed";
+
+        /// <summary>
+        /// 添加订阅
+        /// 参数uuid为订阅ID
+        /// 参数tid为串ID
+        /// </summary>
+        public static string AddSubscription = $"{BaseUrl}/Api/addFeed";
     }
 
     public static class Constants
@@ -104,6 +111,8 @@
         public const string SearchThreadButtonTooltip = "搜索串";
         public const string GotoThreadTooltip = "跳转到串";
         public const string PoOnlyTooltip = "只看PO";
+        public const string DeleteSubscription = "删除订阅";
+        public const string ReportThread = "举报该串";
     }
 
     public static class ConfirmationMessage

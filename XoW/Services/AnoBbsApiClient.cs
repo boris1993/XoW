@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using XoW.Models;
 
 namespace XoW.Services
@@ -14,6 +14,10 @@ namespace XoW.Services
         private const string QueryParamId = "id";
         private const string QueryParamUuid = "uuid";
         private const string QueryParamPageId = "page";
+        private const string QueryParamTid = "tid";
+
+        private const string AddSubscriptionSuccessfulMessage = "订阅大成功→_→";
+        private const string AddSubscriptionFailedMessage = "该串不存在";
 
         public static async Task<List<CdnUrl>> GetCdnAsync()
         {
@@ -91,6 +95,7 @@ namespace XoW.Services
 
             return reply;
         }
+
         public static async Task<List<ThreadSubscription>> GetSubscriptionsAsync(string subscriptionId, int pageId = 1)
         {
             var uriBuilder = new UriBuilder(Url.GetSubscription);
@@ -104,6 +109,20 @@ namespace XoW.Services
             var subscriptions = JsonConvert.DeserializeObject<List<ThreadSubscription>>(responseString);
 
             return subscriptions;
+        }
+
+        public static async Task<string> AddSubscriptionAsync(string subscriptionId, string tid)
+        {
+            var uriBuilder = new UriBuilder(Url.AddSubscription);
+
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query[QueryParamUuid] = subscriptionId;
+            query[QueryParamTid] = tid;
+            uriBuilder.Query = query.ToString();
+
+            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
+
+            return JsonConvert.DeserializeObject<string>(responseString);
         }
 
         private static async Task<string> GetStringResponseAsync(string url)
