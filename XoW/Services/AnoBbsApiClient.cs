@@ -125,6 +125,20 @@ namespace XoW.Services
             return JsonConvert.DeserializeObject<string>(responseString);
         }
 
+        public static async Task<string> DeleteSubscriptionAsync(string subscriptionId, string tid)
+        {
+            var uriBuilder = new UriBuilder(Url.DeleteSubscription);
+
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query[QueryParamUuid] = subscriptionId;
+            query[QueryParamTid] = tid;
+            uriBuilder.Query = query.ToString();
+
+            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
+
+            return JsonConvert.DeserializeObject<string>(responseString);
+        }
+
         private static async Task<string> GetStringResponseAsync(string url)
         {
             var httpClient = HttpClientService.GetHttpClientInstance();

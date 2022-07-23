@@ -5,7 +5,6 @@ using System.Linq;
 using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -72,6 +71,7 @@ namespace XoW
                 {
                     var errorMessagePopup = new ContentDialog
                     {
+                        RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
                         Title = ComponentContent.Error,
                         CloseButtonText = ComponentContent.Ok,
                         Content = ErrorMessage.SubscriptionIdRequiredForGettingSubscription,
@@ -95,6 +95,7 @@ namespace XoW
             {
                 var errorMessagePopup = new ContentDialog
                 {
+                    RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
                     Title = ComponentContent.Error,
                     CloseButtonText = ComponentContent.Ok,
                     Content = ErrorMessage.CookieRequiredForThisForum,
@@ -149,8 +150,35 @@ namespace XoW
 
             var result = await AnoBbsApiClient.AddSubscriptionAsync(subscriptionId, threadId);
 
-            var messageDialog = new MessageDialog(result);
-            await messageDialog.ShowAsync();
+            var contentDialog = new ContentDialog
+            {
+                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
+                Title = ComponentContent.Notification,
+                Content = result,
+                CloseButtonText = ComponentContent.Ok,
+            };
+
+            await contentDialog.ShowAsync();
+        }
+
+        private async void OnDeleteSubscriptionButtonClicked(object sender, RoutedEventArgs args)
+        {
+            var subscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
+            var threadId = ((Button)sender).DataContext.ToString();
+
+            var result = await AnoBbsApiClient.DeleteSubscriptionAsync(subscriptionId, threadId);
+
+            var contentDialog = new ContentDialog
+            {
+                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
+                Title = ComponentContent.Notification,
+                Content = result,
+                CloseButtonText = ComponentContent.Ok,
+            };
+
+            await contentDialog.ShowAsync();
+
+            RefreshSubscriptions();
         }
 
         private async void OnScanQRCodeButtonClicked(object sender, RoutedEventArgs args)
@@ -205,6 +233,7 @@ namespace XoW
         {
             var dialog = new ContentDialog
             {
+                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
                 PrimaryButtonText = ComponentContent.Confirm,
                 SecondaryButtonText = ComponentContent.Cancel,
                 DefaultButton = ContentDialogButton.Primary,
@@ -239,10 +268,10 @@ namespace XoW
 
             #region 设定部分手动指定颜色的控件的新颜色
             var borderAndBackgroundColor = isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.LightGray);
-            ThreadButtonTopBar.Background = borderAndBackgroundColor;
-            ThreadButtonTopBar.BorderBrush = borderAndBackgroundColor;
-            ReplyTopBar.Background = borderAndBackgroundColor;
-            ReplyTopBar.BorderBrush = borderAndBackgroundColor;
+            ThreadTopBarGrid.Background = borderAndBackgroundColor;
+            ThreadTopBarGrid.BorderBrush = borderAndBackgroundColor;
+            ReplyTopBarGrid.Background = borderAndBackgroundColor;
+            ReplyTopBarGrid.BorderBrush = borderAndBackgroundColor;
             ThreadsListView.BorderBrush = borderAndBackgroundColor;
             Replies.BorderBrush = borderAndBackgroundColor;
             #endregion
@@ -265,6 +294,7 @@ namespace XoW
             {
                 var dialog = new ContentDialog
                 {
+                    RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
                     PrimaryButtonText = ComponentContent.Confirm,
                     SecondaryButtonText = ComponentContent.Cancel,
                     DefaultButton = ContentDialogButton.Primary,

@@ -28,7 +28,8 @@
             </Grid.RowDefinitions>
 
             <!--#region 左边串列表 -->
-            <Grid Background="LightGray"
+            <Grid x:Name="ThreadTopBarGrid"
+                  Background="LightGray"
                   Grid.Column="0"
                   Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -138,9 +139,7 @@
                             x:Name="ReplyTopBar"
                             Grid.Column="1"
                             Grid.Row="0"
-                            Background="LightGray"
                             BorderThickness="5, 5, 10, 5"
-                            BorderBrush="LightGray"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
                             FlowDirection="RightToLeft">
@@ -272,20 +271,38 @@
                         <ListView.ItemTemplate>
                             <DataTemplate x:Name="CookieListViewTemplate"
                                           x:DataType="localModel:AnonBbsCookie">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Center"
-                                               Text="{x:Bind Name}"
-                                               DataContext="{x:Bind Name}" />
-                                    <Button x:Name="ButtonDeleteCookie"
-                                            Background="Transparent"
-                                            HorizontalAlignment="Right"
-                                            DataContext="{x:Bind Name}"
-                                            Click="OnDeleteCookieButtonClicked">
-                                        <SymbolIcon Symbol="Delete" />
-                                    </Button>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="1*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Grid.Column="0">
+                                        <TextBlock VerticalAlignment="Center"
+                                                   Text="{x:Bind Name}"
+                                                   DataContext="{x:Bind Name}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal"
+                                                FlowDirection="RightToLeft"
+                                                Grid.Column="1">
+                                        <Button x:Name="ButtonDeleteCookie"
+                                                Background="Transparent"
+                                                HorizontalAlignment="Right"
+                                                DataContext="{x:Bind Name}"
+                                                Click="OnDeleteCookieButtonClicked">
+                                            <SymbolIcon Symbol="Delete" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
                     </ListView>
                 </StackPanel>
             </Grid>

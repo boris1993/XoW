@@ -1,7 +1,7 @@
-﻿using Microsoft.Toolkit.Uwp;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Uwp;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -119,7 +119,36 @@ namespace XoW
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
-            ThreadsListView.ItemsSource = new IncrementalLoadingCollection<SubscriptionSource, Grid>();
+            var itemsSource = new IncrementalLoadingCollection<SubscriptionSource, Grid>();
+            itemsSource.OnEndLoading = () =>
+            {
+                foreach (var item in itemsSource)
+                {
+                    var contentParentStackPanel = item.Children
+                        .Where(element => ((StackPanel)element).Name == ComponentsBuilder.TopLevelStackPanel)
+                        .Single() as StackPanel;
+
+                    var headerGrid = contentParentStackPanel.Children
+                        .Where(element => ((Grid)element).Name == ComponentsBuilder.ThreadHeaderParentGrid)
+                        .Single() as Grid;
+
+                    var stackPanelForDeleteButton = headerGrid.Children
+                        .Where(element => ((StackPanel)element).Name == ComponentsBuilder.StackPanelForDeleteButton)
+                        .Single() as StackPanel;
+
+                    var buttonForDeleteSubscription = stackPanelForDeleteButton
+                        .Children
+                        .Where(element => element is Button)
+                        .Where(button => ((Button)button).Name == ComponentsBuilder.ButtonDeleteSubscriptionName)
+                        .Single() as Button;
+
+                    // 确保这个EventHandler只被注册一次
+                    buttonForDeleteSubscription.Click -= OnDeleteSubscriptionButtonClicked;
+                    buttonForDeleteSubscription.Click += OnDeleteSubscriptionButtonClicked;
+                }
+            };
+
+            ThreadsListView.ItemsSource = itemsSource;
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }

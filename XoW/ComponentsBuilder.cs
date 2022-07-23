@@ -13,6 +13,12 @@ namespace XoW
 {
     public static class ComponentsBuilder
     {
+        public const string TopLevelStackPanel = "TopLevelStackPanel";
+        public const string ThreadHeaderParentGrid = "ThreadHeaderParentGrid";
+        public const string ThreadInfoStackPanel = "ThreadInfoStackPanel";
+        public const string StackPanelForDeleteButton = "StackPanelForDeleteButton";
+        public const string ButtonDeleteSubscriptionName = "ButtonDeleteSubscription";
+
         public static List<Grid> BuildGridForThread(
             IEnumerable<ForumThread> threads,
             string cdnUrl,
@@ -88,12 +94,23 @@ namespace XoW
             bool isForSubscription = false)
             where T : ForumThread
         {
+            var threadHeaderParentGrid = new Grid
+            {
+                Name = ThreadHeaderParentGrid,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+            };
+            threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
             var threadHeaderStackPanel = new StackPanel
             {
+                Name = ThreadInfoStackPanel,
                 Orientation = Orientation.Horizontal,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
             };
             Grid.SetColumn(threadHeaderStackPanel, 0);
+            threadHeaderParentGrid.Children.Add(threadHeaderStackPanel);
 
             var textBlockThreadId = CreateTextBlockWithDefaultMargin($"No.{thread.Id}");
             threadHeaderStackPanel.Children.Add(textBlockThreadId);
@@ -129,19 +146,11 @@ namespace XoW
                 threadHeaderStackPanel.Children.Add(textBlockSage);
             }
 
-            var headerParentGrid = new Grid
-            {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-            };
-            headerParentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            headerParentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            headerParentGrid.Children.Add(threadHeaderStackPanel);
-
             if (isForSubscription)
             {
                 var buttonDeleteSubscription = new Button
                 {
+                    Name = ButtonDeleteSubscriptionName,
                     HorizontalAlignment = HorizontalAlignment.Right,
                     Content = new SymbolIcon { Symbol = Symbol.Delete },
                     DataContext = thread.Id,
@@ -149,6 +158,7 @@ namespace XoW
 
                 var stackPanelForDeleteButton = new StackPanel
                 {
+                    Name = StackPanelForDeleteButton,
                     Orientation = Orientation.Horizontal,
                     FlowDirection = FlowDirection.RightToLeft,
                     HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -156,10 +166,10 @@ namespace XoW
                 Grid.SetColumn(stackPanelForDeleteButton, 1);
                 stackPanelForDeleteButton.Children.Add(buttonDeleteSubscription);
 
-                headerParentGrid.Children.Add(stackPanelForDeleteButton);
+                threadHeaderParentGrid.Children.Add(stackPanelForDeleteButton);
             }
 
-            return headerParentGrid;
+            return threadHeaderParentGrid;
         }
 
         /// <summary>
@@ -238,6 +248,7 @@ namespace XoW
 
             var stackPanel = new StackPanel
             {
+                Name = TopLevelStackPanel,
                 Orientation = Orientation.Vertical,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
             };

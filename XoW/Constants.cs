@@ -59,6 +59,13 @@
         /// 参数tid为串ID
         /// </summary>
         public static string AddSubscription = $"{BaseUrl}/Api/addFeed";
+
+        /// <summary>
+        /// 删除订阅
+        /// 参数uuid为订阅ID
+        /// 参数tid为串ID
+        /// </summary>
+        public static string DeleteSubscription = $"{BaseUrl}/Api/delFeed";
     }
 
     public static class Constants
@@ -98,6 +105,7 @@
         public const string Confirm = "我确定！";
         public const string Cancel = "算了吧";
 
+        public const string Notification = "提示";
         public const string Error = "错误";
 
         public const string SubscriptionIdLabel = "订阅ID";
