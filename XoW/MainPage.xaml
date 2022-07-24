@@ -24,97 +24,98 @@
                 <ColumnDefinition Width="0.5*" />
                 <ColumnDefinition Width="0.5*" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
 
             <!--#region 左边串列表 -->
-            <Grid x:Name="ThreadTopBarGrid"
+            <Grid x:Name="ContentThreadGrid"
                   Background="LightGray"
-                  Visibility="Collapsed"
+                  BorderBrush="LightGray"
+                  BorderThickness="10, 0, 10, 10"
                   Grid.Column="0"
-                  Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="0.5*" />
-                </Grid.ColumnDefinitions>
+                  Visibility="Visible">
                 <Grid.RowDefinitions>
-                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal"
-                            Grid.Column="0"
-                            Grid.Row="0"
-                            Margin="10, 0"
-                            BorderThickness="5, 5, 10, 5"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            FlowDirection="LeftToRight">
-                    <TextBlock FontWeight="Bold"
-                               FontSize="20"
-                               Text="{x:Bind local:GlobalState.CurrentForumName.ForumName, Mode=OneWay}" />
-                </StackPanel>
+                <Grid x:Name="ThreadTopBarGrid"
+                      Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*" />
+                        <ColumnDefinition Width="0.5*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal"
-                            x:Name="ThreadButtonTopBar"
-                            Grid.Column="1"
-                            Grid.Row="0"
-                            BorderThickness="5, 5, 10, 5"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            FlowDirection="RightToLeft">
-                    <Button x:Name="ButtonRefreshThread"
-                            Margin="5, 0, 5, 0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Stretch"
-                            Click="{x:Bind OnRefreshThreadButtonClicked}"
-                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThreadButtonTooltip}">
-                        <SymbolIcon Symbol="Refresh" />
-                    </Button>
-                    <Button x:Name="ButtonCreateThread"
-                            Margin="0, 0, 5, 0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Stretch"
-                            Click="{x:Bind OnCreateNewThreadButtonClicked}"
-                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
-                        <SymbolIcon Symbol="Edit" />
-                    </Button>
-                    <Button x:Name="ButtonSearchThread"
-                            Margin="0, 0, 5, 0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Stretch"
-                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.SearchThreadButtonTooltip}">
-                        <SymbolIcon Symbol="Find" />
-                    </Button>
-                    <Button x:Name="ButtonGotoThread"
-                            Margin="0, 0, 5, 0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Stretch"
-                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.GotoThreadTooltip}">
-                        <SymbolIcon Symbol="Go" />
-                    </Button>
-                </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Margin="0, 5"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                FlowDirection="LeftToRight">
+                        <TextBlock FontWeight="Bold"
+                                   FontSize="20"
+                                   VerticalAlignment="Center"
+                                   Text="{x:Bind local:GlobalState.CurrentForumName.ForumName, Mode=OneWay}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                x:Name="ThreadButtonTopBar"
+                                Grid.Column="1"
+                                Grid.Row="0"
+                                Margin="0, 5"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                FlowDirection="RightToLeft">
+                        <Button x:Name="ButtonRefreshThread"
+                                Margin="0, 0, 5, 0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                Click="{x:Bind OnRefreshThreadButtonClicked}"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThreadButtonTooltip}">
+                            <SymbolIcon Symbol="Refresh" />
+                        </Button>
+                        <Button x:Name="ButtonCreateThread"
+                                Margin="0, 0, 5, 0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                Click="{x:Bind OnCreateNewThreadButtonClicked}"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
+                            <SymbolIcon Symbol="Edit" />
+                        </Button>
+                        <Button x:Name="ButtonSearchThread"
+                                Margin="0, 0, 5, 0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.SearchThreadButtonTooltip}">
+                            <SymbolIcon Symbol="Find" />
+                        </Button>
+                        <Button x:Name="ButtonGotoThread"
+                                Margin="0, 0, 5, 0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.GotoThreadTooltip}">
+                            <SymbolIcon Symbol="Go" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                
+                <ListView x:Name="ThreadsListView"
+                          Grid.Row="1"
+                          Background="White"
+                          SelectionMode="None"
+                          HorizontalAlignment="Stretch"
+                          IsItemClickEnabled="True"
+                          ItemClick="{x:Bind OnThreadClicked}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
             </Grid>
-
-            <ListView x:Name="ThreadsListView"
-                      Grid.Column="0"
-                      Grid.Row="1"
-                      Visibility="Collapsed"
-                      SelectionMode="None"
-                      BorderBrush="LightGray"
-                      BorderThickness="10, 0, 10, 10"
-                      HorizontalAlignment="Stretch"
-                      Width="Auto"
-                      IsItemClickEnabled="True"
-                      ItemClick="{x:Bind OnThreadClicked}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment"
-                                Value="Stretch" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
             <!--#endregion-->
 
             <!-- #region 发新串 -->
@@ -127,7 +128,7 @@
                   VerticalAlignment="Stretch"
                   BorderThickness="5, 5, 10, 5"
                   BorderBrush="LightGray"
-                  Visibility="Visible">
+                  Visibility="Collapsed">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
