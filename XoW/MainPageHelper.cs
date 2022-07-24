@@ -106,12 +106,12 @@ namespace XoW
 
         private void RefreshReplies()
         {
-            Replies.ItemsSource = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
+            RepliesListView.ItemsSource = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
         }
 
         private void RefreshPoOnlyReplies()
         {
-            Replies.ItemsSource = new IncrementalLoadingCollection<PoOnlyThreadReplySource, Grid>();
+            RepliesListView.ItemsSource = new IncrementalLoadingCollection<PoOnlyThreadReplySource, Grid>();
         }
 
         public void RefreshSubscriptions()

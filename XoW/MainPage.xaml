@@ -27,8 +27,8 @@
 
             <!--#region 左边串列表 -->
             <Grid x:Name="ContentThreadGrid"
-                  Background="LightGray"
-                  BorderBrush="LightGray"
+                  Background="{x:Bind local:GlobalState.BackgroundAndBorderColor.ColorBrush, Mode=OneWay}"
+                  BorderBrush="{x:Bind local:GlobalState.BackgroundAndBorderColor.ColorBrush, Mode=OneWay}"
                   BorderThickness="10, 0, 10, 10"
                   Grid.Column="0"
                   Visibility="Visible">
@@ -103,7 +103,7 @@
                 
                 <ListView x:Name="ThreadsListView"
                           Grid.Row="1"
-                          Background="White"
+                          Background="{x:Bind local:GlobalState.ListViewBackgroundColor.ColorBrush, Mode=OneWay}"
                           SelectionMode="None"
                           HorizontalAlignment="Stretch"
                           IsItemClickEnabled="True"
@@ -118,16 +118,105 @@
             </Grid>
             <!--#endregion-->
 
+            <!--#region 右边回复列表 -->
+            <Grid x:Name="ContentRepliesGrid"
+                  Background="{x:Bind local:GlobalState.BackgroundAndBorderColor.ColorBrush, Mode=OneWay}"
+                  BorderBrush="{x:Bind local:GlobalState.BackgroundAndBorderColor.ColorBrush, Mode=OneWay}"
+                  BorderThickness="0, 0, 10, 10"
+                  Grid.Column="1"
+                  Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="ReplyTopBarGrid"
+                      Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.5*" />
+                        <ColumnDefinition Width="0.5*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                Margin="0, 5"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                FlowDirection="LeftToRight">
+                        <TextBlock FontWeight="Bold"
+                                   FontSize="20"
+                                   VerticalAlignment="Center"
+                                   Text="{x:Bind local:GlobalState.CurrentThreadIdDisplay.ThreadId, Mode=OneWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                x:Name="ReplyTopBar"
+                                Grid.Column="1"
+                                Grid.Row="0"
+                                Margin="0, 5"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                FlowDirection="RightToLeft">
+                        <Button x:Name="ButtonRefreshReplies"
+                                Margin="0, 0, 5, 0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                Click="{x:Bind OnRefreshRepliesButtonClicked}"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThreadButtonTooltip}">
+                            <SymbolIcon Symbol="Refresh" />
+                        </Button>
+                        <Button x:Name="ButtonCreateReply"
+                                Margin="0, 0, 5, 0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReplyButtonTooltip}">
+                            <SymbolIcon Symbol="Comment" />
+                        </Button>
+                        <Button x:Name="ButtonAddToFavourites"
+                                Margin="0, 0, 5, 0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                Click="{x:Bind OnAddSubscriptionButtonClicked}"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.AddToFavouritesButtonTooltip}">
+                            <SymbolIcon Symbol="OutlineStar" />
+                        </Button>
+                        <ToggleButton x:Name="ButtonPoOnly"
+                                      Margin="0, 0, 5, 0"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Stretch"
+                                      Checked="{x:Bind OnPoOnlyButtonClicked}"
+                                      Unchecked="{x:Bind RefreshReplies}"
+                                      ToolTipService.ToolTip="{x:Bind local:ComponentContent.PoOnlyTooltip}"
+                                      Content="PO" />
+                        <Button x:Name="ButtonReportThread"
+                                Margin="0, 0, 5, 0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Stretch"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.ReportThread}">
+                            <SymbolIcon Symbol="Flag" />
+                        </Button>
+
+                    </StackPanel>
+                </Grid>
+
+                <ListView x:Name="RepliesListView"
+                          Grid.Row="1"
+                          Background="{x:Bind local:GlobalState.ListViewBackgroundColor.ColorBrush, Mode=OneWay}"
+                          SelectionMode="None"
+                          HorizontalAlignment="Stretch" />
+            </Grid>
+            <!--#endregion-->
+
             <!-- #region 发新串 -->
             <Grid x:Name="NewThreadPanelGrid"
-                  Background="LightGray"
+                  Background="{x:Bind local:GlobalState.BackgroundAndBorderColor.ColorBrush, Mode=OneWay}"
+                  BorderBrush="{x:Bind local:GlobalState.BackgroundAndBorderColor.ColorBrush, Mode=OneWay}"
+                  BorderThickness="5, 5, 10, 5"
                   Grid.Column="0"
                   Grid.Row="0"
                   Grid.RowSpan="2"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
-                  BorderThickness="5, 5, 10, 5"
-                  BorderBrush="LightGray"
                   Visibility="Collapsed">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -252,95 +341,6 @@
                 </StackPanel>
             </Grid>
             <!-- #endregion -->
-
-            <!--#region 右边回复列表 -->
-            <Grid x:Name="ContentRepliesGrid"
-                  Background="LightGray"
-                  BorderBrush="LightGray"
-                  BorderThickness="0, 0, 10, 10"
-                  Grid.Column="1"
-                  Visibility="Collapsed">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <Grid x:Name="ReplyTopBarGrid"
-                      Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.5*" />
-                        <ColumnDefinition Width="0.5*" />
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Orientation="Horizontal"
-                                Grid.Column="0"
-                                Grid.Row="0"
-                                Margin="0, 5"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                FlowDirection="LeftToRight">
-                        <TextBlock FontWeight="Bold"
-                                   FontSize="20"
-                                   VerticalAlignment="Center"
-                                   Text="{x:Bind local:GlobalState.CurrentThreadIdDisplay.ThreadId, Mode=OneWay}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                                x:Name="ReplyTopBar"
-                                Grid.Column="1"
-                                Grid.Row="0"
-                                Margin="0, 5"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                FlowDirection="RightToLeft">
-                        <Button x:Name="ButtonRefreshReplies"
-                                Margin="0, 0, 5, 0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Stretch"
-                                Click="{x:Bind OnRefreshRepliesButtonClicked}"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThreadButtonTooltip}">
-                            <SymbolIcon Symbol="Refresh" />
-                        </Button>
-                        <Button x:Name="ButtonCreateReply"
-                                Margin="0, 0, 5, 0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Stretch"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReplyButtonTooltip}">
-                            <SymbolIcon Symbol="Comment" />
-                        </Button>
-                        <Button x:Name="ButtonAddToFavourites"
-                                Margin="0, 0, 5, 0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Stretch"
-                                Click="{x:Bind OnAddSubscriptionButtonClicked}"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.AddToFavouritesButtonTooltip}">
-                            <SymbolIcon Symbol="OutlineStar" />
-                        </Button>
-                        <ToggleButton x:Name="ButtonPoOnly"
-                                      Margin="0, 0, 5, 0"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Stretch"
-                                      Checked="{x:Bind OnPoOnlyButtonClicked}"
-                                      Unchecked="{x:Bind RefreshReplies}"
-                                      ToolTipService.ToolTip="{x:Bind local:ComponentContent.PoOnlyTooltip}"
-                                      Content="PO" />
-                        <Button x:Name="ButtonReportThread"
-                                Margin="0, 0, 5, 0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Stretch"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.ReportThread}">
-                            <SymbolIcon Symbol="Flag" />
-                        </Button>
-
-                    </StackPanel>
-                </Grid>
-
-                <ListView x:Name="Replies"
-                          Grid.Row="1"
-                          Background="White"
-                          SelectionMode="None"
-                          HorizontalAlignment="Stretch" />
-            </Grid>
-            <!--#endregion-->
         </Grid>
 
         <Grid x:Name="SettingsGrid"
