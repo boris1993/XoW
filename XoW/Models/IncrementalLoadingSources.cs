@@ -13,7 +13,7 @@ namespace XoW.Models
         public async Task<IEnumerable<Grid>> GetPagedItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default)
         {
             var threads = await AnoBbsApiClient.GetTimelineAsync(pageIndex + 1);
-            var gridsInTheListView = ComponentsBuilder.BuildGridForThread(threads, GlobalState.CdnUrl, GlobalState.ForumAndIdLookup);
+            var gridsInTheListView = ComponentsBuilder.BuildGridForThread(threads, GlobalState.CdnUrl);
 
             return gridsInTheListView;
         }
@@ -24,7 +24,7 @@ namespace XoW.Models
         public async Task<IEnumerable<Grid>> GetPagedItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default)
         {
             var threads = await AnoBbsApiClient.GetThreadsAsync(GlobalState.CurrentForumId, pageIndex + 1);
-            var gridsInTheListView = ComponentsBuilder.BuildGridForThread(threads, GlobalState.CdnUrl, GlobalState.ForumAndIdLookup);
+            var gridsInTheListView = ComponentsBuilder.BuildGridForThread(threads, GlobalState.CdnUrl);
 
             return gridsInTheListView;
         }
@@ -39,12 +39,10 @@ namespace XoW.Models
             var grids = actualPageIndex == 1 ?
                 ComponentsBuilder.BuildGridForReply(
                     replies,
-                    GlobalState.CdnUrl,
-                    GlobalState.ForumAndIdLookup) :
+                    GlobalState.CdnUrl) :
                 ComponentsBuilder.BuildGridForOnlyReplies(
                     replies.Replies.Where(reply => reply.UserHash != "Tips").ToList(),
-                    GlobalState.CdnUrl,
-                    GlobalState.ForumAndIdLookup);
+                    GlobalState.CdnUrl);
 
             return grids;
         }
@@ -59,12 +57,10 @@ namespace XoW.Models
             var grids = actualPageIndex == 1 ?
                 ComponentsBuilder.BuildGridForReply(
                     replies,
-                    GlobalState.CdnUrl,
-                    GlobalState.ForumAndIdLookup) :
+                    GlobalState.CdnUrl) :
                 ComponentsBuilder.BuildGridForOnlyReplies(
                     replies.Replies.Where(reply => reply.UserHash != "Tips").ToList(),
-                    GlobalState.CdnUrl,
-                    GlobalState.ForumAndIdLookup);
+                    GlobalState.CdnUrl);
 
             return grids;
         }
@@ -76,7 +72,7 @@ namespace XoW.Models
         {
             var actualPageIndex = pageIndex + 1;
             var subscriptions = await AnoBbsApiClient.GetSubscriptionsAsync(GlobalState.SubscriptionId.SubscriptionId, actualPageIndex);
-            var grids = ComponentsBuilder.BuildGrids(subscriptions, GlobalState.CdnUrl, GlobalState.ForumAndIdLookup, isForSubscription: true);
+            var grids = ComponentsBuilder.BuildGrids(subscriptions, GlobalState.CdnUrl, isForSubscription: true);
 
             return grids;
         }

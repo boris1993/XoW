@@ -21,23 +21,21 @@ namespace XoW
 
         public static List<Grid> BuildGridForThread(
             IEnumerable<ForumThread> threads,
-            string cdnUrl,
-            Dictionary<string, (string, string)> forumLookup)
+            string cdnUrl)
         {
-            var gridsInTheListView = BuildGrids(threads, cdnUrl, forumLookup);
+            var gridsInTheListView = BuildGrids(threads, cdnUrl);
 
             return gridsInTheListView;
         }
 
         public static List<Grid> BuildGridForReply(
             ThreadReply threadReply,
-            string cdnUrl,
-            Dictionary<string, (string, string)> forumLookup)
+            string cdnUrl)
         {
             var gridsInTheListView = new List<Grid>();
 
             #region 渲染第一条串
-            var headerForTheFirstGrid = BuildThreadHeader(threadReply, forumLookup, true);
+            var headerForTheFirstGrid = BuildThreadHeader(threadReply, true);
             var contentForTheFirstGrid = BuildThreadContent(threadReply, cdnUrl);
             var firstThreadGrid = BuildThreadParentGrid(threadReply, headerForTheFirstGrid, contentForTheFirstGrid);
 
@@ -45,7 +43,7 @@ namespace XoW
             #endregion
 
             #region 渲染回复串
-            gridsInTheListView.AddRange(BuildGrids(threadReply.Replies, cdnUrl, forumLookup, true));
+            gridsInTheListView.AddRange(BuildGrids(threadReply.Replies, cdnUrl, true));
             #endregion
 
             return gridsInTheListView;
@@ -53,13 +51,11 @@ namespace XoW
 
         public static List<Grid> BuildGridForOnlyReplies(
             List<ForumThread> replies,
-            string cdnUrl,
-            Dictionary<string, (string, string)> forumLookup) => BuildGrids(replies, cdnUrl, forumLookup, true);
+            string cdnUrl) => BuildGrids(replies, cdnUrl, true);
 
         public static List<Grid> BuildGrids(
             IEnumerable<ForumThread> threads,
             string cdnUrl,
-            Dictionary<string, (string, string)> forumLookup,
             bool isForReplies = false,
             bool isForSubscription = false)
         {
@@ -67,7 +63,7 @@ namespace XoW
 
             foreach (var thread in threads)
             {
-                var headerStackPanel = BuildThreadHeader(thread, forumLookup, isForReplies, isForSubscription);
+                var headerStackPanel = BuildThreadHeader(thread, isForReplies, isForSubscription);
                 var contentGrid = BuildThreadContent(thread, cdnUrl);
 
                 var grid = BuildThreadParentGrid(thread, headerStackPanel, contentGrid);
@@ -89,7 +85,6 @@ namespace XoW
         /// <returns>一个串头的<see cref="StackPanel"/></returns>
         public static Grid BuildThreadHeader<T>(
             T thread,
-            Dictionary<string, (string forumId, string permissionLevel)> forumLookup,
             bool isForReplies = false,
             bool isForSubscription = false)
             where T : ForumThread
@@ -133,7 +128,7 @@ namespace XoW
             var textBlockUserName = CreateTextBlockWithDefaultMargin(thread.Name, Colors.DarkGreen);
             threadHeaderStackPanel.Children.Add(textBlockUserName);
 
-            var forumName = forumLookup.Where(f => f.Value.forumId == thread.FId).Select(f => f.Key).FirstOrDefault();
+            var forumName = GlobalState.ForumAndIdLookup.Where(f => f.Value.forumId == thread.FId).Select(f => f.Key).FirstOrDefault();
             var textBlockForumName = CreateTextBlockWithDefaultMargin(forumName ?? string.Empty);
             threadHeaderStackPanel.Children.Add(textBlockForumName);
 

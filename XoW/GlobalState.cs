@@ -10,7 +10,7 @@ namespace XoW
         /// 版名 -> (版ID, 权限级别)
         /// 目前已知权限级别2代表需要cookie
         /// </summary>
-        public static readonly Dictionary<string, (string, string)> ForumAndIdLookup = new Dictionary<string, (string, string)>();
+        public static Dictionary<string, (string forumId, string permissionLevel)> ForumAndIdLookup = default;
         public static string CurrentForumId = Constants.TimelineForumId;
         public static string CurrentThreadId = default;
         public static string CurrentThreadAuthorUserHash = default;
