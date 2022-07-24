@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Uwp;
@@ -16,7 +17,7 @@ namespace XoW
 
         private async Task RefreshForumsAsync()
         {
-            GlobalState.ForumAndIdLookup.Clear();
+            GlobalState.ForumAndIdLookup = new Dictionary<string, (string, string)>();
 
             var forumGroups = await AnoBbsApiClient.GetForumGroupsAsync();
 
@@ -88,17 +89,15 @@ namespace XoW
 
             if (GlobalState.CurrentForumId == Constants.TimelineForumId)
             {
-                ButtonCreateThread.IsEnabled = false;
                 ThreadsListView.ItemsSource = new IncrementalLoadingCollection<TimelineForumThreadSource, Grid>();
             }
             else
             {
-                ButtonCreateThread.IsEnabled = true;
                 ThreadsListView.ItemsSource = new IncrementalLoadingCollection<NormalForumThreadSource, Grid>();
             }
 
             GlobalState.CurrentForumName.ForumName = GlobalState.ForumAndIdLookup
-                    .Where(lookup => lookup.Value.Item1 == GlobalState.CurrentForumId)
+                    .Where(lookup => lookup.Value.forumId == GlobalState.CurrentForumId)
                     .Single()
                     .Key;
 
@@ -187,6 +186,22 @@ namespace XoW
         {
             ContentGrid.Visibility = Visibility.Visible;
             SettingsGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void ShowNewThreadPanel()
+        {
+            ThreadTopBarGrid.Visibility = Visibility.Collapsed;
+            ThreadsListView.Visibility = Visibility.Collapsed;
+
+            NewThreadPanelGrid.Visibility = Visibility.Visible;
+        }
+
+        private void HideNewThreadPanel()
+        {
+            ThreadTopBarGrid.Visibility = Visibility.Visible;
+            ThreadsListView.Visibility = Visibility.Visible;
+
+            NewThreadPanelGrid.Visibility = Visibility.Collapsed;
         }
     }
 }

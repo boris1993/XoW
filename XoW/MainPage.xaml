@@ -13,11 +13,13 @@
         <localServices:CookieNameConverter x:Key="CookieNameConverter" />
     </Page.Resources>
 
-    <Grid x:Name="RootGrid">
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
         <Grid x:Name="ContentGrid"
               Margin="40, 0, 0, 0"
               Visibility="Visible"
-              HorizontalAlignment="Stretch">
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.5*" />
                 <ColumnDefinition Width="0.5*" />
@@ -30,6 +32,7 @@
             <!--#region 左边串列表 -->
             <Grid x:Name="ThreadTopBarGrid"
                   Background="LightGray"
+                  Visibility="Collapsed"
                   Grid.Column="0"
                   Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -73,7 +76,7 @@
                             Margin="0, 0, 5, 0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
-                            IsEnabled="False"
+                            Click="{x:Bind OnCreateNewThreadButtonClicked}"
                             ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
                         <SymbolIcon Symbol="Edit" />
                     </Button>
@@ -97,6 +100,7 @@
             <ListView x:Name="ThreadsListView"
                       Grid.Column="0"
                       Grid.Row="1"
+                      Visibility="Collapsed"
                       SelectionMode="None"
                       BorderBrush="LightGray"
                       BorderThickness="10, 0, 10, 10"
@@ -112,6 +116,141 @@
                 </ListView.ItemContainerStyle>
             </ListView>
             <!--#endregion-->
+
+            <!-- #region 发新串 -->
+            <Grid x:Name="NewThreadPanelGrid"
+                  Background="LightGray"
+                  Grid.Column="0"
+                  Grid.Row="0"
+                  Grid.RowSpan="2"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  BorderThickness="5, 5, 10, 5"
+                  BorderBrush="LightGray"
+                  Visibility="Visible">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0"
+                            Orientation="Vertical">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Column="0"
+                                    Margin="5, 0, 5, 0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    FlowDirection="LeftToRight">
+                            <Button x:Name="ButtonCloseNewThreadPanel"
+                                    Margin="0, 0, 5, 0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Stretch"
+                                    Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
+                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.Close}">
+                                <SymbolIcon Symbol="Clear" />
+                            </Button>
+
+                            <ComboBox x:Name="ForumSelectionComboBox"
+                                      Margin="0, 0, 5, 0"
+                                      SelectionChanged="OnForumSelectionComboBoxSelectionChanged"
+                                      DisplayMemberPath="Key" />
+
+                            <ComboBox x:Name="NewThreadCookieSelectionComboBox"
+                                      Margin="0, 0, 5, 0"
+                                      ItemsSource="{x:Bind local:GlobalState.Cookies, Mode=OneWay}"
+                                      DisplayMemberPath="Name"
+                                      SelectedValuePath="Cookie" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Column="1"
+                                    Margin="5, 0, 5, 0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    FlowDirection="RightToLeft">
+                            <Button x:Name="ButtonSendNewThread"
+                                    Margin="0, 0, 5, 0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Stretch"
+                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
+                                <SymbolIcon Symbol="Send" />
+                            </Button>
+                            <Button x:Name="ButtonSaveScratch"
+                                    Margin="0, 0, 5, 0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Stretch"
+                                    Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
+                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.SaveScratch}">
+                                <SymbolIcon Symbol="Save" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                    <Grid HorizontalAlignment="Stretch"
+                          Margin="5, 5, 5, 5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*" />
+                            <ColumnDefinition Width="0.3*" />
+                            <ColumnDefinition Width="0.3*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxNewThreadUserName"
+                                 Grid.Column="0"
+                                 Margin="0, 0, 5, 0"
+                                 HorizontalAlignment="Stretch"
+                                 Header="{x:Bind local:ComponentContent.Username}" />
+                        <TextBox x:Name="TextBoxNewThreadEmail"
+                                 Grid.Column="1"
+                                 Margin="5, 0, 5, 0"
+                                 HorizontalAlignment="Stretch"
+                                 Header="{x:Bind local:ComponentContent.Email}" />
+                        <TextBox x:Name="TextBoxNewThreadTitle"
+                                 Grid.Column="2"
+                                 Margin="5, 0, 0, 0"
+                                 HorizontalAlignment="Stretch"
+                                 Header="{x:Bind local:ComponentContent.Title}" />
+                    </Grid>
+                </StackPanel>
+
+                <TextBox x:Name="TextBoxNewThreadContent"
+                         Grid.Row="1"
+                         Grid.ColumnSpan="2"
+                         Margin="5, 0"
+                         Header="{x:Bind local:ComponentContent.Content}"
+                         HorizontalAlignment="Stretch"
+                         HorizontalContentAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         VerticalContentAlignment="Stretch"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         IsSpellCheckEnabled="False" />
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="2"
+                            Margin="5, 5, 5, 0">
+                    <Button x:Name="ButtonSelectEmoticon"
+                            Margin="0, 0, 5, 0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Stretch"
+                            Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
+                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertEmoticon}">
+                        <SymbolIcon Symbol="Emoji" />
+                    </Button>
+                    <Button x:Name="ButtonAttachPicture"
+                            Margin="0, 0, 5, 0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Stretch"
+                            Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
+                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertImage}">
+                        <SymbolIcon Symbol="Attach" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <!-- #endregion -->
 
             <!--#region 右边回复列表 -->
             <Grid x:Name="ReplyTopBarGrid"

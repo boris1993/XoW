@@ -36,11 +36,25 @@ namespace XoW
             // 刷新板块列表，完成后默认选定时间线版
             await RefreshForumsAsync();
 
+            // 因为没有ObservableDictionary
+            // 所以只能在版面加载好后，在这里把版面列表绑给发新串页面的版面下拉列表
+            ForumSelectionComboBox.ItemsSource =
+                GlobalState.ForumAndIdLookup
+                    .Where(item => item.Value.forumId != Constants.TimelineForumId)
+                    .ToDictionary(item => item.Key, item => item.Value);
+            ForumSelectionComboBox.SelectedIndex = 0;
+
             // 载入时间线第一页
             await RefreshThreads();
 
             // 载入已添加的饼干
             ApplicationConfigurationHelper.LoadAllCookies();
+
+            // 默认以当前选择的饼干发串
+            NewThreadCookieSelectionComboBox.SelectedItem =
+                GlobalState.Cookies
+                    .Where(cookie => cookie.Name == GlobalState.CurrentCookie.CurrentCookie)
+                    .Single();
 
             // 加载订阅ID
             GlobalState.SubscriptionId.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
@@ -62,6 +76,8 @@ namespace XoW
                 ShowSettingsGrid();
                 return;
             }
+
+            HideNewThreadPanel();
 
             if (args.InvokedItemContainer.Name == Constants.FavouriteThreadNavigationItemName)
             {
@@ -88,9 +104,9 @@ namespace XoW
             #region 检查将要访问的版是否要求持有饼干
             var selectedForumId = args.InvokedItemContainer.DataContext.ToString();
             var currentForumPermissionLevel = GlobalState.ForumAndIdLookup.Values
-                .Where(value => value.Item1.ToString() == selectedForumId)
+                .Where(value => value.forumId.ToString() == selectedForumId)
                 .Single()
-                .Item2;
+                .permissionLevel;
             if (string.IsNullOrEmpty(GlobalState.CurrentCookie?.CurrentCookie) && currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
             {
                 var errorMessagePopup = new ContentDialog
@@ -137,6 +153,17 @@ namespace XoW
             }
 
             await RefreshThreads();
+        }
+
+        private void OnCreateNewThreadButtonClicked(object sender, RoutedEventArgs args)
+        {
+            ShowNewThreadPanel();
+
+        }
+
+        private void OnCloseNewThreadPanelButtonClicked(object sender, RoutedEventArgs args)
+        {
+            HideNewThreadPanel();
         }
 
         private void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => RefreshReplies();
@@ -274,6 +301,8 @@ namespace XoW
             ReplyTopBarGrid.BorderBrush = borderAndBackgroundColor;
             ThreadsListView.BorderBrush = borderAndBackgroundColor;
             Replies.BorderBrush = borderAndBackgroundColor;
+            NewThreadPanelGrid.Background = borderAndBackgroundColor;
+            NewThreadPanelGrid.BorderBrush = borderAndBackgroundColor;
             #endregion
         }
 
@@ -320,6 +349,11 @@ namespace XoW
         {
             var newSubscriptionId = TextBoxSubscriptionId.Text;
             UpdateSubscriptionId(newSubscriptionId);
+        }
+
+        private void OnForumSelectionComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
