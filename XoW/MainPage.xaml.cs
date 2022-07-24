@@ -137,6 +137,8 @@ namespace XoW
             GlobalState.CurrentThreadIdDisplay.ThreadId = dataContext.ThreadId;
             GlobalState.CurrentThreadAuthorUserHash = dataContext.ThreadAuthorUserHash;
 
+            ButtonPoOnly.IsChecked = false;
+
             RefreshReplies();
             ContentRepliesGrid.Visibility = Visibility.Visible;
 
