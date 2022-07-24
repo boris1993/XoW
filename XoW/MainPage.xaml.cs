@@ -138,8 +138,7 @@ namespace XoW
             GlobalState.CurrentThreadAuthorUserHash = dataContext.ThreadAuthorUserHash;
 
             RefreshReplies();
-            Replies.Visibility = Visibility.Visible;
-            ReplyTopBarGrid.Visibility = Visibility.Visible;
+            ContentRepliesGrid.Visibility = Visibility.Visible;
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
