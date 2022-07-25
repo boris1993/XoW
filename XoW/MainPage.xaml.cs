@@ -299,7 +299,7 @@ namespace XoW
             GlobalState.BackgroundAndBorderColor.ColorBrush = borderAndBackgroundColor;
 
             var listViewBackgroundColor = isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
-            GlobalState.ListViewBackgroundColor.ColorBrush = listViewBackgroundColor;
+            GlobalState.ListViewAndInputBackgroundColor.ColorBrush = listViewBackgroundColor;
             #endregion
         }
 

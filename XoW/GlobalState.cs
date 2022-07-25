@@ -23,7 +23,7 @@ namespace XoW
             ColorBrush = new SolidColorBrush(Colors.LightGray)
         };
 
-        public static ObservableListViewBackgroundColor ListViewBackgroundColor = new ObservableListViewBackgroundColor
+        public static ObservableListViewBackgroundColor ListViewAndInputBackgroundColor = new ObservableListViewBackgroundColor
         {
             ColorBrush = new SolidColorBrush(Colors.White)
         };

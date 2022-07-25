@@ -190,16 +190,14 @@ namespace XoW
 
         private void ShowNewThreadPanel()
         {
-            ThreadTopBarGrid.Visibility = Visibility.Collapsed;
-            ThreadsListView.Visibility = Visibility.Collapsed;
+            ContentThreadGrid.Visibility = Visibility.Collapsed;
 
             NewThreadPanelGrid.Visibility = Visibility.Visible;
         }
 
         private void HideNewThreadPanel()
         {
-            ThreadTopBarGrid.Visibility = Visibility.Visible;
-            ThreadsListView.Visibility = Visibility.Visible;
+            ContentThreadGrid.Visibility = Visibility.Visible;
 
             NewThreadPanelGrid.Visibility = Visibility.Collapsed;
         }
