@@ -10,4 +10,14 @@ namespace XoW.Services
 
         public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotImplementedException();
     }
+
+    public class SendNewThreadButtonEnableStateConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return !string.IsNullOrWhiteSpace(value.ToString());
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotImplementedException();
+    }
 }

@@ -11,6 +11,7 @@
 
     <Page.Resources>
         <localServices:CookieNameConverter x:Key="CookieNameConverter" />
+        <localServices:SendNewThreadButtonEnableStateConverter x:Key="SendNewThreadButtonEnableStateConverter" />
     </Page.Resources>
 
     <Grid HorizontalAlignment="Stretch"
@@ -267,6 +268,7 @@
                                     Margin="0, 0, 5, 0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Stretch"
+                                    IsEnabled="{x:Bind TextBoxNewThreadContent.Text, Converter={StaticResource SendNewThreadButtonEnableStateConverter}, Mode=OneWay}"
                                     ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
                                 <SymbolIcon Symbol="Send" />
                             </Button>
@@ -478,11 +480,9 @@
                      VerticalAlignment="Top" />
 
         <NavigationView Name="ForumListNavigation"
-                        Grid.ColumnSpan="2"
                         PaneTitle="{x:Bind local:Constants.ForumName, Mode=OneTime}"
                         PaneDisplayMode="LeftCompact"
                         IsBackButtonVisible="Collapsed"
-                        IsPaneOpen="False"
                         ItemInvoked="NavigationItemInvokedAsync"
                         MenuItemsSource="{x:Bind _navigationItems, Mode=OneWay}" />
     </Grid>
