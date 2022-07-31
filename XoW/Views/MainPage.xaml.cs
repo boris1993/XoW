@@ -53,15 +53,14 @@ namespace XoW.Views
             // 默认以当前选择的饼干发串
             NewThreadCookieSelectionComboBox.SelectedItem =
                 GlobalState.Cookies
-                    .Where(cookie => cookie.Name == GlobalState.CurrentCookie.CurrentCookie)
-                    .Single();
+                    .Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
 
             // 加载订阅ID
-            GlobalState.SubscriptionId.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
+            GlobalState.ObservableObject.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
 
             var currentCookieName = ApplicationConfigurationHelper.GetCurrentCookie();
-            var currentCookieValue = GlobalState.Cookies.Where(cookie => cookie.Name == currentCookieName)
-                .SingleOrDefault()?.Cookie;
+            var currentCookieValue = GlobalState.Cookies
+                .SingleOrDefault(cookie => cookie.Name == currentCookieName)?.Cookie;
             if (!string.IsNullOrEmpty(currentCookieValue))
             {
                 HttpClientService.ApplyCookie(currentCookieValue);
@@ -84,7 +83,7 @@ namespace XoW.Views
             {
                 ShowContentGrid();
 
-                if (string.IsNullOrEmpty(GlobalState.SubscriptionId.SubscriptionId))
+                if (string.IsNullOrEmpty(GlobalState.ObservableObject.SubscriptionId))
                 {
                     var errorMessagePopup = new ContentDialog
                     {
@@ -97,7 +96,7 @@ namespace XoW.Views
                 }
 
                 RefreshSubscriptions();
-                GlobalState.CurrentForumName.ForumName = Constants.FavouriteThreadNavigationItemName;
+                GlobalState.ObservableObject.ForumName = Constants.FavouriteThreadNavigationItemName;
 
                 return;
             }
@@ -106,10 +105,9 @@ namespace XoW.Views
 
             var selectedForumId = args.InvokedItemContainer.DataContext.ToString();
             var currentForumPermissionLevel = GlobalState.ForumAndIdLookup.Values
-                .Where(value => value.forumId.ToString() == selectedForumId)
-                .Single()
+                .Single(value => value.forumId.ToString() == selectedForumId)
                 .permissionLevel;
-            if (string.IsNullOrEmpty(GlobalState.CurrentCookie?.CurrentCookie) &&
+            if (string.IsNullOrEmpty(GlobalState.ObservableObject.CurrentCookie) &&
                 currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
             {
                 var errorMessagePopup = new ContentDialog
@@ -137,8 +135,13 @@ namespace XoW.Views
 
             var dataContext = ((Grid)args.ClickedItem).DataContext as ThreadDataContext;
 
+            if (dataContext == null)
+            {
+                throw new AppException("串的DataContext为null");
+            }
+
             GlobalState.CurrentThreadId = dataContext.ThreadId;
-            GlobalState.CurrentThreadIdDisplay.ThreadId = dataContext.ThreadId;
+            GlobalState.ObservableObject.ThreadId = dataContext.ThreadId;
             GlobalState.CurrentThreadAuthorUserHash = dataContext.ThreadAuthorUserHash;
 
             ButtonPoOnly.IsChecked = false;

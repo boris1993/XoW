@@ -20,9 +20,9 @@ namespace XoW.Views
             this.InitializeComponent();
         }
 
-        private void OnCookieClicked(object sender, ItemClickEventArgs args)
+        private static void OnCookieClicked(object sender, ItemClickEventArgs args)
         {
-            var selectedCookie = args.ClickedItem as AnonBbsCookie;
+            var selectedCookie = args.ClickedItem as AnoBbsCookie;
             var cookieName = selectedCookie.Name;
             var cookieValue = selectedCookie.Cookie;
 
@@ -107,11 +107,11 @@ namespace XoW.Views
             var borderAndBackgroundColor = isDarkModeEnabled
                 ? new SolidColorBrush(Colors.Black)
                 : new SolidColorBrush(Colors.LightGray);
-            GlobalState.BackgroundAndBorderColor.ColorBrush = borderAndBackgroundColor;
+            GlobalState.ObservableObject.BackgroundAndBorderColorBrush = borderAndBackgroundColor;
 
             var listViewBackgroundColor =
                 isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
-            GlobalState.ListViewAndInputBackgroundColor.ColorBrush = listViewBackgroundColor;
+            GlobalState.ObservableObject.ListViewBackgroundColorBrush = listViewBackgroundColor;
 
             #endregion
         }
@@ -129,7 +129,7 @@ namespace XoW.Views
 
         private async void OnGenerateSubscriptionButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (!string.IsNullOrEmpty(GlobalState.SubscriptionId?.SubscriptionId))
+            if (!string.IsNullOrEmpty(GlobalState.ObservableObject.SubscriptionId))
             {
                 var dialog = new ContentDialog
                 {
@@ -149,6 +149,8 @@ namespace XoW.Views
                     case ContentDialogResult.Primary:
                         GenerateNewSubscriptionId();
                         break;
+                    case ContentDialogResult.None:
+                    case ContentDialogResult.Secondary:
                     default:
                         break;
                 }
@@ -159,27 +161,27 @@ namespace XoW.Views
             GenerateNewSubscriptionId();
         }
 
-        private void DeleteCookie(string cookieName)
+        private static void DeleteCookie(string cookieName)
         {
-            if (cookieName == GlobalState.CurrentCookie.CurrentCookie)
+            if (cookieName == GlobalState.ObservableObject.CurrentCookie)
             {
                 ApplicationConfigurationHelper.RemoveCurrentCookie();
-                GlobalState.CurrentCookie.CurrentCookie = null;
+                GlobalState.ObservableObject.CurrentCookie = null;
             }
 
             ApplicationConfigurationHelper.DeleteCookie(cookieName);
-            GlobalState.Cookies.Remove(GlobalState.Cookies.Where(cookie => cookie.Name == cookieName).Single());
+            GlobalState.Cookies.Remove(GlobalState.Cookies.Single(cookie => cookie.Name == cookieName));
         }
 
-        private void GenerateNewSubscriptionId()
+        private static void GenerateNewSubscriptionId()
         {
             var newSubscriptionId = Guid.NewGuid().ToString();
             UpdateSubscriptionId(newSubscriptionId);
         }
 
-        private void UpdateSubscriptionId(string newSubscriptionId)
+        private static void UpdateSubscriptionId(string newSubscriptionId)
         {
-            GlobalState.SubscriptionId.SubscriptionId = newSubscriptionId;
+            GlobalState.ObservableObject.SubscriptionId = newSubscriptionId;
             ApplicationConfigurationHelper.SetSubscriptionId(newSubscriptionId);
         }
     }

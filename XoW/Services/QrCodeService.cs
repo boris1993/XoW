@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
+using Newtonsoft.Json;
 using XoW.Models;
 using ZXing;
 
@@ -21,17 +21,14 @@ namespace XoW.Services
             {
                 lock (_lock)
                 {
-                    _barcodeReader = new BarcodeReader
-                    {
-                        AutoRotate = true,
-                    };
+                    _barcodeReader = new BarcodeReader {AutoRotate = true,};
                 }
             }
 
             return _barcodeReader;
         }
 
-        public static async Task<AnonBbsCookie> DecodeBarcodeFromStorageFileAsync(StorageFile file)
+        public static async Task<AnoBbsCookie> DecodeBarcodeFromStorageFileAsync(StorageFile file)
         {
             var barcodeDecoder = GetBarcodeReaderInstance();
             using (var stream = await file.OpenReadAsync())
@@ -51,7 +48,7 @@ namespace XoW.Services
                 }
 
                 var content = decodeResult.Text;
-                var cookie = JsonConvert.DeserializeObject<AnonBbsCookie>(content);
+                var cookie = JsonConvert.DeserializeObject<AnoBbsCookie>(content);
 
                 return cookie;
             }

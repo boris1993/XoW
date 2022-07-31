@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Windows.UI.Xaml.Data;
+using XoW.Models;
 
 namespace XoW.Services
 {
@@ -8,7 +10,7 @@ namespace XoW.Services
         public object Convert(object value, Type targetType, object parameter, string language) =>
             string.IsNullOrEmpty((string)value) ? Constants.NoCookieSelected : value.ToString();
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotImplementedException();
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
     }
 
     public class SendNewThreadButtonEnableStateConverter : IValueConverter
@@ -18,6 +20,19 @@ namespace XoW.Services
             return !string.IsNullOrWhiteSpace(value.ToString());
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotImplementedException();
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
+    }
+
+    public class CookieNameToObjectConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return GlobalState.Cookies.SingleOrDefault(cookie =>
+                cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+        }
+
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language) =>
+            ((AnoBbsCookie)value).Name;
     }
 }

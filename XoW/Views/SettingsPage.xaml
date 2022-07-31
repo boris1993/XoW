@@ -7,6 +7,7 @@
     xmlns:localServices="using:XoW.Services"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:XoW.Views"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -51,9 +52,8 @@
                              IsTextPredictionEnabled="False"
                              TextWrapping="Wrap"
                              Header="{x:Bind local:ComponentContent.SubscriptionIdLabel}"
-                             Text="{x:Bind local:GlobalState.SubscriptionId.SubscriptionId, Mode=TwoWay}"
-                             TextChanged="OnSubscriptionIdTextBoxTextChanged">
-                    </TextBox>
+                             Text="{x:Bind local:GlobalState.ObservableObject.SubscriptionId, Mode=TwoWay}"
+                             TextChanged="OnSubscriptionIdTextBoxTextChanged" />
                     <TextBlock Text="{x:Bind local:ComponentContent.SubscriptionRecommendation}" />
                     <Button x:Name="ButtonGenerateSubscriptionId"
                             Margin="0, 5"
@@ -74,7 +74,7 @@
                                    Text="当前饼干：" />
                         <TextBlock VerticalAlignment="Center"
                                    FontWeight="Bold"
-                                   Text="{x:Bind local:GlobalState.CurrentCookie.CurrentCookie, Mode=OneWay, Converter={StaticResource CookieNameConverter}}" />
+                                   Text="{x:Bind local:GlobalState.ObservableObject.CurrentCookie, Mode=OneWay, Converter={StaticResource CookieNameConverter}}" />
                     </StackPanel>
                 </StackPanel>
                 <ListView x:Name="ListViewCookies"
@@ -82,10 +82,10 @@
                           SelectionMode="None"
                           ItemsSource="{x:Bind local:GlobalState.Cookies}"
                           IsItemClickEnabled="True"
-                          ItemClick="{x:Bind OnCookieClicked}">
+                          ItemClick="{x:Bind views:SettingsPage.OnCookieClicked}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:Name="CookieListViewTemplate"
-                                      x:DataType="localModel:AnonBbsCookie">
+                                      x:DataType="localModel:AnoBbsCookie">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />

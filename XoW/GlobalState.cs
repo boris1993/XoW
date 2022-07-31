@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
@@ -20,23 +21,16 @@ namespace XoW
         public static string CurrentThreadAuthorUserHash = default;
         public static string CdnUrl;
 
-        public static ObservableBackgroundAndBorderColor BackgroundAndBorderColor =
-            new ObservableBackgroundAndBorderColor {ColorBrush = new SolidColorBrush(Colors.LightGray)};
+        public static readonly ObservableCollection<AnoBbsCookie> Cookies = new ObservableCollection<AnoBbsCookie>();
 
-        public static ObservableListViewBackgroundColor ListViewAndInputBackgroundColor =
-            new ObservableListViewBackgroundColor {ColorBrush = new SolidColorBrush(Colors.White)};
-
-
-        public static ObservableCollection<AnonBbsCookie> Cookies = new ObservableCollection<AnonBbsCookie>();
-
-        public static ObservableCurrentCookie CurrentCookie =
-            new ObservableCurrentCookie {CurrentCookie = ApplicationConfigurationHelper.GetCurrentCookie()};
-
-        public static ObservableSubscriptionId SubscriptionId =
-            new ObservableSubscriptionId {SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId()};
-
-        public static ObservableForumName CurrentForumName = new ObservableForumName();
-
-        public static ObservableCurrentThreadId CurrentThreadIdDisplay = new ObservableCurrentThreadId();
+        public static ObservableObject ObservableObject = new ObservableObject
+        {
+            BackgroundAndBorderColorBrush = new SolidColorBrush(Colors.LightGray),
+            ListViewBackgroundColorBrush = new SolidColorBrush(Colors.White),
+            CurrentCookie = ApplicationConfigurationHelper.GetCurrentCookie(),
+            SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId(),
+            ForumName = String.Empty,
+            ThreadId = string.Empty,
+        };
     }
 }

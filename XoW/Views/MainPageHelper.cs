@@ -13,7 +13,7 @@ namespace XoW.Views
 {
     partial class MainPage : Page
     {
-        private async Task<string> GetCdnUrl() => (await AnoBbsApiClient.GetCdnAsync()).First().Url;
+        private static async Task<string> GetCdnUrl() => (await AnoBbsApiClient.GetCdnAsync()).First().Url;
 
         private async Task RefreshForumsAsync()
         {
@@ -78,8 +78,7 @@ namespace XoW.Views
 
             // 版面导航栏加载完成后，默认选择第一项，即默认展示时间线
             ForumListNavigation.SelectedItem = _navigationItems
-                .Where(item => item is NavigationViewItem && !_nonForumNavigationItems.Contains(item.Name))
-                .First();
+                .First(item => item is NavigationViewItem && !_nonForumNavigationItems.Contains(item.Name));
         }
 
         private async Task RefreshThreads()
@@ -95,9 +94,8 @@ namespace XoW.Views
                 ThreadsListView.ItemsSource = new IncrementalLoadingCollection<NormalForumThreadSource, Grid>();
             }
 
-            GlobalState.CurrentForumName.ForumName = GlobalState.ForumAndIdLookup
-                .Where(lookup => lookup.Value.forumId == GlobalState.CurrentForumId)
-                .Single()
+            GlobalState.ObservableObject.ForumName = GlobalState.ForumAndIdLookup
+                .Single(lookup => lookup.Value.forumId == GlobalState.CurrentForumId)
                 .Key;
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
@@ -113,7 +111,7 @@ namespace XoW.Views
             RepliesListView.ItemsSource = new IncrementalLoadingCollection<PoOnlyThreadReplySource, Grid>();
         }
 
-        public void RefreshSubscriptions()
+        private void RefreshSubscriptions()
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
@@ -123,22 +121,21 @@ namespace XoW.Views
                 foreach (var item in itemsSource)
                 {
                     var contentParentStackPanel = item.Children
-                        .Where(element => ((StackPanel)element).Name == ComponentsBuilder.TopLevelStackPanel)
-                        .Single() as StackPanel;
+                        .Single(element =>
+                            ((StackPanel)element).Name == ComponentsBuilder.TopLevelStackPanel) as StackPanel;
 
                     var headerGrid = contentParentStackPanel.Children
-                        .Where(element => ((Grid)element).Name == ComponentsBuilder.ThreadHeaderParentGrid)
-                        .Single() as Grid;
+                        .Single(element => ((Grid)element).Name == ComponentsBuilder.ThreadHeaderParentGrid) as Grid;
 
                     var stackPanelForDeleteButton = headerGrid.Children
-                        .Where(element => ((StackPanel)element).Name == ComponentsBuilder.StackPanelForDeleteButton)
-                        .Single() as StackPanel;
+                        .Single(element =>
+                            ((StackPanel)element).Name == ComponentsBuilder.StackPanelForDeleteButton) as StackPanel;
 
                     var buttonForDeleteSubscription = stackPanelForDeleteButton
                         .Children
                         .Where(element => element is Button)
-                        .Where(button => ((Button)button).Name == ComponentsBuilder.ButtonDeleteSubscriptionName)
-                        .Single() as Button;
+                        .Single(button =>
+                            ((Button)button).Name == ComponentsBuilder.ButtonDeleteSubscriptionName) as Button;
 
                     // 确保这个EventHandler只被注册一次
                     buttonForDeleteSubscription.Click -= OnDeleteSubscriptionButtonClicked;

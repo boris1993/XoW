@@ -78,7 +78,8 @@ namespace XoW.Models
         {
             var actualPageIndex = pageIndex + 1;
             var subscriptions =
-                await AnoBbsApiClient.GetSubscriptionsAsync(GlobalState.SubscriptionId.SubscriptionId, actualPageIndex);
+                await AnoBbsApiClient.GetSubscriptionsAsync(GlobalState.ObservableObject.SubscriptionId,
+                    actualPageIndex);
             var grids = ComponentsBuilder.BuildGrids(subscriptions, GlobalState.CdnUrl, isForSubscription: true);
 
             return grids;
