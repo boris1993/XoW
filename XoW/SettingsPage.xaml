@@ -1,0 +1,136 @@
+﻿<UserControl
+    x:Class="XoW.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:XoW"
+    xmlns:localModel="using:XoW.Models"
+    xmlns:localServices="using:XoW.Services"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <localServices:CookieNameConverter x:Key="CookieNameConverter" />
+    </UserControl.Resources>
+
+    <Grid x:Name="SettingsGrid"
+          HorizontalAlignment="Stretch"
+          Margin="40, 0, 0, 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="0.5*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="ConfigurationItemsGrid"
+              Grid.Column="0"
+              BorderThickness="0, 0, 1, 0"
+              BorderBrush="Gray"
+              Padding="20">
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontSize="30"
+                           FontWeight="Bold"
+                           Padding="0, 5"
+                           Text="设定" />
+                <TextBlock FontSize="20"
+                           FontWeight="Bold"
+                           Text="常规" />
+                <StackPanel Padding="0, 5"
+                            Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleSwitch x:Name="ToggleSwitchNightMode"
+                                      Header="夜间模式"
+                                      Toggled="OnNightModeSwitchToggled"
+                                      Loaded="OnNightModeSwitchLoaded" />
+                    </StackPanel>
+                    <TextBox x:Name="TextBoxSubscriptionId"
+                             VerticalAlignment="Stretch"
+                             HorizontalAlignment="Stretch"
+                             IsSpellCheckEnabled="False"
+                             IsTextPredictionEnabled="False"
+                             TextWrapping="Wrap"
+                             Header="{x:Bind local:ComponentContent.SubscriptionIdLabel}"
+                             Text="{x:Bind local:GlobalState.SubscriptionId.SubscriptionId, Mode=TwoWay}"
+                             TextChanged="OnSubscriptionIdTextBoxTextChanged">
+                    </TextBox>
+                    <TextBlock Text="{x:Bind local:ComponentContent.SubscriptionRecommendation}" />
+                    <Button x:Name="ButtonGenerateSubscriptionId"
+                            Margin="0, 5"
+                            HorizontalAlignment="Stretch"
+                            Content="{x:Bind local:ComponentContent.GenerateSubscriptionId}"
+                            Click="OnGenerateSubscriptionButtonClicked" />
+                </StackPanel>
+                <TextBlock FontSize="20"
+                           FontWeight="Bold"
+                           Text="饼干管理" />
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="ButtonLoadImage"
+                            Content="从图库选择二维码"
+                            Margin="0, 5, 5, 5"
+                            Click="OnLoadImageButtonClicked" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="当前饼干：" />
+                        <TextBlock VerticalAlignment="Center"
+                                   FontWeight="Bold"
+                                   Text="{x:Bind local:GlobalState.CurrentCookie.CurrentCookie, Mode=OneWay, Converter={StaticResource CookieNameConverter}}" />
+                    </StackPanel>
+                </StackPanel>
+                <ListView x:Name="ListViewCookies"
+                          HorizontalAlignment="Stretch"
+                          SelectionMode="None"
+                          ItemsSource="{x:Bind local:GlobalState.Cookies}"
+                          IsItemClickEnabled="True"
+                          ItemClick="{x:Bind OnCookieClicked}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="CookieListViewTemplate"
+                                      x:DataType="localModel:AnonBbsCookie">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal"
+                                            Grid.Column="0">
+                                    <TextBlock VerticalAlignment="Center"
+                                               Text="{x:Bind Name}"
+                                               DataContext="{x:Bind Name}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            FlowDirection="RightToLeft"
+                                            Grid.Column="1">
+                                    <Button x:Name="ButtonDeleteCookie"
+                                            Background="Transparent"
+                                            HorizontalAlignment="Right"
+                                            DataContext="{x:Bind Name}"
+                                            Click="OnDeleteCookieButtonClicked">
+                                        <SymbolIcon Symbol="Delete" />
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="AboutGrid"
+              Grid.Column="1"
+              Padding="20">
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontSize="30">
+                        <Span><Bold>关于</Bold></Span>
+                </TextBlock>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</UserControl>

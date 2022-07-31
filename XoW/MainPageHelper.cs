@@ -152,40 +152,16 @@ namespace XoW
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private void DeleteCookie(string cookieName)
-        {
-            if (cookieName == GlobalState.CurrentCookie.CurrentCookie)
-            {
-                ApplicationConfigurationHelper.RemoveCurrentCookie();
-                GlobalState.CurrentCookie.CurrentCookie = null;
-            }
-
-            ApplicationConfigurationHelper.DeleteCookie(cookieName);
-            GlobalState.Cookies.Remove(GlobalState.Cookies.Where(cookie => cookie.Name == cookieName).Single());
-        }
-
-        private void GenerateNewSubscriptionId()
-        {
-            var newSubscriptionId = Guid.NewGuid().ToString();
-            UpdateSubscriptionId(newSubscriptionId);
-        }
-
-        private void UpdateSubscriptionId(string newSubscriptionId)
-        {
-            GlobalState.SubscriptionId.SubscriptionId = newSubscriptionId;
-            ApplicationConfigurationHelper.SetSubscriptionId(newSubscriptionId);
-        }
-
         private void ShowSettingsGrid()
         {
             ContentGrid.Visibility = Visibility.Collapsed;
-            SettingsGrid.Visibility = Visibility.Visible;
+            SettingsPage.Visibility = Visibility.Visible;
         }
 
         private void ShowContentGrid()
         {
             ContentGrid.Visibility = Visibility.Visible;
-            SettingsGrid.Visibility = Visibility.Collapsed;
+            SettingsPage.Visibility = Visibility.Collapsed;
         }
 
         private void ShowNewThreadPanel()

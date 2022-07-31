@@ -1,10 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.DataTransfer;
+using Newtonsoft.Json;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -33,26 +29,6 @@ namespace XoW.Services
             }
 
             return _barcodeReader;
-        }
-
-        public static async Task DecodeBarcodeFromClipboard()
-        {
-            var barcodeDecoder = GetBarcodeReaderInstance();
-
-            var dataPackage = new DataPackage();
-            var bitmapFile = await dataPackage.GetView().GetBitmapAsync();
-
-            var bitmap = (Bitmap)Image.FromStream((await bitmapFile.OpenReadAsync()).AsStreamForRead());
-            var lockedBitmap = bitmap.LockBits(
-                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
-                System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            var lockedBitmapLength = lockedBitmap.Stride + bitmap.Height * bitmap.Width;
-            var bitmapBytes = new byte[lockedBitmapLength];
-            Marshal.Copy(lockedBitmap.Scan0, bitmapBytes, 0, lockedBitmapLength);
-            bitmap.UnlockBits(lockedBitmap);
-
-            var decodeResult = barcodeDecoder.Decode(bitmapBytes, bitmap.Width, bitmap.Height, RGBLuminanceSource.BitmapFormat.ARGB32);
         }
 
         public static async Task<AnonBbsCookie> DecodeBarcodeFromStorageFileAsync(StorageFile file)
