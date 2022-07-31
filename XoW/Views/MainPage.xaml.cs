@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Navigation;
 using XoW.Models;
 using XoW.Services;
 
-namespace XoW
+namespace XoW.Views
 {
     /// <summary>
     /// 

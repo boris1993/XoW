@@ -10,7 +10,7 @@ using XoW.Services;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace XoW
+namespace XoW.Views
 {
     public sealed partial class SettingsPage : UserControl
     {

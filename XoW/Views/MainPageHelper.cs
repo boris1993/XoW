@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Media;
 using XoW.Models;
 using XoW.Services;
 
-namespace XoW
+namespace XoW.Views
 {
     partial class MainPage : Page
     {

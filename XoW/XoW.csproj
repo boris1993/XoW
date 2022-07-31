@@ -125,10 +125,10 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="GlobalState.cs" />
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPageHelper.cs" />
+    <Compile Include="Views\MainPageHelper.cs" />
     <Compile Include="Models\CdnUrl.cs" />
     <Compile Include="Models\AnonBbsCookie.cs" />
     <Compile Include="Models\ObservableBackgroundAndBorderColor.cs" />
@@ -150,7 +150,7 @@
     <Compile Include="Services\HtmlParser.cs" />
     <Compile Include="Services\HttpClientService.cs" />
     <Compile Include="Services\QrCodeService.cs" />
-    <Compile Include="SettingsPage.xaml.cs">
+    <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -185,11 +185,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
+    <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SettingsPage.xaml">
+    <Page Include="Views\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
