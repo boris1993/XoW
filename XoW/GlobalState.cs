@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 using XoW.Models;
+using XoW.Utils;
 
 namespace XoW
 {
@@ -13,35 +14,26 @@ namespace XoW
         /// 目前已知权限级别2代表需要cookie
         /// </summary>
         public static Dictionary<string, (string forumId, string permissionLevel)> ForumAndIdLookup = default;
+
         public static string CurrentForumId = Constants.TimelineForumId;
         public static string CurrentThreadId = default;
         public static string CurrentThreadAuthorUserHash = default;
         public static string CdnUrl;
 
-        public static ObservableBackgroundAndBorderColor BackgroundAndBorderColor = new ObservableBackgroundAndBorderColor
-        {
-            ColorBrush = new SolidColorBrush(Colors.LightGray)
-        };
+        public static ObservableBackgroundAndBorderColor BackgroundAndBorderColor =
+            new ObservableBackgroundAndBorderColor {ColorBrush = new SolidColorBrush(Colors.LightGray)};
 
-        public static ObservableListViewBackgroundColor ListViewAndInputBackgroundColor = new ObservableListViewBackgroundColor
-        {
-            ColorBrush = new SolidColorBrush(Colors.White)
-        };
+        public static ObservableListViewBackgroundColor ListViewAndInputBackgroundColor =
+            new ObservableListViewBackgroundColor {ColorBrush = new SolidColorBrush(Colors.White)};
 
 
         public static ObservableCollection<AnonBbsCookie> Cookies = new ObservableCollection<AnonBbsCookie>();
 
         public static ObservableCurrentCookie CurrentCookie =
-            new ObservableCurrentCookie
-            {
-                CurrentCookie = ApplicationConfigurationHelper.GetCurrentCookie()
-            };
+            new ObservableCurrentCookie {CurrentCookie = ApplicationConfigurationHelper.GetCurrentCookie()};
 
         public static ObservableSubscriptionId SubscriptionId =
-            new ObservableSubscriptionId
-            {
-                SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId()
-            };
+            new ObservableSubscriptionId {SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId()};
 
         public static ObservableForumName CurrentForumName = new ObservableForumName();
 

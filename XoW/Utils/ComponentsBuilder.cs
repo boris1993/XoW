@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using XoW.Models;
 using XoW.Services;
 
-namespace XoW
+namespace XoW.Utils
 {
     public static class ComponentsBuilder
     {
@@ -35,15 +35,19 @@ namespace XoW
             var gridsInTheListView = new List<Grid>();
 
             #region 渲染第一条串
+
             var headerForTheFirstGrid = BuildThreadHeader(threadReply, true);
             var contentForTheFirstGrid = BuildThreadContent(threadReply, cdnUrl);
             var firstThreadGrid = BuildThreadParentGrid(threadReply, headerForTheFirstGrid, contentForTheFirstGrid);
 
             gridsInTheListView.Add(firstThreadGrid);
+
             #endregion
 
             #region 渲染回复串
+
             gridsInTheListView.AddRange(BuildGrids(threadReply.Replies, cdnUrl, true));
+
             #endregion
 
             return gridsInTheListView;
@@ -95,8 +99,11 @@ namespace XoW
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
-            threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
+            threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition
+            {
+                Width = new GridLength(1, GridUnitType.Star)
+            });
 
             var threadHeaderStackPanel = new StackPanel
             {
@@ -128,7 +135,8 @@ namespace XoW
             var textBlockUserName = CreateTextBlockWithDefaultMargin(thread.Name, Colors.DarkGreen);
             threadHeaderStackPanel.Children.Add(textBlockUserName);
 
-            var forumName = GlobalState.ForumAndIdLookup.Where(f => f.Value.forumId == thread.FId).Select(f => f.Key).FirstOrDefault();
+            var forumName = GlobalState.ForumAndIdLookup.Where(f => f.Value.forumId == thread.FId).Select(f => f.Key)
+                .FirstOrDefault();
             var textBlockForumName = CreateTextBlockWithDefaultMargin(forumName ?? string.Empty);
             threadHeaderStackPanel.Children.Add(textBlockForumName);
 
@@ -147,7 +155,7 @@ namespace XoW
                 {
                     Name = ButtonDeleteSubscriptionName,
                     HorizontalAlignment = HorizontalAlignment.Right,
-                    Content = new SymbolIcon { Symbol = Symbol.Delete },
+                    Content = new SymbolIcon {Symbol = Symbol.Delete},
                     DataContext = thread.Id,
                 };
 
@@ -209,7 +217,7 @@ namespace XoW
             {
                 var image = new Image
                 {
-                    Source = new BitmapImage { UriSource = new Uri($"{cdnUrl}/thumb/{thread.Img}{thread.Ext}") },
+                    Source = new BitmapImage {UriSource = new Uri($"{cdnUrl}/thumb/{thread.Img}{thread.Ext}")},
                     Stretch = Stretch.None,
                     VerticalAlignment = VerticalAlignment.Top,
                     Margin = new Thickness(10, 0, 10, 0),
@@ -234,11 +242,7 @@ namespace XoW
             var parentGridForThisThread = new Grid
             {
                 Margin = new Thickness(5),
-                DataContext = new ThreadDataContext
-                {
-                    ThreadId = thread.Id,
-                    ThreadAuthorUserHash = thread.UserHash,
-                },
+                DataContext = new ThreadDataContext {ThreadId = thread.Id, ThreadAuthorUserHash = thread.UserHash,},
             };
 
             var stackPanel = new StackPanel
@@ -276,6 +280,5 @@ namespace XoW
 
             return textBlock;
         }
-
     }
 }

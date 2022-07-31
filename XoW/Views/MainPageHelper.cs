@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Toolkit.Uwp;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Microsoft.Toolkit.Uwp;
 using XoW.Models;
 using XoW.Services;
+using XoW.Utils;
 
 namespace XoW.Views
 {
@@ -66,8 +66,7 @@ namespace XoW.Views
                         Icon = new FontIcon
                         {
                             // 是个Windows肯定会带微软雅黑的吧
-                            FontFamily = new FontFamily("Microsoft YaHei"),
-                            Glyph = f.Name.First().ToString()
+                            FontFamily = new FontFamily("Microsoft YaHei"), Glyph = f.Name.First().ToString()
                         },
                         DataContext = f.Id.ToString(),
                     };
@@ -97,9 +96,9 @@ namespace XoW.Views
             }
 
             GlobalState.CurrentForumName.ForumName = GlobalState.ForumAndIdLookup
-                    .Where(lookup => lookup.Value.forumId == GlobalState.CurrentForumId)
-                    .Single()
-                    .Key;
+                .Where(lookup => lookup.Value.forumId == GlobalState.CurrentForumId)
+                .Single()
+                .Key;
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }

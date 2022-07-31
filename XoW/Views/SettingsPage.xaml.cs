@@ -7,6 +7,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using XoW.Models;
 using XoW.Services;
+using XoW.Utils;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -95,16 +96,23 @@ namespace XoW.Views
             ApplicationConfigurationHelper.SetDarkThemeEnabled(isDarkModeEnabled);
 
             #region 设定应用全局主题
+
             var frameworkElementRoot = Window.Current.Content as FrameworkElement;
             frameworkElementRoot.RequestedTheme = isDarkModeEnabled ? ElementTheme.Dark : ElementTheme.Light;
+
             #endregion
 
             #region 设定部分手动指定颜色的控件的新颜色
-            var borderAndBackgroundColor = isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.LightGray);
+
+            var borderAndBackgroundColor = isDarkModeEnabled
+                ? new SolidColorBrush(Colors.Black)
+                : new SolidColorBrush(Colors.LightGray);
             GlobalState.BackgroundAndBorderColor.ColorBrush = borderAndBackgroundColor;
 
-            var listViewBackgroundColor = isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
+            var listViewBackgroundColor =
+                isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
             GlobalState.ListViewAndInputBackgroundColor.ColorBrush = listViewBackgroundColor;
+
             #endregion
         }
 
@@ -174,6 +182,5 @@ namespace XoW.Views
             GlobalState.SubscriptionId.SubscriptionId = newSubscriptionId;
             ApplicationConfigurationHelper.SetSubscriptionId(newSubscriptionId);
         }
-
     }
 }

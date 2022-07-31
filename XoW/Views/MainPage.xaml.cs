@@ -7,6 +7,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using XoW.Models;
 using XoW.Services;
+using XoW.Utils;
 
 namespace XoW.Views
 {
@@ -15,8 +16,11 @@ namespace XoW.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private readonly ObservableCollection<NavigationViewItemBase> _navigationItems = new ObservableCollection<NavigationViewItemBase>();
-        private readonly List<string> _nonForumNavigationItems = new List<string>() { Constants.FavouriteThreadNavigationItemName };
+        private readonly ObservableCollection<NavigationViewItemBase> _navigationItems =
+            new ObservableCollection<NavigationViewItemBase>();
+
+        private readonly List<string> _nonForumNavigationItems =
+            new List<string>() {Constants.FavouriteThreadNavigationItemName};
 
         public MainPage()
         {
@@ -56,7 +60,8 @@ namespace XoW.Views
             GlobalState.SubscriptionId.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
 
             var currentCookieName = ApplicationConfigurationHelper.GetCurrentCookie();
-            var currentCookieValue = GlobalState.Cookies.Where(cookie => cookie.Name == currentCookieName).SingleOrDefault()?.Cookie;
+            var currentCookieValue = GlobalState.Cookies.Where(cookie => cookie.Name == currentCookieName)
+                .SingleOrDefault()?.Cookie;
             if (!string.IsNullOrEmpty(currentCookieValue))
             {
                 HttpClientService.ApplyCookie(currentCookieValue);
@@ -98,12 +103,14 @@ namespace XoW.Views
             }
 
             #region 检查将要访问的版是否要求持有饼干
+
             var selectedForumId = args.InvokedItemContainer.DataContext.ToString();
             var currentForumPermissionLevel = GlobalState.ForumAndIdLookup.Values
                 .Where(value => value.forumId.ToString() == selectedForumId)
                 .Single()
                 .permissionLevel;
-            if (string.IsNullOrEmpty(GlobalState.CurrentCookie?.CurrentCookie) && currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
+            if (string.IsNullOrEmpty(GlobalState.CurrentCookie?.CurrentCookie) &&
+                currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
             {
                 var errorMessagePopup = new ContentDialog
                 {
@@ -116,6 +123,7 @@ namespace XoW.Views
 
                 return;
             }
+
             #endregion
 
             GlobalState.CurrentForumId = selectedForumId;
@@ -143,7 +151,8 @@ namespace XoW.Views
 
         private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name == Constants.FavouriteThreadNavigationItemName)
+            if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name ==
+                Constants.FavouriteThreadNavigationItemName)
             {
                 RefreshSubscriptions();
                 return;
@@ -155,7 +164,6 @@ namespace XoW.Views
         private void OnCreateNewThreadButtonClicked(object sender, RoutedEventArgs args)
         {
             ShowNewThreadPanel();
-
         }
 
         private void OnCloseNewThreadPanelButtonClicked(object sender, RoutedEventArgs args)
@@ -207,7 +215,6 @@ namespace XoW.Views
 
         private void OnForumSelectionComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
         }
     }
 }

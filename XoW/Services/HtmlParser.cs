@@ -1,8 +1,9 @@
-﻿using HtmlAgilityPack;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
+using HtmlAgilityPack;
+using XoW.Utils;
 
 namespace XoW.Services
 {

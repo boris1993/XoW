@@ -2,7 +2,7 @@
 using Windows.Storage;
 using XoW.Models;
 
-namespace XoW
+namespace XoW.Utils
 {
     public static class ApplicationConfigurationHelper
     {
@@ -27,7 +27,8 @@ namespace XoW
 
         public static void AddCookie(AnonBbsCookie cookie)
         {
-            var cookieListComposite = localSettings.Values[ApplicationSettingsKey.AllCookies] as ApplicationDataCompositeValue;
+            var cookieListComposite =
+                localSettings.Values[ApplicationSettingsKey.AllCookies] as ApplicationDataCompositeValue;
             if (cookieListComposite == null)
             {
                 cookieListComposite = new ApplicationDataCompositeValue();
@@ -45,7 +46,8 @@ namespace XoW
 
         public static void DeleteCookie(string cookieName)
         {
-            var cookieListComposite = localSettings.Values[ApplicationSettingsKey.AllCookies] as ApplicationDataCompositeValue;
+            var cookieListComposite =
+                localSettings.Values[ApplicationSettingsKey.AllCookies] as ApplicationDataCompositeValue;
             if (cookieListComposite == null)
             {
                 return;
@@ -58,14 +60,15 @@ namespace XoW
 
         public static void LoadAllCookies()
         {
-            var cookieListComposite = localSettings.Values[ApplicationSettingsKey.AllCookies] as ApplicationDataCompositeValue;
+            var cookieListComposite =
+                localSettings.Values[ApplicationSettingsKey.AllCookies] as ApplicationDataCompositeValue;
             if (cookieListComposite == null)
             {
                 return;
             }
 
             var parsedCookies = cookieListComposite
-                .Select(cookie => new AnonBbsCookie { Name = cookie.Key, Cookie = cookie.Value.ToString() })
+                .Select(cookie => new AnonBbsCookie {Name = cookie.Key, Cookie = cookie.Value.ToString()})
                 .ToList();
 
             parsedCookies.ForEach(cookie => GlobalState.Cookies.Add(cookie));
@@ -78,8 +81,9 @@ namespace XoW
 
         public static bool IsDarkThemeEnabled()
         {
-            return localSettings.Values.ContainsKey(ApplicationSettingsKey.DarkThemeSelected) ?
-                (bool)localSettings.Values[ApplicationSettingsKey.DarkThemeSelected] : false;
+            return localSettings.Values.ContainsKey(ApplicationSettingsKey.DarkThemeSelected)
+                ? (bool)localSettings.Values[ApplicationSettingsKey.DarkThemeSelected]
+                : false;
         }
 
         public static void SetSubscriptionId(string subscriptionId)
@@ -89,8 +93,9 @@ namespace XoW
 
         public static string GetSubscriptionId()
         {
-            return localSettings.Values.ContainsKey(ApplicationSettingsKey.SubscriptionId) ?
-                localSettings.Values[ApplicationSettingsKey.SubscriptionId].ToString() : null;
+            return localSettings.Values.ContainsKey(ApplicationSettingsKey.SubscriptionId)
+                ? localSettings.Values[ApplicationSettingsKey.SubscriptionId].ToString()
+                : null;
         }
     }
 }
