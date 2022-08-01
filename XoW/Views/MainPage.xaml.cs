@@ -216,6 +216,10 @@ namespace XoW.Views
         private async void OnAttachPictureButtonClicked(object sender, RoutedEventArgs args)
         {
             var storageFile = await CommonUtils.OpenFilePickerForSingleImageAsync();
+            if (storageFile == null)
+            {
+                return;
+            }
 
             ButtonAttachPicture.DataContext = storageFile;
 
