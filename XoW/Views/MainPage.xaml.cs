@@ -20,7 +20,7 @@ namespace XoW.Views
             new ObservableCollection<NavigationViewItemBase>();
 
         private readonly List<string> _nonForumNavigationItems =
-            new List<string>() {Constants.FavouriteThreadNavigationItemName};
+            new List<string>() { Constants.FavouriteThreadNavigationItemName };
 
         public MainPage()
         {
@@ -45,22 +45,20 @@ namespace XoW.Views
             ForumSelectionComboBox.SelectedIndex = 0;
 
             // 载入时间线第一页
-            await RefreshThreads();
+            RefreshThreads();
 
             // 载入已添加的饼干
             ApplicationConfigurationHelper.LoadAllCookies();
 
             // 默认以当前选择的饼干发串
             NewThreadCookieSelectionComboBox.SelectedItem =
-                GlobalState.Cookies
-                    .Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+                GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
 
             // 加载订阅ID
             GlobalState.ObservableObject.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
 
             var currentCookieName = ApplicationConfigurationHelper.GetCurrentCookie();
-            var currentCookieValue = GlobalState.Cookies
-                .SingleOrDefault(cookie => cookie.Name == currentCookieName)?.Cookie;
+            var currentCookieValue = GlobalState.Cookies.SingleOrDefault(cookie => cookie.Name == currentCookieName)?.Cookie;
             if (!string.IsNullOrEmpty(currentCookieValue))
             {
                 HttpClientService.ApplyCookie(currentCookieValue);
@@ -126,16 +124,14 @@ namespace XoW.Views
 
             GlobalState.CurrentForumId = selectedForumId;
             ShowContentGrid();
-            await RefreshThreads();
+            RefreshThreads();
         }
 
         private void OnThreadClicked(object sender, ItemClickEventArgs args)
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
-            var dataContext = ((Grid)args.ClickedItem).DataContext as ThreadDataContext;
-
-            if (dataContext == null)
+            if (((Grid)args.ClickedItem).DataContext is not ThreadDataContext dataContext)
             {
                 throw new AppException("串的DataContext为null");
             }
@@ -152,16 +148,15 @@ namespace XoW.Views
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args)
+        private void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name ==
-                Constants.FavouriteThreadNavigationItemName)
+            if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name == Constants.FavouriteThreadNavigationItemName)
             {
                 RefreshSubscriptions();
                 return;
             }
 
-            await RefreshThreads();
+            RefreshThreads();
         }
 
         private void OnCreateNewThreadButtonClicked(object sender, RoutedEventArgs args)

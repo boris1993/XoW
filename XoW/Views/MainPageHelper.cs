@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Uwp;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Microsoft.Toolkit.Uwp;
 using XoW.Models;
 using XoW.Services;
 using XoW.Utils;
@@ -21,17 +21,20 @@ namespace XoW.Views
 
             var forumGroups = await AnoBbsApiClient.GetForumGroupsAsync();
 
+            // 版面组和版面按照Sort排序，保证以正确的顺序展示
+            forumGroups = forumGroups
+                .OrderBy(fg => fg.Sort)
+                .ToList();
+
+            forumGroups.ForEach(fg =>
+            {
+                fg.Forums = fg.Forums.OrderBy(f => f.Sort).ToList();
+            });
+
             forumGroups
                 .SelectMany(fg => fg.Forums)
                 .ToList()
                 .ForEach(f => GlobalState.ForumAndIdLookup.Add(f.Name, (f.Id, f.permissionLevel)));
-
-            // 版面组和版面按照Sort排序，保证以正确的顺序展示
-            forumGroups.OrderBy(fg =>
-            {
-                fg.Forums = fg.Forums.OrderBy(f => f.Sort).ToList();
-                return fg;
-            });
 
             _navigationItems.Clear();
 
@@ -66,7 +69,8 @@ namespace XoW.Views
                         Icon = new FontIcon
                         {
                             // 是个Windows肯定会带微软雅黑的吧
-                            FontFamily = new FontFamily("Microsoft YaHei"), Glyph = f.Name.First().ToString()
+                            FontFamily = new FontFamily("Microsoft YaHei"),
+                            Glyph = f.Name.First().ToString()
                         },
                         DataContext = f.Id.ToString(),
                     };
@@ -81,7 +85,7 @@ namespace XoW.Views
                 .First(item => item is NavigationViewItem && !_nonForumNavigationItems.Contains(item.Name));
         }
 
-        private async Task RefreshThreads()
+        private void RefreshThreads()
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
@@ -162,14 +166,14 @@ namespace XoW.Views
 
         private void ShowNewThreadPanel()
         {
-            ContentThreadGrid.Visibility = Visibility.Collapsed;
+            //ContentThreadGrid.Visibility = Visibility.Collapsed;
 
             NewThreadPanelGrid.Visibility = Visibility.Visible;
         }
 
         private void HideNewThreadPanel()
         {
-            ContentThreadGrid.Visibility = Visibility.Visible;
+            //ContentThreadGrid.Visibility = Visibility.Visible;
 
             NewThreadPanelGrid.Visibility = Visibility.Collapsed;
         }

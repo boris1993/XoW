@@ -212,7 +212,7 @@
             <Grid x:Name="NewThreadPanelGrid"
                   Background="{x:Bind local:GlobalState.ObservableObject.BackgroundAndBorderColorBrush, Mode=OneWay}"
                   BorderBrush="{x:Bind local:GlobalState.ObservableObject.BackgroundAndBorderColorBrush, Mode=OneWay}"
-                  BorderThickness="5, 5, 10, 5"
+                  BorderThickness="5"
                   Grid.Column="0"
                   Grid.Row="0"
                   HorizontalAlignment="Stretch"
