@@ -22,52 +22,68 @@ namespace XoW
         public static string GetForums = $"{BaseUrl}/Api/getForumList";
 
         /// <summary>
-        /// 获取时间线
+        /// 获取时间线<br/>
         /// 参数page为分页页码
         /// </summary>
         public static string GetTimeline = $"{BaseUrl}/Api/Timeline";
 
         /// <summary>
-        /// 获取板块中的串
-        /// 参数id为板块ID
+        /// 获取板块中的串<br/>
+        /// 参数id为板块ID<br/>
         /// 参数page为分页页码
         /// </summary>
         public static string GetThreads = $"{BaseUrl}/Api/showf";
 
         /// <summary>
-        /// 获取串和回复
-        /// 参数id为串号
+        /// 获取串和回复<br/>
+        /// 参数id为串号<br/>
         /// 参数page为分页页码
         /// </summary>
         public static string GetReplies = $"{BaseUrl}/Api/thread";
 
         /// <summary>
-        /// 只看po
-        /// 参数id为串号
+        /// 只看po<br/>
+        /// 参数id为串号<br/>
         /// 参数page为分页页码
         /// </summary>
         public static string GetPoOnlyReplies = $"{BaseUrl}/Api/po";
 
         /// <summary>
-        /// 获取订阅
-        /// 参数uuid为订阅ID
+        /// 获取订阅<br/>
+        /// 参数uuid为订阅ID<br/>
         /// 参数page为分页页码
         /// </summary>
         public static string GetSubscription = $"{BaseUrl}/Api/feed";
 
         /// <summary>
-        /// 添加订阅
-        /// 参数uuid为订阅ID
+        /// 添加订阅<br/>
+        /// 参数uuid为订阅ID<br/>
         /// 参数tid为串ID
         /// </summary>
         public static string AddSubscription = $"{BaseUrl}/Api/addFeed";
 
         /// <summary>
-        /// 删除订阅
-        /// 参数uuid为订阅ID
+        /// 删除订阅<br/>
+        /// 参数uuid为订阅ID<br/>
         /// 参数tid为串ID
         /// </summary>
         public static string DeleteSubscription = $"{BaseUrl}/Api/delFeed";
+
+        /// <summary>
+        /// 发新串<br/>
+        /// </summary>
+        public static string CreateNewThread = $"{BaseUrl}/Home/Forum/doPostThread.html";
+    }
+
+    public static class RequestBodyParamName
+    {
+        public const string FId = "fid";
+        public const string Username = "name";
+        public const string EMail = "email";
+        public const string Title = "title";
+        public const string Content = "content";
+        public const string Water = "Water";
+        public const string Image = "image";
     }
 
     public static class Constants
@@ -227,6 +243,7 @@ namespace XoW
         public const string SubscriptionIdLabel = "订阅ID";
         public const string GenerateSubscriptionId = "生成订阅ID";
         public const string SubscriptionRecommendation = "建议在不同设备间使用相同订阅ID，以同步收藏";
+        public const string NewThreadCreatedSuccessfully = "发串大成功";
 
         public const string CreateThreadButtonTooltip = "创建新串";
         public const string CreateReplyButtonTooltip = "创建回复";
@@ -241,10 +258,12 @@ namespace XoW
         public const string SaveScratch = "保存草稿";
         public const string InsertEmoticon = "插入颜文字";
         public const string InsertImage = "插入图片";
+        public const string RemoveImage = "删除图片";
         public const string Username = "名称";
         public const string Email = "E-Mail";
         public const string Title = "标题";
         public const string Content = "正文";
+        public const string ImagePreview = "图片附件预览";
     }
 
     public static class ConfirmationMessage

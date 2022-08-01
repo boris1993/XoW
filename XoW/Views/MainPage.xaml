@@ -11,7 +11,7 @@
 
     <Page.Resources>
         <localServices:SendNewThreadButtonEnableStateConverter x:Key="SendNewThreadButtonEnableStateConverter" />
-        <localServices:CookieNameToObjectConverter x:Key="CookieNameToObjectConverter"/>
+        <localServices:CookieNameToObjectConverter x:Key="CookieNameToObjectConverter" />
     </Page.Resources>
 
     <Grid HorizontalAlignment="Stretch"
@@ -222,6 +222,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0"
@@ -248,7 +249,6 @@
 
                             <ComboBox x:Name="ForumSelectionComboBox"
                                       Margin="0, 0, 5, 0"
-                                      SelectionChanged="OnForumSelectionComboBoxSelectionChanged"
                                       DisplayMemberPath="Key" />
 
                             <ComboBox x:Name="NewThreadCookieSelectionComboBox"
@@ -270,6 +270,7 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Stretch"
                                     IsEnabled="{x:Bind TextBoxNewThreadContent.Text, Converter={StaticResource SendNewThreadButtonEnableStateConverter}, Mode=OneWay}"
+                                    Click="{x:Bind OnSendNewThreadButtonClicked}"
                                     ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
                                 <SymbolIcon Symbol="Send" />
                             </Button>
@@ -295,18 +296,21 @@
                                  Grid.Column="0"
                                  Margin="0, 0, 5, 0"
                                  HorizontalAlignment="Stretch"
+                                 IsSpellCheckEnabled="False"
                                  Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
                                  Header="{x:Bind local:ComponentContent.Username}" />
                         <TextBox x:Name="TextBoxNewThreadEmail"
                                  Grid.Column="1"
                                  Margin="5, 0, 5, 0"
                                  HorizontalAlignment="Stretch"
+                                 IsSpellCheckEnabled="False"
                                  Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
                                  Header="{x:Bind local:ComponentContent.Email}" />
                         <TextBox x:Name="TextBoxNewThreadTitle"
                                  Grid.Column="2"
                                  Margin="5, 0, 0, 0"
                                  HorizontalAlignment="Stretch"
+                                 IsSpellCheckEnabled="False"
                                  Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
                                  Header="{x:Bind local:ComponentContent.Title}" />
                     </Grid>
@@ -325,8 +329,32 @@
                          AcceptsReturn="True"
                          IsSpellCheckEnabled="False" />
 
-                <StackPanel Orientation="Horizontal"
+                <StackPanel x:Name="ImagePreviewStackPanel"
+                            Orientation="Vertical"
                             Grid.Row="2"
+                            Margin="5, 0"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Visibility="Collapsed">
+                    <TextBlock Text="{x:Bind local:ComponentContent.ImagePreview}" />
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Top">
+                        <Image x:Name="ImageNewThreadPreview"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Left"
+                               Height="200" />
+                        <Button x:Name="ButtonRemovePicture"
+                                Margin="5, 0"
+                                VerticalAlignment="Top"
+                                Click="{x:Bind OnRemovePictureButtonClicked}"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.RemoveImage}">
+                            <SymbolIcon Symbol="Delete" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="3"
                             Margin="5, 5, 5, 0">
                     <Button x:Name="ButtonSelectEmoticon"
                             Margin="0, 0, 5, 0"
@@ -340,7 +368,7 @@
                             Margin="0, 0, 5, 0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Stretch"
-                            Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
+                            Click="{x:Bind OnAttachPictureButtonClicked}"
                             ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertImage}">
                         <SymbolIcon Symbol="Attach" />
                     </Button>

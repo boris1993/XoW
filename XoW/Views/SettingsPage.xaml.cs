@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Windows.Storage.Pickers;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -38,21 +37,7 @@ namespace XoW.Views
 
         private async void OnLoadImageButtonClicked(object sender, RoutedEventArgs args)
         {
-            var filePicker = new FileOpenPicker();
-            filePicker.FileTypeFilter.Add("*");
-
-            var storageFile = await filePicker.PickSingleFileAsync();
-
-            if (storageFile == null)
-            {
-                return;
-            }
-
-            var fileMimeType = storageFile.ContentType;
-            if (!fileMimeType.StartsWith("image/"))
-            {
-                throw new AppException(ErrorMessage.FileIsNotImage);
-            }
+            var storageFile = await CommonUtils.OpenFilePickerForSingleImageAsync();
 
             var cookie = await QrCodeService.DecodeBarcodeFromStorageFileAsync(storageFile);
 

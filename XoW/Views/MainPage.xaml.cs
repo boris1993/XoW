@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using XoW.Models;
 using XoW.Services;
@@ -211,8 +213,62 @@ namespace XoW.Views
             RefreshSubscriptions();
         }
 
-        private void OnForumSelectionComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void OnAttachPictureButtonClicked(object sender, RoutedEventArgs args)
         {
+            var storageFile = await CommonUtils.OpenFilePickerForSingleImageAsync();
+
+            ButtonAttachPicture.DataContext = storageFile;
+
+            var thumbnail =
+                await storageFile.GetThumbnailAsync(
+                    Windows.Storage.FileProperties.ThumbnailMode.PicturesView,
+                    200,
+                    Windows.Storage.FileProperties.ThumbnailOptions.UseCurrentScale);
+
+            var bitmapImage = new BitmapImage();
+            await bitmapImage.SetSourceAsync(thumbnail.CloneStream());
+            ImageNewThreadPreview.Source = bitmapImage;
+            ImagePreviewStackPanel.Visibility = Visibility.Visible;
+        }
+
+        public void OnRemovePictureButtonClicked(object sender, RoutedEventArgs args)
+        {
+            ButtonAttachPicture.DataContext = null;
+            ImagePreviewStackPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private async void OnSendNewThreadButtonClicked(object sender, RoutedEventArgs args)
+        {
+            var fid = ((KeyValuePair<string, (string forumId, string permissionLevel)>)ForumSelectionComboBox.SelectedItem).Value.forumId;
+            var selectedCookie = (AnoBbsCookie)NewThreadCookieSelectionComboBox.SelectedItem;
+            var username = TextBoxNewThreadUserName.Text;
+            var email = TextBoxNewThreadEmail.Text;
+            var title = TextBoxNewThreadTitle.Text;
+            var content = TextBoxNewThreadContent.Text;
+            var image = ButtonAttachPicture.DataContext as StorageFile;
+
+            await AnoBbsApiClient.CreateNewThread(
+                fid,
+                username,
+                email,
+                title,
+                content,
+                "1",
+                selectedCookie,
+                image);
+
+            var contentDialog = new ContentDialog
+            {
+                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
+                Title = ComponentContent.Notification,
+                Content = ComponentContent.NewThreadCreatedSuccessfully,
+                CloseButtonText = ComponentContent.Ok,
+            };
+
+            await contentDialog.ShowAsync();
+
+            HideNewThreadPanel();
+            ResetNewThreadPanel();
         }
     }
 }

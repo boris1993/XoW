@@ -173,9 +173,20 @@ namespace XoW.Views
 
         private void HideNewThreadPanel()
         {
-            //ContentThreadGrid.Visibility = Visibility.Visible;
-
+            ResetNewThreadPanel();
             NewThreadPanelGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void ResetNewThreadPanel()
+        {
+            TextBoxNewThreadUserName.Text = "";
+            TextBoxNewThreadEmail.Text = "";
+            TextBoxNewThreadTitle.Text = "";
+            TextBoxNewThreadContent.Text = "";
+            NewThreadCookieSelectionComboBox.SelectedItem = GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+            ForumSelectionComboBox.SelectedIndex = 0;
+            ButtonAttachPicture.DataContext = null;
+            ImagePreviewStackPanel.Visibility = Visibility.Collapsed;
         }
     }
 }

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Windows.Storage;
+using Windows.Web.Http;
 using XoW.Models;
 
 namespace XoW.Services
@@ -137,6 +140,59 @@ namespace XoW.Services
             var responseString = await GetStringResponseAsync(uriBuilder.ToString());
 
             return JsonConvert.DeserializeObject<string>(responseString);
+        }
+
+        public static async Task CreateNewThread(
+            string fid,
+            string name,
+            string email,
+            string title,
+            string content,
+            string water,
+            AnoBbsCookie cookie,
+            StorageFile image)
+        {
+            var uri = new Uri(Url.CreateNewThread);
+
+            using var requestBody = new HttpMultipartFormDataContent();
+            requestBody.Add(new HttpStringContent("117"), RequestBodyParamName.FId);
+            requestBody.Add(new HttpStringContent(content), RequestBodyParamName.Content);
+            requestBody.Add(new HttpStringContent(water), RequestBodyParamName.Water);
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                requestBody.Add(new HttpStringContent(name), RequestBodyParamName.Username);
+            }
+
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                requestBody.Add(new HttpStringContent(email), RequestBodyParamName.EMail);
+            }
+
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                requestBody.Add(new HttpStringContent(title), RequestBodyParamName.Title);
+            }
+
+            if (image != null)
+            {
+                var imageStream = await image.OpenReadAsync();
+                var fileStreamContent = new HttpStreamContent(imageStream);
+                fileStreamContent.Headers.Add(HeaderNames.ContentType, imageStream.ContentType.ToString());
+                requestBody.Add(fileStreamContent, RequestBodyParamName.Image, $"/{image.Path.Replace('\\', '/')}");
+            }
+
+            var httpClient = HttpClientService.GetHttpClientInstance();
+
+            var defaultCookie = httpClient.DefaultRequestHeaders.Cookie.Single();
+            httpClient.DefaultRequestHeaders.Cookie.Clear();
+            httpClient.DefaultRequestHeaders.Cookie.Add(new Windows.Web.Http.Headers.HttpCookiePairHeaderValue(Constants.CookieNameUserHash) { Value = cookie.Cookie });
+
+            var response = await httpClient.PostAsync(uri, requestBody);
+            response.EnsureSuccessStatusCode();
+
+            httpClient.DefaultRequestHeaders.Cookie.Clear();
+            httpClient.DefaultRequestHeaders.Cookie.Add(defaultCookie);
         }
 
         private static async Task<string> GetStringResponseAsync(string url)
