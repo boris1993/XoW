@@ -35,4 +35,10 @@ namespace XoW.Services
         public object ConvertBack(object value, Type targetType, object parameter, string language) =>
             ((AnoBbsCookie)value).Name;
     }
+
+    public class ThreadIdConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language) => $"No.{value}";
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotImplementedException();
+    }
 }

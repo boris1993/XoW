@@ -175,6 +175,17 @@ namespace XoW.Views
             NewThreadPanelGrid.Visibility = Visibility.Collapsed;
         }
 
+        private void ShowNewReplyPanel()
+        {
+            NewReplyPanelGrid.Visibility = Visibility.Visible;
+        }
+
+        private void HideNewReplyPanel()
+        {
+            ResetNewReplyPanel();
+            NewReplyPanelGrid.Visibility = Visibility.Collapsed;
+        }
+
         private void ResetNewThreadPanel()
         {
             TextBoxNewThreadUserName.Text = "";
@@ -186,6 +197,18 @@ namespace XoW.Views
             ButtonNewThreadAttachPicture.DataContext = null;
             CheckBoxNewThreadWaterMark.IsChecked = true;
             ImagePreviewStackPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void ResetNewReplyPanel()
+        {
+            TextBoxNewReplyUserName.Text = "";
+            TextBoxNewReplyEmail.Text = "";
+            TextBoxNewReplyTitle.Text = "";
+            TextBoxNewReplyContent.Text = "";
+            NewReplyCookieSelectionComboBox.SelectedItem = GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+            ButtonNewReplyAttachPicture.DataContext = null;
+            CheckBoxNewReplyWaterMark.IsChecked = true;
+            ReplyImagePreviewStackPanel.Visibility = Visibility.Collapsed;
         }
 
         private void DisableSendButtonAndShowProgressBar(Button sendButton)

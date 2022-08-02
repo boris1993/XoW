@@ -73,11 +73,17 @@ namespace XoW
         /// 发新串<br/>
         /// </summary>
         public static string CreateNewThread = $"{BaseUrl}/Home/Forum/doPostThread.html";
+
+        /// <summary>
+        /// 发回复
+        /// </summary>
+        public static string CreateNewReply = $"{BaseUrl}/Home/Forum/doReplyThread.html";
     }
 
     public static class RequestBodyParamName
     {
         public const string FId = "fid";
+        public const string Resto = "resto";
         public const string Username = "name";
         public const string EMail = "email";
         public const string Title = "title";
@@ -244,6 +250,7 @@ namespace XoW
         public const string GenerateSubscriptionId = "生成订阅ID";
         public const string SubscriptionRecommendation = "建议在不同设备间使用相同订阅ID，以同步收藏";
         public const string NewThreadCreatedSuccessfully = "发串大成功";
+        public const string NewReplyCreatedSuccessfully = "回复成功";
 
         public const string CreateThreadButtonTooltip = "创建新串";
         public const string CreateReplyButtonTooltip = "创建回复";

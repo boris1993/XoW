@@ -62,7 +62,7 @@ namespace XoW.Models
             {
                 if (_threadId != value)
                 {
-                    _threadId = $"No.{value}";
+                    _threadId = value;
                     OnPropertyChanged();
                 }
             }

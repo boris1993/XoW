@@ -12,6 +12,7 @@
     <Page.Resources>
         <localServices:SendNewThreadButtonEnableStateConverter x:Key="SendNewThreadButtonEnableStateConverter" />
         <localServices:CookieNameToObjectConverter x:Key="CookieNameToObjectConverter" />
+        <localServices:ThreadIdConverter x:Key="ThreadIdConverter" />
     </Page.Resources>
 
     <Grid HorizontalAlignment="Stretch"
@@ -148,7 +149,7 @@
                         <TextBlock FontWeight="Bold"
                                    FontSize="20"
                                    VerticalAlignment="Center"
-                                   Text="{x:Bind local:GlobalState.ObservableObject.ThreadId, Mode=OneWay}" />
+                                   Text="{x:Bind local:GlobalState.ObservableObject.ThreadId, Mode=OneWay, Converter={StaticResource ThreadIdConverter}}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                                 x:Name="ReplyTopBar"
@@ -170,6 +171,7 @@
                                 Margin="0, 0, 5, 0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Stretch"
+                                Click="{x:Bind OnCreateReplyButtonClicked}"
                                 ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReplyButtonTooltip}">
                             <SymbolIcon Symbol="Comment" />
                         </Button>
@@ -214,7 +216,6 @@
                   BorderBrush="{x:Bind local:GlobalState.ObservableObject.BackgroundAndBorderColorBrush, Mode=OneWay}"
                   BorderThickness="5"
                   Grid.Column="0"
-                  Grid.Row="0"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   Visibility="Collapsed">
@@ -345,7 +346,7 @@
                         <Button x:Name="ButtonRemovePicture"
                                 Margin="5, 0"
                                 VerticalAlignment="Top"
-                                Click="{x:Bind OnRemovePictureButtonClicked}"
+                                Click="{x:Bind OnRemoveNewThreadPictureButtonClicked}"
                                 ToolTipService.ToolTip="{x:Bind local:ComponentContent.RemoveImage}">
                             <SymbolIcon Symbol="Delete" />
                         </Button>
@@ -367,13 +368,177 @@
                             Margin="0, 0, 5, 0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Stretch"
-                            Click="{x:Bind OnAttachPictureButtonClicked}"
+                            Click="{x:Bind OnNewThreadAttachPictureButtonClicked}"
                             ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertImage}">
                         <SymbolIcon Symbol="Attach" />
                     </Button>
                     <CheckBox x:Name="CheckBoxNewThreadWaterMark"
                               Content="{x:Bind local:ComponentContent.Watermark}"
                               IsChecked="True"/>
+                </StackPanel>
+            </Grid>
+            <!-- #endregion -->
+            
+            <!-- #region 发回复 -->
+            <Grid x:Name="NewReplyPanelGrid"
+                  Background="{x:Bind local:GlobalState.ObservableObject.BackgroundAndBorderColorBrush, Mode=OneWay}"
+                  BorderBrush="{x:Bind local:GlobalState.ObservableObject.BackgroundAndBorderColorBrush, Mode=OneWay}"
+                  BorderThickness="5"
+                  Grid.Column="0"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0"
+                            Orientation="Vertical">
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="0.5*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Column="0"
+                                    Margin="5, 0, 5, 0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    FlowDirection="LeftToRight">
+                            <Button x:Name="ButtonCloseNewReplyPanel"
+                                    Margin="0, 0, 5, 0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Stretch"
+                                    Click="{x:Bind OnCloseNewReplyPanelButtonClicked}"
+                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.Close}">
+                                <SymbolIcon Symbol="Clear" />
+                            </Button>
+
+                            <ComboBox x:Name="NewReplyCookieSelectionComboBox"
+                                      Margin="0, 0, 5, 0"
+                                      ItemsSource="{x:Bind local:GlobalState.Cookies, Mode=OneWay}"
+                                      SelectedItem="{x:Bind local:GlobalState.ObservableObject.CurrentCookie, Mode=OneWay, Converter={StaticResource CookieNameToObjectConverter}}"
+                                      DisplayMemberPath="Name"
+                                      SelectedValuePath="Cookie" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Column="1"
+                                    Margin="5, 0, 5, 0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    FlowDirection="RightToLeft">
+                            <Button x:Name="ButtonSendNewReply"
+                                    Margin="0, 0, 5, 0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Stretch"
+                                    Click="{x:Bind OnSendNewReplyButtonClicked}"
+                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReplyButtonTooltip}">
+                                <SymbolIcon Symbol="Send" />
+                            </Button>
+                            <Button x:Name="ButtonSaveReplyScratch"
+                                    Margin="0, 0, 5, 0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Stretch"
+                                    Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
+                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.SaveScratch}">
+                                <SymbolIcon Symbol="Save" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                    <Grid HorizontalAlignment="Stretch"
+                          Margin="5, 5, 5, 5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.3*" />
+                            <ColumnDefinition Width="0.3*" />
+                            <ColumnDefinition Width="0.3*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="TextBoxNewReplyUserName"
+                                 Grid.Column="0"
+                                 Margin="0, 0, 5, 0"
+                                 HorizontalAlignment="Stretch"
+                                 IsSpellCheckEnabled="False"
+                                 Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
+                                 Header="{x:Bind local:ComponentContent.Username}" />
+                        <TextBox x:Name="TextBoxNewReplyEmail"
+                                 Grid.Column="1"
+                                 Margin="5, 0, 5, 0"
+                                 HorizontalAlignment="Stretch"
+                                 IsSpellCheckEnabled="False"
+                                 Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
+                                 Header="{x:Bind local:ComponentContent.Email}" />
+                        <TextBox x:Name="TextBoxNewReplyTitle"
+                                 Grid.Column="2"
+                                 Margin="5, 0, 0, 0"
+                                 HorizontalAlignment="Stretch"
+                                 IsSpellCheckEnabled="False"
+                                 Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
+                                 Header="{x:Bind local:ComponentContent.Title}" />
+                    </Grid>
+                </StackPanel>
+
+                <TextBox x:Name="TextBoxNewReplyContent"
+                         Grid.Row="1"
+                         Margin="5, 0"
+                         Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
+                         Header="{x:Bind local:ComponentContent.Content}"
+                         HorizontalAlignment="Stretch"
+                         HorizontalContentAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         VerticalContentAlignment="Stretch"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         IsSpellCheckEnabled="False" />
+
+                <StackPanel x:Name="ReplyImagePreviewStackPanel"
+                            Orientation="Vertical"
+                            Grid.Row="2"
+                            Margin="5, 0"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Visibility="Collapsed">
+                    <TextBlock Text="{x:Bind local:ComponentContent.ImagePreview}" />
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Top">
+                        <Image x:Name="ReplyImageNewThreadPreview"
+                               VerticalAlignment="Stretch"
+                               HorizontalAlignment="Left"
+                               Height="200" />
+                        <Button Margin="5, 0"
+                                VerticalAlignment="Top"
+                                Click="{x:Bind OnRemoveNewReplyPictureButtonClicked}"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.RemoveImage}">
+                            <SymbolIcon Symbol="Delete" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="3"
+                            Margin="5, 5, 5, 0">
+                    <Button x:Name="ButtonNewReplySelectEmoticon"
+                            Margin="0, 0, 5, 0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Stretch"
+                            Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
+                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertEmoticon}">
+                        <SymbolIcon Symbol="Emoji" />
+                    </Button>
+                    <Button x:Name="ButtonNewReplyAttachPicture"
+                            Margin="0, 0, 5, 0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Stretch"
+                            Click="{x:Bind OnNewReplyAttachPictureButtonClicked}"
+                            ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertImage}">
+                        <SymbolIcon Symbol="Attach" />
+                    </Button>
+                    <CheckBox x:Name="CheckBoxNewReplyWaterMark"
+                              Content="{x:Bind local:ComponentContent.Watermark}"
+                              IsChecked="True" />
                 </StackPanel>
             </Grid>
             <!-- #endregion -->

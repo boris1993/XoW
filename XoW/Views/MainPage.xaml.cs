@@ -55,6 +55,8 @@ namespace XoW.Views
             // 默认以当前选择的饼干发串
             NewThreadCookieSelectionComboBox.SelectedItem =
                 GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+            NewReplyCookieSelectionComboBox.SelectedItem =
+                GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
 
             // 加载订阅ID
             GlobalState.ObservableObject.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
@@ -78,6 +80,7 @@ namespace XoW.Views
             }
 
             HideNewThreadPanel();
+            HideNewReplyPanel();
 
             if (args.InvokedItemContainer.Name == Constants.FavouriteThreadNavigationItemName)
             {
@@ -161,17 +164,15 @@ namespace XoW.Views
             RefreshThreads();
         }
 
-        private void OnCreateNewThreadButtonClicked(object sender, RoutedEventArgs args)
-        {
-            ShowNewThreadPanel();
-        }
+        private void OnCreateNewThreadButtonClicked(object sender, RoutedEventArgs args) => ShowNewThreadPanel();
 
-        private void OnCloseNewThreadPanelButtonClicked(object sender, RoutedEventArgs args)
-        {
-            HideNewThreadPanel();
-        }
+        private void OnCloseNewThreadPanelButtonClicked(object sender, RoutedEventArgs args) => HideNewThreadPanel();
 
         private void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => RefreshReplies();
+
+        private void OnCreateReplyButtonClicked(object sender, RoutedEventArgs args) => ShowNewReplyPanel();
+
+        private void OnCloseNewReplyPanelButtonClicked(object sender, RoutedEventArgs args) => HideNewReplyPanel();
 
         private void OnPoOnlyButtonClicked(object sender, RoutedEventArgs args) => RefreshPoOnlyReplies();
 
@@ -213,7 +214,7 @@ namespace XoW.Views
             RefreshSubscriptions();
         }
 
-        private async void OnAttachPictureButtonClicked(object sender, RoutedEventArgs args)
+        private async void OnNewThreadAttachPictureButtonClicked(object sender, RoutedEventArgs args)
         {
             var storageFile = await CommonUtils.OpenFilePickerForSingleImageAsync();
             if (storageFile == null)
@@ -235,10 +236,38 @@ namespace XoW.Views
             ImagePreviewStackPanel.Visibility = Visibility.Visible;
         }
 
-        public void OnRemovePictureButtonClicked(object sender, RoutedEventArgs args)
+        private async void OnNewReplyAttachPictureButtonClicked(object sender, RoutedEventArgs args)
+        {
+            var storageFile = await CommonUtils.OpenFilePickerForSingleImageAsync();
+            if (storageFile == null)
+            {
+                return;
+            }
+
+            ButtonNewReplyAttachPicture.DataContext = storageFile;
+
+            var thumbnail =
+                await storageFile.GetThumbnailAsync(
+                    Windows.Storage.FileProperties.ThumbnailMode.PicturesView,
+                    200,
+                    Windows.Storage.FileProperties.ThumbnailOptions.UseCurrentScale);
+
+            var bitmapImage = new BitmapImage();
+            await bitmapImage.SetSourceAsync(thumbnail.CloneStream());
+            ReplyImageNewThreadPreview.Source = bitmapImage;
+            ReplyImagePreviewStackPanel.Visibility = Visibility.Visible;
+        }
+
+        public void OnRemoveNewThreadPictureButtonClicked(object sender, RoutedEventArgs args)
         {
             ButtonNewThreadAttachPicture.DataContext = null;
             ImagePreviewStackPanel.Visibility = Visibility.Collapsed;
+        }
+
+        public void OnRemoveNewReplyPictureButtonClicked(object sender, RoutedEventArgs args)
+        {
+            ButtonNewReplyAttachPicture.DataContext = null;
+            ReplyImagePreviewStackPanel.Visibility = Visibility.Collapsed;
         }
 
         private async void OnSendNewThreadButtonClicked(object sender, RoutedEventArgs args)
@@ -294,6 +323,62 @@ namespace XoW.Views
             EnableSendButtonAndHideProgressBar(ButtonSendNewThread);
             HideNewThreadPanel();
             ResetNewThreadPanel();
+        }
+
+        private async void OnSendNewReplyButtonClicked(object sender, RoutedEventArgs args)
+        {
+            ContentDialog contentDialog;
+
+            if (string.IsNullOrWhiteSpace(TextBoxNewReplyContent.Text) && ButtonNewReplyAttachPicture.DataContext == null)
+            {
+                contentDialog = new ContentDialog
+                {
+                    RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
+                    Title = ComponentContent.Error,
+                    Content = ErrorMessage.ContentRequiredWhenNoImageAttached,
+                    CloseButtonText = ComponentContent.Ok,
+                };
+
+                await contentDialog.ShowAsync();
+
+                return;
+            }
+
+            var resto = GlobalState.ObservableObject.ThreadId;
+            var selectedCookie = (AnoBbsCookie)NewThreadCookieSelectionComboBox.SelectedItem;
+            var username = TextBoxNewReplyUserName.Text;
+            var email = TextBoxNewReplyEmail.Text;
+            var title = TextBoxNewReplyTitle.Text;
+            var content = TextBoxNewReplyContent.Text;
+            var image = ButtonNewReplyAttachPicture.DataContext as StorageFile;
+            var shouldApplyWatermark = (CheckBoxNewReplyWaterMark.IsChecked ?? false) ? "1" : "0";
+
+            DisableSendButtonAndShowProgressBar(ButtonSendNewReply);
+
+            await AnoBbsApiClient.CreateNewReply(
+                resto,
+                username,
+                email,
+                title,
+                content,
+                shouldApplyWatermark,
+                selectedCookie,
+                image);
+
+            contentDialog = new ContentDialog
+            {
+                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
+                Title = ComponentContent.Notification,
+                Content = ComponentContent.NewReplyCreatedSuccessfully,
+                CloseButtonText = ComponentContent.Ok,
+            };
+
+            await contentDialog.ShowAsync();
+
+            EnableSendButtonAndHideProgressBar(ButtonSendNewReply);
+            HideNewReplyPanel();
+
+            RefreshReplies();
         }
     }
 }
