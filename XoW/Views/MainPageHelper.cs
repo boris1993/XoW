@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Uwp;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -13,6 +14,31 @@ namespace XoW.Views
 {
     partial class MainPage : Page
     {
+        private void InitializeStaticResources()
+        {
+            // 载入已添加的饼干
+            ApplicationConfigurationHelper.LoadAllCookies();
+
+            // 默认以当前选择的饼干发串
+            NewThreadCookieSelectionComboBox.SelectedItem =
+                GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+            NewReplyCookieSelectionComboBox.SelectedItem =
+                GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+
+            // 加载订阅ID
+            GlobalState.ObservableObject.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
+
+            var currentCookieName = ApplicationConfigurationHelper.GetCurrentCookie();
+            var currentCookieValue = GlobalState.Cookies.SingleOrDefault(cookie => cookie.Name == currentCookieName)?.Cookie;
+            if (!string.IsNullOrEmpty(currentCookieValue))
+            {
+                HttpClientService.ApplyCookie(currentCookieValue);
+            }
+
+            CreateEmoticonButtons(NewThreadEmoticonWrapPanel, OnNewThreadEmoticonButtonClicked);
+            CreateEmoticonButtons(NewReplyEmoticonWrapPanel, OnNewReplyEmoticonButtonClicked);
+        }
+
         private static async Task<string> GetCdnUrl() => (await AnoBbsApiClient.GetCdnAsync()).First().Url;
 
         private async Task RefreshForumsAsync()
@@ -221,6 +247,22 @@ namespace XoW.Views
         {
             sendButton.IsEnabled = true;
             MainPageProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        private void CreateEmoticonButtons(WrapPanel parentWrapPanel, RoutedEventHandler clickEventHandler)
+        {
+            foreach (var emoticon in Constants.Emoticons)
+            {
+                var button = new Button
+                {
+                    Content = emoticon.Key,
+                    DataContext = emoticon.Value
+                };
+
+                button.Click += clickEventHandler;
+
+                parentWrapPanel.Children.Add(button);
+            }
         }
     }
 }

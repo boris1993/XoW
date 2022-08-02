@@ -33,6 +33,8 @@ namespace XoW.Views
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
+            InitializeStaticResources();
+
             GlobalState.CdnUrl = await GetCdnUrl();
 
             // 刷新板块列表，完成后默认选定时间线版
@@ -48,25 +50,6 @@ namespace XoW.Views
 
             // 载入时间线第一页
             RefreshThreads();
-
-            // 载入已添加的饼干
-            ApplicationConfigurationHelper.LoadAllCookies();
-
-            // 默认以当前选择的饼干发串
-            NewThreadCookieSelectionComboBox.SelectedItem =
-                GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
-            NewReplyCookieSelectionComboBox.SelectedItem =
-                GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
-
-            // 加载订阅ID
-            GlobalState.ObservableObject.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
-
-            var currentCookieName = ApplicationConfigurationHelper.GetCurrentCookie();
-            var currentCookieValue = GlobalState.Cookies.SingleOrDefault(cookie => cookie.Name == currentCookieName)?.Cookie;
-            if (!string.IsNullOrEmpty(currentCookieValue))
-            {
-                HttpClientService.ApplyCookie(currentCookieValue);
-            }
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
@@ -379,6 +362,34 @@ namespace XoW.Views
             HideNewReplyPanel();
 
             RefreshReplies();
+        }
+
+        private void OnNewThreadSelectEmoticonButtonClicked(object sender, RoutedEventArgs args)
+        {
+            NewThreadEmoticonWrapPanel.Visibility =
+                NewThreadEmoticonWrapPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void OnNewReplySelectEmoticonButtonClicked(object sender, RoutedEventArgs args)
+        {
+            NewReplyEmoticonWrapPanel.Visibility =
+                NewReplyEmoticonWrapPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void OnNewThreadEmoticonButtonClicked(object sender, RoutedEventArgs args)
+        {
+            var button = sender as Button;
+            var emoticonValue = button.DataContext as string;
+
+            TextBoxNewThreadContent.Text += emoticonValue;
+        }
+
+        private void OnNewReplyEmoticonButtonClicked(object sender, RoutedEventArgs args)
+        {
+            var button = sender as Button;
+            var emoticonValue = button.DataContext as string;
+
+            TextBoxNewReplyContent.Text += emoticonValue;
         }
     }
 }

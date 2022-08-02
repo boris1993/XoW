@@ -4,6 +4,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
+      xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:local="using:XoW"
       xmlns:localServices="using:XoW.Services"
       xmlns:localViews="using:XoW.Views"
@@ -224,6 +225,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0"
@@ -360,7 +362,7 @@
                             Margin="0, 0, 5, 0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Stretch"
-                            Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
+                            Click="{x:Bind OnNewThreadSelectEmoticonButtonClicked}"
                             ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertEmoticon}">
                         <SymbolIcon Symbol="Emoji" />
                     </Button>
@@ -374,11 +376,18 @@
                     </Button>
                     <CheckBox x:Name="CheckBoxNewThreadWaterMark"
                               Content="{x:Bind local:ComponentContent.Watermark}"
-                              IsChecked="True"/>
+                              IsChecked="True" />
                 </StackPanel>
+
+                <controls:WrapPanel x:Name="NewThreadEmoticonWrapPanel"
+                                    Grid.Row="4"
+                                    Margin="5, 5"
+                                    HorizontalSpacing="5"
+                                    VerticalSpacing="5"
+                                    Visibility="Collapsed" />
             </Grid>
             <!-- #endregion -->
-            
+
             <!-- #region 发回复 -->
             <Grid x:Name="NewReplyPanelGrid"
                   Background="{x:Bind local:GlobalState.ObservableObject.BackgroundAndBorderColorBrush, Mode=OneWay}"
@@ -391,6 +400,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -524,7 +534,7 @@
                             Margin="0, 0, 5, 0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Stretch"
-                            Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
+                            Click="{x:Bind OnNewReplySelectEmoticonButtonClicked}"
                             ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertEmoticon}">
                         <SymbolIcon Symbol="Emoji" />
                     </Button>
@@ -540,6 +550,13 @@
                               Content="{x:Bind local:ComponentContent.Watermark}"
                               IsChecked="True" />
                 </StackPanel>
+
+                <controls:WrapPanel x:Name="NewReplyEmoticonWrapPanel"
+                                    Grid.Row="4"
+                                    Margin="5, 5"
+                                    HorizontalSpacing="5"
+                                    VerticalSpacing="5"
+                                    Visibility="Collapsed" />
             </Grid>
             <!-- #endregion -->
         </Grid>

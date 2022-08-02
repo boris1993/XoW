@@ -99,7 +99,7 @@ namespace XoW.Utils
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
             };
-            threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition {Width = GridLength.Auto});
+            threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition
             {
                 Width = new GridLength(1, GridUnitType.Star)
@@ -155,7 +155,7 @@ namespace XoW.Utils
                 {
                     Name = ButtonDeleteSubscriptionName,
                     HorizontalAlignment = HorizontalAlignment.Right,
-                    Content = new SymbolIcon {Symbol = Symbol.Delete},
+                    Content = new SymbolIcon { Symbol = Symbol.Delete },
                     DataContext = thread.Id,
                 };
 
@@ -217,7 +217,7 @@ namespace XoW.Utils
             {
                 var image = new Image
                 {
-                    Source = new BitmapImage {UriSource = new Uri($"{cdnUrl}/thumb/{thread.Img}{thread.Ext}")},
+                    Source = new BitmapImage { UriSource = new Uri($"{cdnUrl}/thumb/{thread.Img}{thread.Ext}") },
                     Stretch = Stretch.None,
                     VerticalAlignment = VerticalAlignment.Top,
                     Margin = new Thickness(10, 0, 10, 0),
@@ -242,7 +242,7 @@ namespace XoW.Utils
             var parentGridForThisThread = new Grid
             {
                 Margin = new Thickness(5),
-                DataContext = new ThreadDataContext {ThreadId = thread.Id, ThreadAuthorUserHash = thread.UserHash,},
+                DataContext = new ThreadDataContext { ThreadId = thread.Id, ThreadAuthorUserHash = thread.UserHash, },
             };
 
             var stackPanel = new StackPanel
