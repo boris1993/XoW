@@ -269,6 +269,8 @@ namespace XoW.Views
             var image = ButtonNewThreadAttachPicture.DataContext as StorageFile;
             var shouldApplyWatermark = (CheckBoxNewThreadWaterMark.IsChecked ?? false) ? "1" : "0";
 
+            DisableSendButtonAndShowProgressBar(ButtonSendNewThread);
+
             await AnoBbsApiClient.CreateNewThread(
                 fid,
                 username,
@@ -289,6 +291,7 @@ namespace XoW.Views
 
             await contentDialog.ShowAsync();
 
+            EnableSendButtonAndHideProgressBar(ButtonSendNewThread);
             HideNewThreadPanel();
             ResetNewThreadPanel();
         }

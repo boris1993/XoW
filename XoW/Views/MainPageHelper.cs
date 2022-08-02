@@ -166,8 +166,6 @@ namespace XoW.Views
 
         private void ShowNewThreadPanel()
         {
-            //ContentThreadGrid.Visibility = Visibility.Collapsed;
-
             NewThreadPanelGrid.Visibility = Visibility.Visible;
         }
 
@@ -188,6 +186,18 @@ namespace XoW.Views
             ButtonNewThreadAttachPicture.DataContext = null;
             CheckBoxNewThreadWaterMark.IsChecked = true;
             ImagePreviewStackPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void DisableSendButtonAndShowProgressBar(Button sendButton)
+        {
+            sendButton.IsEnabled = false;
+            MainPageProgressBar.Visibility = Visibility.Visible;
+        }
+
+        private void EnableSendButtonAndHideProgressBar(Button sendButton)
+        {
+            sendButton.IsEnabled = true;
+            MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
     }
 }
