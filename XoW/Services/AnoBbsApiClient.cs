@@ -155,7 +155,7 @@ namespace XoW.Services
             var uri = new Uri(Url.CreateNewThread);
 
             using var requestBody = new HttpMultipartFormDataContent();
-            requestBody.Add(new HttpStringContent("117"), RequestBodyParamName.FId);
+            requestBody.Add(new HttpStringContent(fid), RequestBodyParamName.FId);
             requestBody.Add(new HttpStringContent(content), RequestBodyParamName.Content);
             requestBody.Add(new HttpStringContent(water), RequestBodyParamName.Water);
 
