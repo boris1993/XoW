@@ -25,6 +25,17 @@ namespace XoW.Services
         public static async Task<List<CdnUrl>> GetCdnAsync()
         {
             var responseString = await GetStringResponseAsync(Url.GetCdn);
+
+            try
+            {
+                JObject.Parse(responseString);
+            }
+            catch (JsonReaderException)
+            {
+                var errorMessage = JsonConvert.DeserializeObject<string>(responseString);
+                throw new AppException(errorMessage);
+            }
+
             var cdnList = JsonConvert.DeserializeObject<List<CdnUrl>>(responseString);
 
             cdnList = cdnList.OrderBy(entry => entry.Rate).ToList();
