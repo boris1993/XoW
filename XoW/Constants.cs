@@ -82,7 +82,7 @@ namespace XoW
         public const string EMail = "email";
         public const string Title = "title";
         public const string Content = "content";
-        public const string Water = "Water";
+        public const string Water = "water";
         public const string Image = "image";
     }
 
@@ -259,6 +259,7 @@ namespace XoW
         public const string InsertEmoticon = "插入颜文字";
         public const string InsertImage = "插入图片";
         public const string RemoveImage = "删除图片";
+        public const string Watermark = "水印";
         public const string Username = "名称";
         public const string Email = "E-Mail";
         public const string Title = "标题";
@@ -280,5 +281,6 @@ namespace XoW
         public const string QrCodeDecodeFailed = "饼干二维码解析失败";
         public const string CookieRequiredForThisForum = "浏览该板块需要拥有饼干";
         public const string SubscriptionIdRequiredForGettingSubscription = "需要有订阅ID才能获取订阅";
+        public const string ContentRequiredWhenNoImageAttached = "没有上传文件的时候，必须填写内容";
     }
 }

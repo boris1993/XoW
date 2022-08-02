@@ -185,7 +185,8 @@ namespace XoW.Views
             TextBoxNewThreadContent.Text = "";
             NewThreadCookieSelectionComboBox.SelectedItem = GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
             ForumSelectionComboBox.SelectedIndex = 0;
-            ButtonAttachPicture.DataContext = null;
+            ButtonNewThreadAttachPicture.DataContext = null;
+            CheckBoxNewThreadWaterMark.IsChecked = true;
             ImagePreviewStackPanel.Visibility = Visibility.Collapsed;
         }
     }

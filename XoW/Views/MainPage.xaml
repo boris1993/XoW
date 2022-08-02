@@ -269,7 +269,6 @@
                                     Margin="0, 0, 5, 0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Stretch"
-                                    IsEnabled="{x:Bind TextBoxNewThreadContent.Text, Converter={StaticResource SendNewThreadButtonEnableStateConverter}, Mode=OneWay}"
                                     Click="{x:Bind OnSendNewThreadButtonClicked}"
                                     ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
                                 <SymbolIcon Symbol="Send" />
@@ -356,7 +355,7 @@
                 <StackPanel Orientation="Horizontal"
                             Grid.Row="3"
                             Margin="5, 5, 5, 0">
-                    <Button x:Name="ButtonSelectEmoticon"
+                    <Button x:Name="ButtonNewThreadSelectEmoticon"
                             Margin="0, 0, 5, 0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Stretch"
@@ -364,7 +363,7 @@
                             ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertEmoticon}">
                         <SymbolIcon Symbol="Emoji" />
                     </Button>
-                    <Button x:Name="ButtonAttachPicture"
+                    <Button x:Name="ButtonNewThreadAttachPicture"
                             Margin="0, 0, 5, 0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Stretch"
@@ -372,6 +371,9 @@
                             ToolTipService.ToolTip="{x:Bind local:ComponentContent.InsertImage}">
                         <SymbolIcon Symbol="Attach" />
                     </Button>
+                    <CheckBox x:Name="CheckBoxNewThreadWaterMark"
+                              Content="{x:Bind local:ComponentContent.Watermark}"
+                              IsChecked="True"/>
                 </StackPanel>
             </Grid>
             <!-- #endregion -->

@@ -221,7 +221,7 @@ namespace XoW.Views
                 return;
             }
 
-            ButtonAttachPicture.DataContext = storageFile;
+            ButtonNewThreadAttachPicture.DataContext = storageFile;
 
             var thumbnail =
                 await storageFile.GetThumbnailAsync(
@@ -237,19 +237,37 @@ namespace XoW.Views
 
         public void OnRemovePictureButtonClicked(object sender, RoutedEventArgs args)
         {
-            ButtonAttachPicture.DataContext = null;
+            ButtonNewThreadAttachPicture.DataContext = null;
             ImagePreviewStackPanel.Visibility = Visibility.Collapsed;
         }
 
         private async void OnSendNewThreadButtonClicked(object sender, RoutedEventArgs args)
         {
+            ContentDialog contentDialog;
+
+            if (string.IsNullOrWhiteSpace(TextBoxNewThreadContent.Text) && ButtonNewThreadAttachPicture.DataContext == null)
+            {
+                contentDialog = new ContentDialog
+                {
+                    RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
+                    Title = ComponentContent.Error,
+                    Content = ErrorMessage.ContentRequiredWhenNoImageAttached,
+                    CloseButtonText = ComponentContent.Ok,
+                };
+
+                await contentDialog.ShowAsync();
+
+                return;
+            }
+
             var fid = ((KeyValuePair<string, (string forumId, string permissionLevel)>)ForumSelectionComboBox.SelectedItem).Value.forumId;
             var selectedCookie = (AnoBbsCookie)NewThreadCookieSelectionComboBox.SelectedItem;
             var username = TextBoxNewThreadUserName.Text;
             var email = TextBoxNewThreadEmail.Text;
             var title = TextBoxNewThreadTitle.Text;
             var content = TextBoxNewThreadContent.Text;
-            var image = ButtonAttachPicture.DataContext as StorageFile;
+            var image = ButtonNewThreadAttachPicture.DataContext as StorageFile;
+            var shouldApplyWatermark = (CheckBoxNewThreadWaterMark.IsChecked ?? false) ? "1" : "0";
 
             await AnoBbsApiClient.CreateNewThread(
                 fid,
@@ -257,11 +275,11 @@ namespace XoW.Views
                 email,
                 title,
                 content,
-                "1",
+                shouldApplyWatermark,
                 selectedCookie,
                 image);
 
-            var contentDialog = new ContentDialog
+            contentDialog = new ContentDialog
             {
                 RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
                 Title = ComponentContent.Notification,
