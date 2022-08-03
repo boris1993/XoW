@@ -8,8 +8,6 @@ using XoW.Models;
 using XoW.Services;
 using XoW.Utils;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace XoW.Views
 {
     public sealed partial class SettingsPage : UserControl
@@ -50,26 +48,14 @@ namespace XoW.Views
 
         private async void OnDeleteCookieButtonClicked(object sender, RoutedEventArgs args)
         {
-            var dialog = new ContentDialog
-            {
-                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                PrimaryButtonText = ComponentContent.Confirm,
-                SecondaryButtonText = ComponentContent.Cancel,
-                DefaultButton = ContentDialogButton.Primary,
-                Title = ConfirmationMessage.DeleteCookieConfirmation,
-            };
-
-            var result = await dialog.ShowAsync();
-
-            switch (result)
-            {
-                case ContentDialogResult.Primary:
+            await new ConfirmationContentDialog(
+                ConfirmationMessage.DeleteCookieConfirmation,
+                primaryButtonEventHandler: (_sender, _args) =>
+                {
                     var cookieName = ((Button)sender).DataContext?.ToString();
                     DeleteCookie(cookieName);
-                    break;
-                default:
-                    break;
-            }
+                })
+                .ShowAsync();
         }
 
         /// <summary>
@@ -116,29 +102,12 @@ namespace XoW.Views
         {
             if (!string.IsNullOrEmpty(GlobalState.ObservableObject.SubscriptionId))
             {
-                var dialog = new ContentDialog
-                {
-                    RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                    PrimaryButtonText = ComponentContent.Confirm,
-                    SecondaryButtonText = ComponentContent.Cancel,
-                    DefaultButton = ContentDialogButton.Primary,
-                    Title = ConfirmationMessage.GenerateNewSubscriptionIdConfirmationTitle,
-                    Content = ConfirmationMessage.GenerateNewSubscriptionIdConfirmationContent,
-                    Foreground = new SolidColorBrush(Colors.Red),
-                };
-
-                var result = await dialog.ShowAsync();
-
-                switch (result)
-                {
-                    case ContentDialogResult.Primary:
-                        GenerateNewSubscriptionId();
-                        break;
-                    case ContentDialogResult.None:
-                    case ContentDialogResult.Secondary:
-                    default:
-                        break;
-                }
+                await new ConfirmationContentDialog(
+                    ConfirmationMessage.GenerateNewSubscriptionIdConfirmationTitle,
+                    ConfirmationMessage.GenerateNewSubscriptionIdConfirmationContent,
+                    Colors.Red,
+                    (sender, args) => GenerateNewSubscriptionId())
+                    .ShowAsync();
 
                 return;
             }

@@ -126,6 +126,9 @@
     <Compile Include="Utils\CommonUtils.cs" />
     <Compile Include="Utils\ApplicationConfigurationHelper.cs" />
     <Compile Include="Utils\ComponentsBuilder.cs" />
+    <Compile Include="Views\ConfirmationContentDialog.xaml.cs">
+      <DependentUpon>ConfirmationContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -186,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\ConfirmationContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
