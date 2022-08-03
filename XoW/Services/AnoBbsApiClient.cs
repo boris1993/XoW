@@ -28,7 +28,7 @@ namespace XoW.Services
 
             try
             {
-                JObject.Parse(responseString);
+                JToken.Parse(responseString);
             }
             catch (JsonReaderException)
             {
