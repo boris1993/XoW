@@ -129,6 +129,9 @@
     <Compile Include="Views\ConfirmationContentDialog.xaml.cs">
       <DependentUpon>ConfirmationContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\JumpToThreadContentDialog.xaml.cs">
+      <DependentUpon>JumpToThreadContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -190,6 +193,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Views\ConfirmationContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\JumpToThreadContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,27 +19,14 @@ namespace XoW.Services
         private const string QueryParamPageId = "page";
         private const string QueryParamTid = "tid";
 
+        /// <summary>
+        /// 值班室版面ID
+        /// </summary>
         private const string ForumIdDutyRoom = "18";
-
-        private const string AddSubscriptionSuccessfulMessage = "订阅大成功→_→";
-        private const string AddSubscriptionFailedMessage = "该串不存在";
 
         public static async Task<List<CdnUrl>> GetCdnAsync()
         {
-            var responseString = await GetStringResponseAsync(Url.GetCdn);
-
-            try
-            {
-                JToken.Parse(responseString);
-            }
-            catch (JsonReaderException)
-            {
-                var errorMessage = JsonConvert.DeserializeObject<string>(responseString);
-                throw new AppException(errorMessage);
-            }
-
-            var cdnList = JsonConvert.DeserializeObject<List<CdnUrl>>(responseString);
-
+            var cdnList = await GetResponseWithType<List<CdnUrl>>(Url.GetCdn);
             cdnList = cdnList.OrderBy(entry => entry.Rate).ToList();
 
             return cdnList;
@@ -47,9 +34,7 @@ namespace XoW.Services
 
         public static async Task<List<ForumGroup>> GetForumGroupsAsync()
         {
-            var responseString = await GetStringResponseAsync(Url.GetForums);
-            var forumGroups = JsonConvert.DeserializeObject<List<ForumGroup>>(responseString);
-
+            var forumGroups = await GetResponseWithType<List<ForumGroup>>(Url.GetForums);
             return forumGroups;
         }
 
@@ -61,8 +46,7 @@ namespace XoW.Services
             query[QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
-            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
-            var threads = JsonConvert.DeserializeObject<List<ForumThread>>(responseString);
+            var threads = await GetResponseWithType<List<ForumThread>>(uriBuilder.ToString());
 
             return threads;
         }
@@ -76,8 +60,7 @@ namespace XoW.Services
             query[QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
-            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
-            var threads = JsonConvert.DeserializeObject<List<ForumThread>>(responseString);
+            var threads = await GetResponseWithType<List<ForumThread>>(uriBuilder.ToString());
 
             return threads;
         }
@@ -91,8 +74,7 @@ namespace XoW.Services
             query[QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
-            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
-            var reply = JsonConvert.DeserializeObject<ThreadReply>(responseString);
+            var reply = await GetResponseWithType<ThreadReply>(uriBuilder.ToString());
 
             return reply;
         }
@@ -106,8 +88,7 @@ namespace XoW.Services
             query[QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
-            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
-            var reply = JsonConvert.DeserializeObject<ThreadReply>(responseString);
+            var reply = await GetResponseWithType<ThreadReply>(uriBuilder.ToString());
 
             return reply;
         }
@@ -121,8 +102,7 @@ namespace XoW.Services
             query[QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
-            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
-            var subscriptions = JsonConvert.DeserializeObject<List<ThreadSubscription>>(responseString);
+            var subscriptions = await GetResponseWithType<List<ThreadSubscription>>(uriBuilder.ToString());
 
             return subscriptions;
         }
@@ -136,9 +116,7 @@ namespace XoW.Services
             query[QueryParamTid] = tid;
             uriBuilder.Query = query.ToString();
 
-            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
-
-            return JsonConvert.DeserializeObject<string>(responseString);
+            return await GetResponseWithType<string>(uriBuilder.ToString());
         }
 
         public static async Task<string> DeleteSubscriptionAsync(string subscriptionId, string tid)
@@ -150,9 +128,7 @@ namespace XoW.Services
             query[QueryParamTid] = tid;
             uriBuilder.Query = query.ToString();
 
-            var responseString = await GetStringResponseAsync(uriBuilder.ToString());
-
-            return JsonConvert.DeserializeObject<string>(responseString);
+            return await GetResponseWithType<string>(uriBuilder.ToString());
         }
 
         public static async Task PostNewReport(string reportThreadContent)
@@ -274,7 +250,7 @@ namespace XoW.Services
             httpClient.DefaultRequestHeaders.Cookie.Add(defaultCookie);
         }
 
-        private static async Task<string> GetStringResponseAsync(string url)
+        private static async Task<T> GetResponseWithType<T>(string url)
         {
             var httpClient = HttpClientService.GetHttpClientInstance();
 
@@ -290,7 +266,16 @@ namespace XoW.Services
                 throw new AppException(errorMessage);
             }
 
-            return responseString;
+            try
+            {
+                var returnObject = JsonConvert.DeserializeObject<T>(responseString);
+                return returnObject;
+            }
+            catch (JsonSerializationException)
+            {
+                var errorMessage = JsonConvert.DeserializeObject<string>(responseString);
+                throw new AppException(errorMessage);
+            }
         }
     }
 }

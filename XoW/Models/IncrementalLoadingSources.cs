@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
 using Microsoft.Toolkit.Collections;
+using Windows.UI.Xaml.Controls;
 using XoW.Services;
 using XoW.Utils;
 
@@ -40,6 +40,12 @@ namespace XoW.Models
         {
             var actualPageIndex = pageIndex + 1;
             var replies = await AnoBbsApiClient.GetRepliesAsync(GlobalState.CurrentThreadId, actualPageIndex);
+            var threadId = replies.Id;
+            var threadAuthorUserHash = replies.UserHash;
+
+            GlobalState.ObservableObject.ThreadId = threadId;
+            GlobalState.CurrentThreadAuthorUserHash = threadAuthorUserHash;
+
             var grids = actualPageIndex == 1
                 ? ComponentsBuilder.BuildGridForReply(
                     replies,

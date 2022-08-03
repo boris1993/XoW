@@ -178,6 +178,12 @@ namespace XoW.Views
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
+        private void ResetAndShowRepliesPanel()
+        {
+            ButtonPoOnly.IsChecked = false;
+            ContentRepliesGrid.Visibility = Visibility.Visible;
+        }
+
         private void ShowSettingsGrid()
         {
             ContentGrid.Visibility = Visibility.Collapsed;

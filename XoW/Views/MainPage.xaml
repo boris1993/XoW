@@ -76,7 +76,7 @@
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Stretch"
                                 Click="{x:Bind OnRefreshThreadButtonClicked}"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThreadButtonTooltip}">
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThread}">
                             <SymbolIcon Symbol="Refresh" />
                         </Button>
                         <Button x:Name="ButtonCreateThread"
@@ -84,21 +84,22 @@
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Stretch"
                                 Click="{x:Bind OnCreateNewThreadButtonClicked}"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThread}">
                             <SymbolIcon Symbol="Edit" />
                         </Button>
                         <Button x:Name="ButtonSearchThread"
                                 Margin="0, 0, 5, 0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Stretch"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.SearchThreadButtonTooltip}">
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.SearchThread}">
                             <SymbolIcon Symbol="Find" />
                         </Button>
                         <Button x:Name="ButtonGotoThread"
                                 Margin="0, 0, 5, 0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Stretch"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.GotoThreadTooltip}">
+                                Click="{x:Bind OnGotoThreadButtonClicked}"
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.GotoThread}">
                             <SymbolIcon Symbol="Go" />
                         </Button>
                     </StackPanel>
@@ -165,7 +166,7 @@
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Stretch"
                                 Click="{x:Bind OnRefreshRepliesButtonClicked}"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThreadButtonTooltip}">
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.RefreshThread}">
                             <SymbolIcon Symbol="Refresh" />
                         </Button>
                         <Button x:Name="ButtonCreateReply"
@@ -173,7 +174,7 @@
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Stretch"
                                 Click="{x:Bind OnCreateReplyButtonClicked}"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReplyButtonTooltip}">
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReply}">
                             <SymbolIcon Symbol="Comment" />
                         </Button>
                         <Button x:Name="ButtonAddToFavourites"
@@ -181,7 +182,7 @@
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Stretch"
                                 Click="{x:Bind OnAddSubscriptionButtonClicked}"
-                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.AddToFavouritesButtonTooltip}">
+                                ToolTipService.ToolTip="{x:Bind local:ComponentContent.AddToFavourites}">
                             <SymbolIcon Symbol="OutlineStar" />
                         </Button>
                         <ToggleButton x:Name="ButtonPoOnly"
@@ -274,7 +275,7 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Stretch"
                                     Click="{x:Bind OnSendNewThreadButtonClicked}"
-                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThreadButtonTooltip}">
+                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThread}">
                                 <SymbolIcon Symbol="Send" />
                             </Button>
                             <Button x:Name="ButtonSaveScratch"
@@ -447,7 +448,7 @@
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Stretch"
                                     Click="{x:Bind OnSendNewReplyButtonClicked}"
-                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReplyButtonTooltip}">
+                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReply}">
                                 <SymbolIcon Symbol="Send" />
                             </Button>
                             <Button x:Name="ButtonSaveReplyScratch"

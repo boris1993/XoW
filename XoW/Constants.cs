@@ -247,19 +247,19 @@ namespace XoW
         public const string Notification = "提示";
         public const string Error = "错误";
 
-        public const string SubscriptionIdLabel = "订阅ID";
+        public const string SubscriptionId = "订阅ID";
         public const string GenerateSubscriptionId = "生成订阅ID";
         public const string SubscriptionRecommendation = "建议在不同设备间使用相同订阅ID，以同步收藏";
         public const string NewThreadCreatedSuccessfully = "发串大成功";
         public const string NewReplyCreatedSuccessfully = "回复成功";
         public const string ReasonOfReporting = "举报理由";
 
-        public const string CreateThreadButtonTooltip = "创建新串";
-        public const string CreateReplyButtonTooltip = "创建回复";
-        public const string RefreshThreadButtonTooltip = "刷新";
-        public const string AddToFavouritesButtonTooltip = "收藏";
-        public const string SearchThreadButtonTooltip = "搜索串";
-        public const string GotoThreadTooltip = "跳转到串";
+        public const string CreateThread = "创建新串";
+        public const string CreateReply = "创建回复";
+        public const string RefreshThread = "刷新";
+        public const string AddToFavourites = "收藏";
+        public const string SearchThread = "搜索串";
+        public const string GotoThread = "跳转到串";
         public const string PoOnlyTooltip = "只看PO";
         public const string DeleteSubscription = "删除订阅";
         public const string ReportThread = "举报该串";

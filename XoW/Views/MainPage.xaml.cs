@@ -110,13 +110,9 @@ namespace XoW.Views
             }
 
             GlobalState.CurrentThreadId = dataContext.ThreadId;
-            GlobalState.ObservableObject.ThreadId = dataContext.ThreadId;
-            GlobalState.CurrentThreadAuthorUserHash = dataContext.ThreadAuthorUserHash;
-
-            ButtonPoOnly.IsChecked = false;
-
             RefreshReplies();
-            ContentRepliesGrid.Visibility = Visibility.Visible;
+
+            ResetAndShowRepliesPanel();
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
@@ -162,15 +158,7 @@ namespace XoW.Views
 
             var result = await AnoBbsApiClient.DeleteSubscriptionAsync(subscriptionId, threadId);
 
-            var contentDialog = new ContentDialog
-            {
-                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                Title = ComponentContent.Notification,
-                Content = result,
-                CloseButtonText = ComponentContent.Ok,
-            };
-
-            await contentDialog.ShowAsync();
+            await new NotificationContentDialog(false, result).ShowAsync();
 
             RefreshSubscriptions();
         }
@@ -233,20 +221,9 @@ namespace XoW.Views
 
         private async void OnSendNewThreadButtonClicked(object sender, RoutedEventArgs args)
         {
-            ContentDialog contentDialog;
-
             if (string.IsNullOrWhiteSpace(TextBoxNewThreadContent.Text) && ButtonNewThreadAttachPicture.DataContext == null)
             {
-                contentDialog = new ContentDialog
-                {
-                    RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                    Title = ComponentContent.Error,
-                    Content = ErrorMessage.ContentRequiredWhenNoImageAttached,
-                    CloseButtonText = ComponentContent.Ok,
-                };
-
-                await contentDialog.ShowAsync();
-
+                await new NotificationContentDialog(true, ErrorMessage.ContentRequiredWhenNoImageAttached).ShowAsync();
                 return;
             }
 
@@ -271,15 +248,7 @@ namespace XoW.Views
                 selectedCookie,
                 image);
 
-            contentDialog = new ContentDialog
-            {
-                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                Title = ComponentContent.Notification,
-                Content = ComponentContent.NewThreadCreatedSuccessfully,
-                CloseButtonText = ComponentContent.Ok,
-            };
-
-            await contentDialog.ShowAsync();
+            await new NotificationContentDialog(false, ComponentContent.NewThreadCreatedSuccessfully).ShowAsync();
 
             EnableSendButtonAndHideProgressBar(ButtonSendNewThread);
             HideNewThreadPanel();
@@ -288,20 +257,9 @@ namespace XoW.Views
 
         private async void OnSendNewReplyButtonClicked(object sender, RoutedEventArgs args)
         {
-            ContentDialog contentDialog;
-
             if (string.IsNullOrWhiteSpace(TextBoxNewReplyContent.Text) && ButtonNewReplyAttachPicture.DataContext == null)
             {
-                contentDialog = new ContentDialog
-                {
-                    RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                    Title = ComponentContent.Error,
-                    Content = ErrorMessage.ContentRequiredWhenNoImageAttached,
-                    CloseButtonText = ComponentContent.Ok,
-                };
-
-                await contentDialog.ShowAsync();
-
+                await new NotificationContentDialog(true, ErrorMessage.ContentRequiredWhenNoImageAttached).ShowAsync();
                 return;
             }
 
@@ -326,15 +284,7 @@ namespace XoW.Views
                 selectedCookie,
                 image);
 
-            contentDialog = new ContentDialog
-            {
-                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                Title = ComponentContent.Notification,
-                Content = ComponentContent.NewReplyCreatedSuccessfully,
-                CloseButtonText = ComponentContent.Ok,
-            };
-
-            await contentDialog.ShowAsync();
+            await new NotificationContentDialog(false, ComponentContent.NewReplyCreatedSuccessfully).ShowAsync();
 
             EnableSendButtonAndHideProgressBar(ButtonSendNewReply);
             HideNewReplyPanel();
@@ -370,6 +320,20 @@ namespace XoW.Views
             TextBoxNewReplyContent.Text += emoticonValue;
         }
 
-        private async void OnReportThreadButtonClicked(object sender, RoutedEventArgs args) => await new ReportThreadContentDialog().ShowAsync();
+        private async void OnReportThreadButtonClicked(object sender, RoutedEventArgs args) =>
+            await new ReportThreadContentDialog().ShowAsync();
+
+        private async void OnGotoThreadButtonClicked(object sender, RoutedEventArgs args)
+        {
+            await new JumpToThreadContentDialog((primaryButtonSender, eventArgs) =>
+            {
+                var textBox = primaryButtonSender.FindName("TextBoxTargetThreadId") as TextBox;
+                var targetThreadId = textBox.Text;
+
+                GlobalState.CurrentThreadId = targetThreadId;
+                RefreshReplies();
+                ResetAndShowRepliesPanel();
+            }).ShowAsync();
+        }
     }
 }

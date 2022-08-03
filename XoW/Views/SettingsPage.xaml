@@ -51,7 +51,7 @@
                              IsSpellCheckEnabled="False"
                              IsTextPredictionEnabled="False"
                              TextWrapping="Wrap"
-                             Header="{x:Bind local:ComponentContent.SubscriptionIdLabel}"
+                             Header="{x:Bind local:ComponentContent.SubscriptionId}"
                              Text="{x:Bind local:GlobalState.ObservableObject.SubscriptionId, Mode=TwoWay}"
                              TextChanged="OnSubscriptionIdTextBoxTextChanged" />
                     <TextBlock Text="{x:Bind local:ComponentContent.SubscriptionRecommendation}" />

@@ -10,8 +10,8 @@ namespace XoW.Views
     {
         public ReportThreadContentDialog()
         {
-            this.InitializeComponent();
-            this.RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
+            InitializeComponent();
+            RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
         }
 
         private async void ContentDialogPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -22,10 +22,6 @@ namespace XoW.Views
             var newReportThreadContent = $">>{threadId}\n{reportReason}";
 
             await AnoBbsApiClient.PostNewReport(newReportThreadContent);
-        }
-
-        private void ContentDialogSecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
         }
     }
 }

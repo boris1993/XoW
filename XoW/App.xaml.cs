@@ -93,13 +93,8 @@ namespace XoW
         {
             args.Handled = true;
 
-            var errorMessagePopup = new ContentDialog
-            {
-                Title = "错误",
-                CloseButtonText = "OK",
-                Content = args.Exception.Message,
-            };
-            await errorMessagePopup.ShowAsync();
+            var errorMessage = args.Exception.InnerException?.Message ?? args.Exception.Message;
+            await new NotificationContentDialog(true, errorMessage).ShowAsync();
         }
     }
 }
