@@ -22,7 +22,7 @@ namespace XoW.Views
             new ObservableCollection<NavigationViewItemBase>();
 
         private readonly List<string> _nonForumNavigationItems =
-            new List<string>() { Constants.FavouriteThreadNavigationItemName };
+            new List<string>() {Constants.FavouriteThreadNavigationItemName};
 
         public MainPage()
         {
@@ -69,11 +69,6 @@ namespace XoW.Views
             {
                 ShowContentGrid();
 
-                if (string.IsNullOrEmpty(GlobalState.ObservableObject.SubscriptionId))
-                {
-                    await new NotificationContentDialog(true, ErrorMessage.SubscriptionIdRequiredForGettingSubscription).ShowAsync();
-                }
-
                 await RefreshSubscriptions();
                 GlobalState.ObservableObject.ForumName = Constants.FavouriteThreadNavigationItemName;
 
@@ -118,7 +113,8 @@ namespace XoW.Views
 
         private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name == Constants.FavouriteThreadNavigationItemName)
+            if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name ==
+                Constants.FavouriteThreadNavigationItemName)
             {
                 await RefreshSubscriptions();
                 return;
@@ -220,13 +216,16 @@ namespace XoW.Views
 
         private async void OnSendNewThreadButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (string.IsNullOrWhiteSpace(TextBoxNewThreadContent.Text) && ButtonNewThreadAttachPicture.DataContext == null)
+            if (string.IsNullOrWhiteSpace(TextBoxNewThreadContent.Text) &&
+                ButtonNewThreadAttachPicture.DataContext == null)
             {
                 await new NotificationContentDialog(true, ErrorMessage.ContentRequiredWhenNoImageAttached).ShowAsync();
                 return;
             }
 
-            var fid = ((KeyValuePair<string, (string forumId, string permissionLevel)>)ForumSelectionComboBox.SelectedItem).Value.forumId;
+            var fid =
+                ((KeyValuePair<string, (string forumId, string permissionLevel)>)ForumSelectionComboBox.SelectedItem)
+                .Value.forumId;
             var selectedCookie = (AnoBbsCookie)NewThreadCookieSelectionComboBox.SelectedItem;
             var username = TextBoxNewThreadUserName.Text;
             var email = TextBoxNewThreadEmail.Text;
@@ -256,7 +255,8 @@ namespace XoW.Views
 
         private async void OnSendNewReplyButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (string.IsNullOrWhiteSpace(TextBoxNewReplyContent.Text) && ButtonNewReplyAttachPicture.DataContext == null)
+            if (string.IsNullOrWhiteSpace(TextBoxNewReplyContent.Text) &&
+                ButtonNewReplyAttachPicture.DataContext == null)
             {
                 await new NotificationContentDialog(true, ErrorMessage.ContentRequiredWhenNoImageAttached).ShowAsync();
                 return;

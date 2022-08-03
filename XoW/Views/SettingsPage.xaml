@@ -4,7 +4,6 @@
              xmlns:local="using:XoW"
              xmlns:localModel="using:XoW.Models"
              xmlns:localServices="using:XoW.Services"
-             xmlns:views="using:XoW.Views"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
@@ -54,6 +53,7 @@
                              Text="{x:Bind local:GlobalState.ObservableObject.SubscriptionId, Mode=TwoWay}"
                              TextChanged="OnSubscriptionIdTextBoxTextChanged" />
                     <TextBlock Text="{x:Bind local:ComponentContent.SubscriptionRecommendation}" />
+                    <TextBlock Text="{x:Bind local:ComponentContent.EmptySubscriptionWarning}" />
                     <Button x:Name="ButtonGenerateSubscriptionId"
                             Margin="0, 5"
                             HorizontalAlignment="Stretch"
