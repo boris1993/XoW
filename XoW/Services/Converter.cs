@@ -13,7 +13,7 @@ namespace XoW.Services
         public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
     }
 
-    public class SendNewThreadButtonEnableStateConverter : IValueConverter
+    public class SetButtonStateByContentExistenseConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

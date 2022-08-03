@@ -71,14 +71,7 @@ namespace XoW.Views
 
                 if (string.IsNullOrEmpty(GlobalState.ObservableObject.SubscriptionId))
                 {
-                    var errorMessagePopup = new ContentDialog
-                    {
-                        RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                        Title = ComponentContent.Error,
-                        CloseButtonText = ComponentContent.Ok,
-                        Content = ErrorMessage.SubscriptionIdRequiredForGettingSubscription,
-                    };
-                    await errorMessagePopup.ShowAsync();
+                    await new NotificationContentDialog(true, ErrorMessage.SubscriptionIdRequiredForGettingSubscription).ShowAsync();
                 }
 
                 RefreshSubscriptions();
@@ -96,15 +89,7 @@ namespace XoW.Views
             if (string.IsNullOrEmpty(GlobalState.ObservableObject.CurrentCookie) &&
                 currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
             {
-                var errorMessagePopup = new ContentDialog
-                {
-                    RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                    Title = ComponentContent.Error,
-                    CloseButtonText = ComponentContent.Ok,
-                    Content = ErrorMessage.CookieRequiredForThisForum,
-                };
-                await errorMessagePopup.ShowAsync();
-
+                await new NotificationContentDialog(true, ErrorMessage.CookieRequiredForThisForum).ShowAsync();
                 return;
             }
 
@@ -166,15 +151,8 @@ namespace XoW.Views
 
             var result = await AnoBbsApiClient.AddSubscriptionAsync(subscriptionId, threadId);
 
-            var contentDialog = new ContentDialog
-            {
-                RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme,
-                Title = ComponentContent.Notification,
-                Content = result,
-                CloseButtonText = ComponentContent.Ok,
-            };
 
-            await contentDialog.ShowAsync();
+            await new NotificationContentDialog(false, result).ShowAsync();
         }
 
         private async void OnDeleteSubscriptionButtonClicked(object sender, RoutedEventArgs args)
@@ -391,5 +369,7 @@ namespace XoW.Views
 
             TextBoxNewReplyContent.Text += emoticonValue;
         }
+
+        private async void OnReportThreadButtonClicked(object sender, RoutedEventArgs args) => await new ReportThreadContentDialog().ShowAsync();
     }
 }

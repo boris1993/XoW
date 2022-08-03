@@ -11,7 +11,7 @@
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <localServices:SendNewThreadButtonEnableStateConverter x:Key="SendNewThreadButtonEnableStateConverter" />
+        <localServices:SetButtonStateByContentExistenseConverter x:Key="SendNewThreadButtonEnableStateConverter" />
         <localServices:CookieNameToObjectConverter x:Key="CookieNameToObjectConverter" />
         <localServices:ThreadIdConverter x:Key="ThreadIdConverter" />
     </Page.Resources>
@@ -196,6 +196,7 @@
                                 Margin="0, 0, 5, 0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Stretch"
+                                Click="{x:Bind OnReportThreadButtonClicked}"
                                 ToolTipService.ToolTip="{x:Bind local:ComponentContent.ReportThread}">
                             <SymbolIcon Symbol="Flag" />
                         </Button>

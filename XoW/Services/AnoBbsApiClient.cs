@@ -19,6 +19,8 @@ namespace XoW.Services
         private const string QueryParamPageId = "page";
         private const string QueryParamTid = "tid";
 
+        private const string ForumIdDutyRoom = "18";
+
         private const string AddSubscriptionSuccessfulMessage = "订阅大成功→_→";
         private const string AddSubscriptionFailedMessage = "该串不存在";
 
@@ -151,6 +153,19 @@ namespace XoW.Services
             var responseString = await GetStringResponseAsync(uriBuilder.ToString());
 
             return JsonConvert.DeserializeObject<string>(responseString);
+        }
+
+        public static async Task PostNewReport(string reportThreadContent)
+        {
+            await CreateNewThread(
+                ForumIdDutyRoom,
+                null,
+                null,
+                null,
+                reportThreadContent,
+                "0",
+                GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie),
+                null);
         }
 
         public static async Task CreateNewThread(

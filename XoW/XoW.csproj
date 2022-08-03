@@ -145,6 +145,12 @@
     <Compile Include="Services\HtmlParser.cs" />
     <Compile Include="Services\HttpClientService.cs" />
     <Compile Include="Services\QrCodeService.cs" />
+    <Compile Include="Views\NotificationContentDialog.xaml.cs">
+      <DependentUpon>NotificationContentDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportThreadContentDialog.xaml.cs">
+      <DependentUpon>ReportThreadContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -183,6 +189,14 @@
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NotificationContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportThreadContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsPage.xaml">
       <SubType>Designer</SubType>

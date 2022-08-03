@@ -242,6 +242,7 @@ namespace XoW
         public const string Ok = "知道了";
         public const string Confirm = "我确定！";
         public const string Cancel = "算了吧";
+        public const string SendReport = "提交举报";
 
         public const string Notification = "提示";
         public const string Error = "错误";
@@ -251,6 +252,7 @@ namespace XoW
         public const string SubscriptionRecommendation = "建议在不同设备间使用相同订阅ID，以同步收藏";
         public const string NewThreadCreatedSuccessfully = "发串大成功";
         public const string NewReplyCreatedSuccessfully = "回复成功";
+        public const string ReasonOfReporting = "举报理由";
 
         public const string CreateThreadButtonTooltip = "创建新串";
         public const string CreateReplyButtonTooltip = "创建回复";
