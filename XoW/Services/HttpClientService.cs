@@ -34,6 +34,7 @@ namespace XoW.Services
                 Value = cookieValue
             };
 
+            GetHttpClientInstance().DefaultRequestHeaders.Cookie.Clear();
             GetHttpClientInstance().DefaultRequestHeaders.Cookie.Add(cookie);
         }
     }

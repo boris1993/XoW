@@ -17,7 +17,7 @@ namespace XoW.Views
             this.InitializeComponent();
         }
 
-        private static void OnCookieClicked(object sender, ItemClickEventArgs args)
+        private void OnCookieClicked(object sender, ItemClickEventArgs args)
         {
             var selectedCookie = args.ClickedItem as AnoBbsCookie;
             var cookieName = selectedCookie.Name;
