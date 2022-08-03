@@ -17,12 +17,5 @@ namespace XoW.Views
                 PrimaryButtonClick += primaryButtonEventHandler;
             }
         }
-
-        private void ContentDialogPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-            var targetThreadId = TextBoxTargetThreadId.Text;
-
-            GlobalState.CurrentThreadId = targetThreadId;
-        }
     }
 }

@@ -23,7 +23,9 @@ namespace XoW.Models
 
     public class NormalForumThreadSource : IIncrementalSource<Grid>
     {
-        public async Task<IEnumerable<Grid>> GetPagedItemsAsync(int pageIndex, int pageSize,
+        public async Task<IEnumerable<Grid>> GetPagedItemsAsync(
+            int pageIndex,
+            int pageSize,
             CancellationToken cancellationToken = default)
         {
             var threads = await AnoBbsApiClient.GetThreadsAsync(GlobalState.CurrentForumId, pageIndex + 1);
@@ -35,7 +37,9 @@ namespace XoW.Models
 
     public class ThreadReplySource : IIncrementalSource<Grid>
     {
-        public async Task<IEnumerable<Grid>> GetPagedItemsAsync(int pageIndex, int pageSize,
+        public async Task<IEnumerable<Grid>> GetPagedItemsAsync(
+            int pageIndex,
+            int pageSize,
             CancellationToken cancellationToken = default)
         {
             var actualPageIndex = pageIndex + 1;

@@ -21,9 +21,9 @@ namespace XoW.Views
 
             // 默认以当前选择的饼干发串
             NewThreadCookieSelectionComboBox.SelectedItem =
-                GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+                GlobalState.Cookies.SingleOrDefault(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
             NewReplyCookieSelectionComboBox.SelectedItem =
-                GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+                GlobalState.Cookies.SingleOrDefault(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
 
             // 加载订阅ID
             GlobalState.ObservableObject.SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
@@ -111,17 +111,21 @@ namespace XoW.Views
                 .First(item => item is NavigationViewItem && !_nonForumNavigationItems.Contains(item.Name));
         }
 
-        private void RefreshThreads()
+        private async Task RefreshThreads()
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
             if (GlobalState.CurrentForumId == Constants.TimelineForumId)
             {
-                ThreadsListView.ItemsSource = new IncrementalLoadingCollection<TimelineForumThreadSource, Grid>();
+                var incrementalLoadingCollection = new IncrementalLoadingCollection<TimelineForumThreadSource, Grid>();
+                await incrementalLoadingCollection.RefreshAsync();
+                ThreadsListView.ItemsSource = incrementalLoadingCollection;
             }
             else
             {
-                ThreadsListView.ItemsSource = new IncrementalLoadingCollection<NormalForumThreadSource, Grid>();
+                var incrementalLoadingCollection = new IncrementalLoadingCollection<NormalForumThreadSource, Grid>();
+                await incrementalLoadingCollection.RefreshAsync();
+                ThreadsListView.ItemsSource = incrementalLoadingCollection;
             }
 
             GlobalState.ObservableObject.ForumName = GlobalState.ForumAndIdLookup
@@ -131,17 +135,21 @@ namespace XoW.Views
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private void RefreshReplies()
+        private async Task RefreshReplies()
         {
-            RepliesListView.ItemsSource = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
+            var incrementalLoadingCollection = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
+            await incrementalLoadingCollection.RefreshAsync();
+            RepliesListView.ItemsSource = incrementalLoadingCollection;
         }
 
-        private void RefreshPoOnlyReplies()
+        private async Task RefreshPoOnlyReplies()
         {
-            RepliesListView.ItemsSource = new IncrementalLoadingCollection<PoOnlyThreadReplySource, Grid>();
+            var incrementalLoadingCollection = new IncrementalLoadingCollection<PoOnlyThreadReplySource, Grid>();
+            await incrementalLoadingCollection.RefreshAsync();
+            RepliesListView.ItemsSource = incrementalLoadingCollection;
         }
 
-        private void RefreshSubscriptions()
+        private async Task RefreshSubscriptions()
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
@@ -173,6 +181,7 @@ namespace XoW.Views
                 }
             };
 
+            await itemsSource.RefreshAsync();
             ThreadsListView.ItemsSource = itemsSource;
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
@@ -224,7 +233,7 @@ namespace XoW.Views
             TextBoxNewThreadEmail.Text = "";
             TextBoxNewThreadTitle.Text = "";
             TextBoxNewThreadContent.Text = "";
-            NewThreadCookieSelectionComboBox.SelectedItem = GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+            NewThreadCookieSelectionComboBox.SelectedItem = GlobalState.Cookies.SingleOrDefault(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
             ForumSelectionComboBox.SelectedIndex = 0;
             ButtonNewThreadAttachPicture.DataContext = null;
             CheckBoxNewThreadWaterMark.IsChecked = true;
@@ -237,7 +246,7 @@ namespace XoW.Views
             TextBoxNewReplyEmail.Text = "";
             TextBoxNewReplyTitle.Text = "";
             TextBoxNewReplyContent.Text = "";
-            NewReplyCookieSelectionComboBox.SelectedItem = GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
+            NewReplyCookieSelectionComboBox.SelectedItem = GlobalState.Cookies.SingleOrDefault(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie);
             ButtonNewReplyAttachPicture.DataContext = null;
             CheckBoxNewReplyWaterMark.IsChecked = true;
             ReplyImagePreviewStackPanel.Visibility = Visibility.Collapsed;

@@ -49,7 +49,7 @@ namespace XoW.Views
             ForumSelectionComboBox.SelectedIndex = 0;
 
             // 载入时间线第一页
-            RefreshThreads();
+            await RefreshThreads();
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
@@ -74,7 +74,7 @@ namespace XoW.Views
                     await new NotificationContentDialog(true, ErrorMessage.SubscriptionIdRequiredForGettingSubscription).ShowAsync();
                 }
 
-                RefreshSubscriptions();
+                await RefreshSubscriptions();
                 GlobalState.ObservableObject.ForumName = Constants.FavouriteThreadNavigationItemName;
 
                 return;
@@ -97,10 +97,10 @@ namespace XoW.Views
 
             GlobalState.CurrentForumId = selectedForumId;
             ShowContentGrid();
-            RefreshThreads();
+            await RefreshThreads();
         }
 
-        private void OnThreadClicked(object sender, ItemClickEventArgs args)
+        private async void OnThreadClicked(object sender, ItemClickEventArgs args)
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
@@ -110,35 +110,34 @@ namespace XoW.Views
             }
 
             GlobalState.CurrentThreadId = dataContext.ThreadId;
-            RefreshReplies();
-
+            await RefreshReplies();
             ResetAndShowRepliesPanel();
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args)
+        private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args)
         {
             if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name == Constants.FavouriteThreadNavigationItemName)
             {
-                RefreshSubscriptions();
+                await RefreshSubscriptions();
                 return;
             }
 
-            RefreshThreads();
+            await RefreshThreads();
         }
 
         private void OnCreateNewThreadButtonClicked(object sender, RoutedEventArgs args) => ShowNewThreadPanel();
 
         private void OnCloseNewThreadPanelButtonClicked(object sender, RoutedEventArgs args) => HideNewThreadPanel();
 
-        private void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => RefreshReplies();
+        private async void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => await RefreshReplies();
 
         private void OnCreateReplyButtonClicked(object sender, RoutedEventArgs args) => ShowNewReplyPanel();
 
         private void OnCloseNewReplyPanelButtonClicked(object sender, RoutedEventArgs args) => HideNewReplyPanel();
 
-        private void OnPoOnlyButtonClicked(object sender, RoutedEventArgs args) => RefreshPoOnlyReplies();
+        private async void OnPoOnlyButtonClicked(object sender, RoutedEventArgs args) => await RefreshPoOnlyReplies();
 
         private async void OnAddSubscriptionButtonClicked(object sender, RoutedEventArgs args)
         {
@@ -160,7 +159,7 @@ namespace XoW.Views
 
             await new NotificationContentDialog(false, result).ShowAsync();
 
-            RefreshSubscriptions();
+            await RefreshSubscriptions();
         }
 
         private async void OnNewThreadAttachPictureButtonClicked(object sender, RoutedEventArgs args)
@@ -289,7 +288,7 @@ namespace XoW.Views
             EnableSendButtonAndHideProgressBar(ButtonSendNewReply);
             HideNewReplyPanel();
 
-            RefreshReplies();
+            await RefreshReplies();
         }
 
         private void OnNewThreadSelectEmoticonButtonClicked(object sender, RoutedEventArgs args)
@@ -325,13 +324,13 @@ namespace XoW.Views
 
         private async void OnGotoThreadButtonClicked(object sender, RoutedEventArgs args)
         {
-            await new JumpToThreadContentDialog((primaryButtonSender, eventArgs) =>
+            await new JumpToThreadContentDialog(async (contetnDialogSender, eventArgs) =>
             {
-                var textBox = primaryButtonSender.FindName("TextBoxTargetThreadId") as TextBox;
-                var targetThreadId = textBox.Text;
+                var textBox = contetnDialogSender.FindName("TextBoxTargetThreadId") as TextBox;
+                var targetThreadId = textBox.Text.Trim();
 
                 GlobalState.CurrentThreadId = targetThreadId;
-                RefreshReplies();
+                await RefreshReplies();
                 ResetAndShowRepliesPanel();
             }).ShowAsync();
         }
