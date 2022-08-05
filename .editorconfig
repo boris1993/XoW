@@ -180,14 +180,15 @@ dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
 # ReSharper properties
 resharper_csharp_blank_lines_inside_region = 0
-resharper_csharp_wrap_after_invocation_lpar = true
-resharper_csharp_wrap_arguments_style = chop_always
+resharper_csharp_wrap_after_invocation_lpar = false
+resharper_csharp_wrap_arguments_style = chop_if_long
 resharper_csharp_wrap_before_invocation_rpar = false
 resharper_csharp_wrap_lines = false
 resharper_csharp_wrap_parameters_style = chop_if_long
 resharper_force_chop_compound_if_expression = false
 resharper_keep_existing_expr_member_arrangement = false
 resharper_keep_existing_invocation_parens_arrangement = false
+resharper_max_invocation_arguments_on_line = 5
 resharper_place_simple_anonymousmethod_on_single_line = false
 resharper_place_simple_initializer_on_single_line = true
 resharper_trailing_comma_in_multiline_lists = false
