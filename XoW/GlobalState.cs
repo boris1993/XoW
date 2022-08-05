@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
@@ -29,8 +28,8 @@ namespace XoW
             ListViewBackgroundColorBrush = new SolidColorBrush(Colors.White),
             CurrentCookie = ApplicationConfigurationHelper.GetCurrentCookie(),
             SubscriptionId = ApplicationConfigurationHelper.GetSubscriptionId(),
-            ForumName = String.Empty,
-            ThreadId = string.Empty,
+            ForumName = string.Empty,
+            ThreadId = string.Empty
         };
     }
 }

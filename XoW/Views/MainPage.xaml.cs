@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.Storage;
+using Windows.Storage.FileProperties;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
@@ -18,11 +19,12 @@ namespace XoW.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private readonly ObservableCollection<NavigationViewItemBase> _navigationItems =
-            new ObservableCollection<NavigationViewItemBase>();
+        private readonly ObservableCollection<NavigationViewItemBase> _navigationItems = new ObservableCollection<NavigationViewItemBase>();
 
-        private readonly List<string> _nonForumNavigationItems =
-            new List<string>() {Constants.FavouriteThreadNavigationItemName};
+        private readonly List<string> _nonForumNavigationItems = new List<string>
+        {
+            Constants.FavouriteThreadNavigationItemName
+        };
 
         public MainPage()
         {
@@ -42,10 +44,10 @@ namespace XoW.Views
 
             // 因为没有ObservableDictionary
             // 所以只能在版面加载好后，在这里把版面列表绑给发新串页面的版面下拉列表
-            ForumSelectionComboBox.ItemsSource =
-                GlobalState.ForumAndIdLookup
-                    .Where(item => item.Value.forumId != Constants.TimelineForumId)
-                    .ToDictionary(item => item.Key, item => item.Value);
+            ForumSelectionComboBox.ItemsSource = GlobalState.ForumAndIdLookup.Where(item => item.Value.forumId != Constants.TimelineForumId)
+                .ToDictionary(
+                    item => item.Key,
+                    item => item.Value);
             ForumSelectionComboBox.SelectedIndex = 0;
 
             // 载入时间线第一页
@@ -76,18 +78,15 @@ namespace XoW.Views
             }
 
             #region 检查将要访问的版是否要求持有饼干
-
             var selectedForumId = args.InvokedItemContainer.DataContext.ToString();
-            var currentForumPermissionLevel = GlobalState.ForumAndIdLookup.Values
-                .Single(value => value.forumId.ToString() == selectedForumId)
-                .permissionLevel;
-            if (string.IsNullOrEmpty(GlobalState.ObservableObject.CurrentCookie) &&
-                currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
+            var currentForumPermissionLevel = GlobalState.ForumAndIdLookup.Values.Single(value => value.forumId.ToString() == selectedForumId).permissionLevel;
+            if (string.IsNullOrEmpty(GlobalState.ObservableObject.CurrentCookie) && currentForumPermissionLevel == Constants.PermissionLevelCookieRequired)
             {
-                await new NotificationContentDialog(true, ErrorMessage.CookieRequiredForThisForum).ShowAsync();
+                await new NotificationContentDialog(
+                    true,
+                    ErrorMessage.CookieRequiredForThisForum).ShowAsync();
                 return;
             }
-
             #endregion
 
             GlobalState.CurrentForumId = selectedForumId;
@@ -113,8 +112,7 @@ namespace XoW.Views
 
         private async void OnRefreshThreadButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name ==
-                Constants.FavouriteThreadNavigationItemName)
+            if (((NavigationViewItem)ForumListNavigation.SelectedItem).Name == Constants.FavouriteThreadNavigationItemName)
             {
                 await RefreshSubscriptions();
                 return;
@@ -140,10 +138,13 @@ namespace XoW.Views
             var subscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
             var threadId = GlobalState.CurrentThreadId;
 
-            var result = await AnoBbsApiClient.AddSubscriptionAsync(subscriptionId, threadId);
+            var result = await AnoBbsApiClient.AddSubscriptionAsync(
+                subscriptionId,
+                threadId);
 
-
-            await new NotificationContentDialog(false, result).ShowAsync();
+            await new NotificationContentDialog(
+                false,
+                result).ShowAsync();
         }
 
         private async void OnDeleteSubscriptionButtonClicked(object sender, RoutedEventArgs args)
@@ -151,9 +152,13 @@ namespace XoW.Views
             var subscriptionId = ApplicationConfigurationHelper.GetSubscriptionId();
             var threadId = ((Button)sender).DataContext.ToString();
 
-            var result = await AnoBbsApiClient.DeleteSubscriptionAsync(subscriptionId, threadId);
+            var result = await AnoBbsApiClient.DeleteSubscriptionAsync(
+                subscriptionId,
+                threadId);
 
-            await new NotificationContentDialog(false, result).ShowAsync();
+            await new NotificationContentDialog(
+                false,
+                result).ShowAsync();
 
             await RefreshSubscriptions();
         }
@@ -168,11 +173,10 @@ namespace XoW.Views
 
             ButtonNewThreadAttachPicture.DataContext = storageFile;
 
-            var thumbnail =
-                await storageFile.GetThumbnailAsync(
-                    Windows.Storage.FileProperties.ThumbnailMode.PicturesView,
-                    200,
-                    Windows.Storage.FileProperties.ThumbnailOptions.UseCurrentScale);
+            var thumbnail = await storageFile.GetThumbnailAsync(
+                ThumbnailMode.PicturesView,
+                200,
+                ThumbnailOptions.UseCurrentScale);
 
             var bitmapImage = new BitmapImage();
             await bitmapImage.SetSourceAsync(thumbnail.CloneStream());
@@ -190,11 +194,10 @@ namespace XoW.Views
 
             ButtonNewReplyAttachPicture.DataContext = storageFile;
 
-            var thumbnail =
-                await storageFile.GetThumbnailAsync(
-                    Windows.Storage.FileProperties.ThumbnailMode.PicturesView,
-                    200,
-                    Windows.Storage.FileProperties.ThumbnailOptions.UseCurrentScale);
+            var thumbnail = await storageFile.GetThumbnailAsync(
+                ThumbnailMode.PicturesView,
+                200,
+                ThumbnailOptions.UseCurrentScale);
 
             var bitmapImage = new BitmapImage();
             await bitmapImage.SetSourceAsync(thumbnail.CloneStream());
@@ -216,16 +219,15 @@ namespace XoW.Views
 
         private async void OnSendNewThreadButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (string.IsNullOrWhiteSpace(TextBoxNewThreadContent.Text) &&
-                ButtonNewThreadAttachPicture.DataContext == null)
+            if (string.IsNullOrWhiteSpace(TextBoxNewThreadContent.Text) && ButtonNewThreadAttachPicture.DataContext == null)
             {
-                await new NotificationContentDialog(true, ErrorMessage.ContentRequiredWhenNoImageAttached).ShowAsync();
+                await new NotificationContentDialog(
+                    true,
+                    ErrorMessage.ContentRequiredWhenNoImageAttached).ShowAsync();
                 return;
             }
 
-            var fid =
-                ((KeyValuePair<string, (string forumId, string permissionLevel)>)ForumSelectionComboBox.SelectedItem)
-                .Value.forumId;
+            var fid = ((KeyValuePair<string, (string forumId, string permissionLevel)>)ForumSelectionComboBox.SelectedItem!).Value.forumId;
             var selectedCookie = (AnoBbsCookie)NewThreadCookieSelectionComboBox.SelectedItem;
             var username = TextBoxNewThreadUserName.Text;
             var email = TextBoxNewThreadEmail.Text;
@@ -246,7 +248,9 @@ namespace XoW.Views
                 selectedCookie,
                 image);
 
-            await new NotificationContentDialog(false, ComponentContent.NewThreadCreatedSuccessfully).ShowAsync();
+            await new NotificationContentDialog(
+                false,
+                ComponentContent.NewThreadCreatedSuccessfully).ShowAsync();
 
             EnableSendButtonAndHideProgressBar(ButtonSendNewThread);
             HideNewThreadPanel();
@@ -255,10 +259,11 @@ namespace XoW.Views
 
         private async void OnSendNewReplyButtonClicked(object sender, RoutedEventArgs args)
         {
-            if (string.IsNullOrWhiteSpace(TextBoxNewReplyContent.Text) &&
-                ButtonNewReplyAttachPicture.DataContext == null)
+            if (string.IsNullOrWhiteSpace(TextBoxNewReplyContent.Text) && ButtonNewReplyAttachPicture.DataContext == null)
             {
-                await new NotificationContentDialog(true, ErrorMessage.ContentRequiredWhenNoImageAttached).ShowAsync();
+                await new NotificationContentDialog(
+                    true,
+                    ErrorMessage.ContentRequiredWhenNoImageAttached).ShowAsync();
                 return;
             }
 
@@ -283,7 +288,9 @@ namespace XoW.Views
                 selectedCookie,
                 image);
 
-            await new NotificationContentDialog(false, ComponentContent.NewReplyCreatedSuccessfully).ShowAsync();
+            await new NotificationContentDialog(
+                false,
+                ComponentContent.NewReplyCreatedSuccessfully).ShowAsync();
 
             EnableSendButtonAndHideProgressBar(ButtonSendNewReply);
             HideNewReplyPanel();
@@ -293,46 +300,45 @@ namespace XoW.Views
 
         private void OnNewThreadSelectEmoticonButtonClicked(object sender, RoutedEventArgs args)
         {
-            NewThreadEmoticonWrapPanel.Visibility =
-                NewThreadEmoticonWrapPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            NewThreadEmoticonWrapPanel.Visibility = NewThreadEmoticonWrapPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void OnNewReplySelectEmoticonButtonClicked(object sender, RoutedEventArgs args)
         {
-            NewReplyEmoticonWrapPanel.Visibility =
-                NewReplyEmoticonWrapPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            NewReplyEmoticonWrapPanel.Visibility = NewReplyEmoticonWrapPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void OnNewThreadEmoticonButtonClicked(object sender, RoutedEventArgs args)
         {
             var button = sender as Button;
-            var emoticonValue = button.DataContext as string;
+            var emoticonValue = button!.DataContext as string;
 
-            TextBoxNewThreadContent.Text += emoticonValue;
+            TextBoxNewThreadContent.Text += emoticonValue!;
         }
 
         private void OnNewReplyEmoticonButtonClicked(object sender, RoutedEventArgs args)
         {
             var button = sender as Button;
-            var emoticonValue = button.DataContext as string;
+            var emoticonValue = button!.DataContext as string;
 
-            TextBoxNewReplyContent.Text += emoticonValue;
+            TextBoxNewReplyContent.Text += emoticonValue!;
         }
 
-        private async void OnReportThreadButtonClicked(object sender, RoutedEventArgs args) =>
-            await new ReportThreadContentDialog().ShowAsync();
+        private async void OnReportThreadButtonClicked(object sender, RoutedEventArgs args) => await new ReportThreadContentDialog().ShowAsync();
 
         private async void OnGotoThreadButtonClicked(object sender, RoutedEventArgs args)
         {
-            await new JumpToThreadContentDialog(async (contetnDialogSender, eventArgs) =>
+            async void PrimaryButtonEventHandler(ContentDialog contentDialogSender, ContentDialogButtonClickEventArgs _)
             {
-                var textBox = contetnDialogSender.FindName("TextBoxTargetThreadId") as TextBox;
-                var targetThreadId = textBox.Text.Trim();
+                var textBox = contentDialogSender.FindName("TextBoxTargetThreadId") as TextBox;
+                var targetThreadId = textBox!.Text.Trim();
 
                 GlobalState.CurrentThreadId = targetThreadId;
                 await RefreshReplies();
                 ResetAndShowRepliesPanel();
-            }).ShowAsync();
+            }
+
+            await new JumpToThreadContentDialog(PrimaryButtonEventHandler).ShowAsync();
         }
     }
 }

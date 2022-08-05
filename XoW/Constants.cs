@@ -7,77 +7,78 @@ namespace XoW
         /// <summary>
         /// X岛域名
         /// </summary>
-        public const string DomainName = "www.nmbxd1.com";
+        private const string DomainName = "www.nmbxd1.com";
 
-        public static string BaseUrl = $"https://{DomainName}";
+        private const string BaseUrl = $"https://{DomainName}";
 
         /// <summary>
         /// 获取CDN列表
         /// </summary>
-        public static string GetCdn = $"{BaseUrl}/Api/getCdnPath";
+        public const string GetCdn = $"{BaseUrl}/Api/getCdnPath";
 
         /// <summary>
         /// 获取板块列表
         /// </summary>
-        public static string GetForums = $"{BaseUrl}/Api/getForumList";
+        public const string GetForums = $"{BaseUrl}/Api/getForumList";
 
         /// <summary>
         /// 获取时间线<br/>
         /// 参数page为分页页码
         /// </summary>
-        public static string GetTimeline = $"{BaseUrl}/Api/Timeline";
+        public const string GetTimeline = $"{BaseUrl}/Api/Timeline";
 
         /// <summary>
         /// 获取板块中的串<br/>
         /// 参数id为板块ID<br/>
         /// 参数page为分页页码
         /// </summary>
-        public static string GetThreads = $"{BaseUrl}/Api/showf";
+        public const string GetThreads = $"{BaseUrl}/Api/showf";
 
         /// <summary>
         /// 获取串和回复<br/>
         /// 参数id为串号<br/>
         /// 参数page为分页页码
         /// </summary>
-        public static string GetReplies = $"{BaseUrl}/Api/thread";
+        public const string GetReplies = $"{BaseUrl}/Api/thread";
 
         /// <summary>
         /// 只看po<br/>
         /// 参数id为串号<br/>
         /// 参数page为分页页码
         /// </summary>
-        public static string GetPoOnlyReplies = $"{BaseUrl}/Api/po";
+        public const string GetPoOnlyReplies = $"{BaseUrl}/Api/po";
 
         /// <summary>
         /// 获取订阅<br/>
         /// 参数uuid为订阅ID<br/>
         /// 参数page为分页页码
         /// </summary>
-        public static string GetSubscription = $"{BaseUrl}/Api/feed";
+        public const string GetSubscription = $"{BaseUrl}/Api/feed";
 
         /// <summary>
         /// 添加订阅<br/>
         /// 参数uuid为订阅ID<br/>
         /// 参数tid为串ID
         /// </summary>
-        public static string AddSubscription = $"{BaseUrl}/Api/addFeed";
+        public const string AddSubscription = $"{BaseUrl}/Api/addFeed";
 
         /// <summary>
         /// 删除订阅<br/>
         /// 参数uuid为订阅ID<br/>
         /// 参数tid为串ID
         /// </summary>
-        public static string DeleteSubscription = $"{BaseUrl}/Api/delFeed";
+        public const string DeleteSubscription = $"{BaseUrl}/Api/delFeed";
 
         /// <summary>
         /// 发新串<br/>
         /// </summary>
-        public static string CreateNewThread = $"{BaseUrl}/Home/Forum/doPostThread.html";
+        public const string CreateNewThread = $"{BaseUrl}/Home/Forum/doPostThread.html";
 
         /// <summary>
         /// 发回复
         /// </summary>
-        public static string CreateNewReply = $"{BaseUrl}/Home/Forum/doReplyThread.html";
+        public const string CreateNewReply = $"{BaseUrl}/Home/Forum/doReplyThread.html";
+
     }
 
     public static class RequestBodyParamName
@@ -119,7 +120,7 @@ namespace XoW
         /// key为名字
         /// value为实际的颜文字
         /// </summary>
-        public static Dictionary<string, string> Emoticons = new Dictionary<string, string>
+        public static readonly Dictionary<string, string> Emoticons = new Dictionary<string, string>
         {
             {"|∀ﾟ", "|∀ﾟ"},
             {"(´ﾟДﾟ`)", "(´ﾟДﾟ`)"},

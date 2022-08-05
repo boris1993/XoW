@@ -6,8 +6,7 @@ namespace XoW.Views
 {
     public sealed partial class JumpToThreadContentDialog : ContentDialog
     {
-        public JumpToThreadContentDialog(
-            TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> primaryButtonEventHandler = null)
+        public JumpToThreadContentDialog(TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> primaryButtonEventHandler = null)
         {
             InitializeComponent();
             RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;

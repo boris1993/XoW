@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Windows.Storage;
+using Windows.Web.Http;
+using Windows.Web.Http.Headers;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Windows.Storage;
-using Windows.Web.Http;
 using XoW.Models;
 
 namespace XoW.Services
@@ -56,7 +57,7 @@ namespace XoW.Services
             var uriBuilder = new UriBuilder(Url.GetThreads);
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[QueryParamId] = forumId.ToString();
+            query[QueryParamId] = forumId;
             query[QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
@@ -144,106 +145,136 @@ namespace XoW.Services
                 null);
         }
 
-        public static async Task CreateNewThread(
-            string fid,
-            string name,
-            string email,
-            string title,
-            string content,
-            string water,
-            AnoBbsCookie cookie,
-            StorageFile image)
+        public static async Task CreateNewThread(string fid, string name, string email, string title, string content, string water, AnoBbsCookie cookie, StorageFile image)
         {
             var uri = new Uri(Url.CreateNewThread);
 
             using var requestBody = new HttpMultipartFormDataContent();
-            requestBody.Add(new HttpStringContent(fid), RequestBodyParamName.FId);
-            requestBody.Add(new HttpStringContent(content), RequestBodyParamName.Content);
-            requestBody.Add(new HttpStringContent(water), RequestBodyParamName.Water);
+            requestBody.Add(
+                new HttpStringContent(fid),
+                RequestBodyParamName.FId);
+            requestBody.Add(
+                new HttpStringContent(content),
+                RequestBodyParamName.Content);
+            requestBody.Add(
+                new HttpStringContent(water),
+                RequestBodyParamName.Water);
 
             if (!string.IsNullOrWhiteSpace(name))
             {
-                requestBody.Add(new HttpStringContent(name), RequestBodyParamName.Username);
+                requestBody.Add(
+                    new HttpStringContent(name),
+                    RequestBodyParamName.Username);
             }
 
             if (!string.IsNullOrWhiteSpace(email))
             {
-                requestBody.Add(new HttpStringContent(email), RequestBodyParamName.EMail);
+                requestBody.Add(
+                    new HttpStringContent(email),
+                    RequestBodyParamName.EMail);
             }
 
             if (!string.IsNullOrWhiteSpace(title))
             {
-                requestBody.Add(new HttpStringContent(title), RequestBodyParamName.Title);
+                requestBody.Add(
+                    new HttpStringContent(title),
+                    RequestBodyParamName.Title);
             }
 
             if (image != null)
             {
                 var imageStream = await image.OpenReadAsync();
                 var fileStreamContent = new HttpStreamContent(imageStream);
-                fileStreamContent.Headers.Add(HeaderNames.ContentType, imageStream.ContentType.ToString());
-                requestBody.Add(fileStreamContent, RequestBodyParamName.Image, $"/{image.Path.Replace('\\', '/')}");
+                fileStreamContent.Headers.Add(
+                    HeaderNames.ContentType,
+                    imageStream.ContentType);
+                requestBody.Add(
+                    fileStreamContent,
+                    RequestBodyParamName.Image,
+                    $"/{image.Path.Replace('\\', '/')}");
             }
 
             var httpClient = HttpClientService.GetHttpClientInstance();
 
             var defaultCookie = httpClient.DefaultRequestHeaders.Cookie.Single();
             httpClient.DefaultRequestHeaders.Cookie.Clear();
-            httpClient.DefaultRequestHeaders.Cookie.Add(new Windows.Web.Http.Headers.HttpCookiePairHeaderValue(Constants.CookieNameUserHash) { Value = cookie.Cookie });
+            httpClient.DefaultRequestHeaders.Cookie.Add(
+                new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
+                {
+                    Value = cookie.Cookie,
+                });
 
-            var response = await httpClient.PostAsync(uri, requestBody);
+            var response = await httpClient.PostAsync(
+                uri,
+                requestBody);
             response.EnsureSuccessStatusCode();
 
             httpClient.DefaultRequestHeaders.Cookie.Clear();
             httpClient.DefaultRequestHeaders.Cookie.Add(defaultCookie);
         }
 
-        public static async Task CreateNewReply(
-            string resto,
-            string name,
-            string email,
-            string title,
-            string content,
-            string water,
-            AnoBbsCookie cookie,
-            StorageFile image)
+        public static async Task CreateNewReply(string resto, string name, string email, string title, string content, string water, AnoBbsCookie cookie, StorageFile image)
         {
             var uri = new Uri(Url.CreateNewReply);
 
             using var requestBody = new HttpMultipartFormDataContent();
-            requestBody.Add(new HttpStringContent(resto), RequestBodyParamName.Resto);
-            requestBody.Add(new HttpStringContent(content), RequestBodyParamName.Content);
-            requestBody.Add(new HttpStringContent(water), RequestBodyParamName.Water);
+            requestBody.Add(
+                new HttpStringContent(resto),
+                RequestBodyParamName.Resto);
+            requestBody.Add(
+                new HttpStringContent(content),
+                RequestBodyParamName.Content);
+            requestBody.Add(
+                new HttpStringContent(water),
+                RequestBodyParamName.Water);
 
             if (!string.IsNullOrWhiteSpace(name))
             {
-                requestBody.Add(new HttpStringContent(name), RequestBodyParamName.Username);
+                requestBody.Add(
+                    new HttpStringContent(name),
+                    RequestBodyParamName.Username);
             }
 
             if (!string.IsNullOrWhiteSpace(email))
             {
-                requestBody.Add(new HttpStringContent(email), RequestBodyParamName.EMail);
+                requestBody.Add(
+                    new HttpStringContent(email),
+                    RequestBodyParamName.EMail);
             }
 
             if (!string.IsNullOrWhiteSpace(title))
             {
-                requestBody.Add(new HttpStringContent(title), RequestBodyParamName.Title);
+                requestBody.Add(
+                    new HttpStringContent(title),
+                    RequestBodyParamName.Title);
             }
 
             if (image != null)
             {
                 var imageStream = await image.OpenReadAsync();
                 var fileStreamContent = new HttpStreamContent(imageStream);
-                fileStreamContent.Headers.Add(HeaderNames.ContentType, imageStream.ContentType.ToString());
-                requestBody.Add(fileStreamContent, RequestBodyParamName.Image, $"/{image.Path.Replace('\\', '/')}");
+                fileStreamContent.Headers.Add(
+                    HeaderNames.ContentType,
+                    imageStream.ContentType);
+                requestBody.Add(
+                    fileStreamContent,
+                    RequestBodyParamName.Image,
+                    $"/{image.Path.Replace('\\', '/')}");
             }
 
             var httpClient = HttpClientService.GetHttpClientInstance();
 
             var defaultCookie = httpClient.DefaultRequestHeaders.Cookie.Single();
             httpClient.DefaultRequestHeaders.Cookie.Clear();
-            httpClient.DefaultRequestHeaders.Cookie.Add(new Windows.Web.Http.Headers.HttpCookiePairHeaderValue(Constants.CookieNameUserHash) { Value = cookie.Cookie });
+            httpClient.DefaultRequestHeaders.Cookie.Add(
+                new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
+                {
+                    Value = cookie.Cookie,
+                });
 
-            var response = await httpClient.PostAsync(uri, requestBody);
+            var response = await httpClient.PostAsync(
+                uri,
+                requestBody);
             response.EnsureSuccessStatusCode();
 
             httpClient.DefaultRequestHeaders.Cookie.Clear();
@@ -257,12 +288,13 @@ namespace XoW.Services
             var uri = new Uri(url);
             var response = await httpClient.GetAsync(uri);
             response.EnsureSuccessStatusCode();
+
             var responseString = await response.Content.ReadAsStringAsync();
 
             var responseJsonObject = JToken.Parse(responseString);
             if (responseJsonObject.SelectToken("success") != null && !responseJsonObject.Value<bool>("success"))
             {
-                var errorMessage = responseJsonObject.SelectToken("error").ToString();
+                var errorMessage = responseJsonObject.SelectToken("error")?.ToString() ?? responseString;
                 throw new AppException(errorMessage);
             }
 

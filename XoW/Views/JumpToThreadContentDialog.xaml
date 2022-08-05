@@ -10,9 +10,9 @@
                PrimaryButtonText="{x:Bind local:ComponentContent.GotoThread}"
                SecondaryButtonText="{x:Bind local:ComponentContent.Cancel}"
                DefaultButton="Primary"
-               IsPrimaryButtonEnabled="{x:Bind TextBoxTargetThreadId.Text, Mode=OneWay, Converter={StaticResource SetButtonStateByContentExistenseConverter}}">
+               IsPrimaryButtonEnabled="{x:Bind TextBoxTargetThreadId.Text, Mode=OneWay, Converter={StaticResource SetButtonStateByContentExistenceConverter}}">
     <ContentDialog.Resources>
-        <localService:SetButtonStateByContentExistenseConverter x:Key="SetButtonStateByContentExistenseConverter" />
+        <localService:SetButtonStateByContentExistenceConverter x:Key="SetButtonStateByContentExistenceConverter" />
     </ContentDialog.Resources>
     
     <Grid HorizontalAlignment="Stretch"

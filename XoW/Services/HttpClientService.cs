@@ -8,14 +8,14 @@ namespace XoW.Services
     {
         private const string UserAgent = "HavfunClient-UWP";
 
-        private static readonly object _lock = new object();
+        private static readonly object Lock = new object();
         private static HttpClient _httpClient;
 
         public static HttpClient GetHttpClientInstance()
         {
             if (_httpClient is null)
             {
-                lock (_lock)
+                lock (Lock)
                 {
                     var httpClient = new HttpClient(new HttpBaseProtocolFilter());
                     httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd(UserAgent);
@@ -31,7 +31,7 @@ namespace XoW.Services
         {
             var cookie = new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
             {
-                Value = cookieValue
+                Value = cookieValue,
             };
 
             GetHttpClientInstance().DefaultRequestHeaders.Cookie.Clear();

@@ -10,9 +10,9 @@
                PrimaryButtonText="{x:Bind local:ComponentContent.SendReport}"
                SecondaryButtonText="{x:Bind local:ComponentContent.Cancel}"
                PrimaryButtonClick="ContentDialogPrimaryButtonClick"
-               IsPrimaryButtonEnabled="{x:Bind TextBoxReportReason.Text, Mode=OneWay, Converter={StaticResource SetButtonStateByContentExistenseConverter}}">
+               IsPrimaryButtonEnabled="{x:Bind TextBoxReportReason.Text, Mode=OneWay, Converter={StaticResource SetButtonStateByContentExistenceConverter}}">
     <ContentDialog.Resources>
-        <localService:SetButtonStateByContentExistenseConverter x:Key="SetButtonStateByContentExistenseConverter" />
+        <localService:SetButtonStateByContentExistenceConverter x:Key="SetButtonStateByContentExistenceConverter" />
     </ContentDialog.Resources>
 
     <Grid VerticalAlignment="Center"
