@@ -1,0 +1,21 @@
+﻿<ContentDialog x:Class="XoW.Views.ContentDialogWithInput"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:local="using:XoW"
+               xmlns:localService="using:XoW.Services"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               mc:Ignorable="d"
+               SecondaryButtonText="{x:Bind local:ComponentContent.Cancel}"
+               DefaultButton="Primary"
+               IsPrimaryButtonEnabled="{x:Bind TextBoxInput.Text, Mode=OneWay, Converter={StaticResource SetButtonStateByContentExistenceConverter}}">
+    <ContentDialog.Resources>
+        <localService:SetButtonStateByContentExistenceConverter x:Key="SetButtonStateByContentExistenceConverter" />
+    </ContentDialog.Resources>
+    
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Center">
+        <TextBox x:Name="TextBoxInput"
+                 IsSpellCheckEnabled="False"/>
+    </Grid>
+</ContentDialog>
