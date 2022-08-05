@@ -12,6 +12,7 @@ using XoW.Models;
 using XoW.Services;
 using XoW.Utils;
 
+// ReSharper disable MemberCanBeMadeStatic.Local
 namespace XoW.Views
 {
     /// <summary>
@@ -330,7 +331,7 @@ namespace XoW.Views
         {
             async void PrimaryButtonEventHandler(ContentDialog contentDialogSender, ContentDialogButtonClickEventArgs _)
             {
-                var textBox = contentDialogSender.FindName("TextBoxTargetThreadId") as TextBox;
+                var textBox = contentDialogSender.FindName("TextBoxInput") as TextBox;
                 var targetThreadId = textBox!.Text.Trim();
 
                 GlobalState.CurrentThreadId = targetThreadId;
@@ -338,7 +339,26 @@ namespace XoW.Views
                 ResetAndShowRepliesPanel();
             }
 
-            await new JumpToThreadContentDialog(PrimaryButtonEventHandler).ShowAsync();
+            await new ContentDialogWithInput(
+                ComponentContent.GotoThread,
+                ComponentContent.GotoThread,
+                PrimaryButtonEventHandler).ShowAsync();
+        }
+
+        private async void OnSearchThreadButtonClicked(object sender, RoutedEventArgs args)
+        {
+            async void PrimaryButtonClickEventHandler(ContentDialog contentDialogSender, ContentDialogButtonClickEventArgs _)
+            {
+                var textBox = contentDialogSender.FindName("TextBoxInput") as TextBox;
+                var searchKeyword = textBox!.Text.Trim();
+
+                await AnoBbsApiClient.SearchThread(searchKeyword);
+            }
+
+            await new ContentDialogWithInput(
+                ComponentContent.SearchThread,
+                ComponentContent.SearchThread,
+                PrimaryButtonClickEventHandler).ShowAsync();
         }
     }
 }

@@ -79,18 +79,13 @@ namespace XoW
         /// </summary>
         public const string CreateNewReply = $"{BaseUrl}/Home/Forum/doReplyThread.html";
 
-    }
+        /// <summary>
+        /// 搜索<br/>
+        /// 参数<c>q</c>为关键词<br/>
+        /// 参数<c>page</c>为页码<br/>
+        /// </summary>
+        public const string Search = $"{BaseUrl}/Api/search";
 
-    public static class RequestBodyParamName
-    {
-        public const string FId = "fid";
-        public const string Resto = "resto";
-        public const string Username = "name";
-        public const string EMail = "email";
-        public const string Title = "title";
-        public const string Content = "content";
-        public const string Water = "water";
-        public const string Image = "image";
     }
 
     public static class Constants

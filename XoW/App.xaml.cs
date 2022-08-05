@@ -58,7 +58,9 @@ namespace XoW
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(
+                        typeof(MainPage),
+                        e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
@@ -92,9 +94,11 @@ namespace XoW
         private async void OnUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs args)
         {
             args.Handled = true;
+            var errorMessage = args.Exception.InnerException?.Message ?? args.Message;
 
-            var errorMessage = args.Exception.InnerException?.Message ?? args.Exception.Message;
-            await new NotificationContentDialog(true, errorMessage).ShowAsync();
+            await new NotificationContentDialog(
+                true,
+                errorMessage).ShowAsync();
         }
     }
 }

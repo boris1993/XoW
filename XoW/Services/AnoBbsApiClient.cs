@@ -13,13 +13,8 @@ using XoW.Models;
 
 namespace XoW.Services
 {
-    internal static class AnoBbsApiClient
+    public static class AnoBbsApiClient
     {
-        private const string QueryParamId = "id";
-        private const string QueryParamUuid = "uuid";
-        private const string QueryParamPageId = "page";
-        private const string QueryParamTid = "tid";
-
         /// <summary>
         /// 值班室版面ID
         /// </summary>
@@ -44,7 +39,7 @@ namespace XoW.Services
             var uriBuilder = new UriBuilder(Url.GetTimeline);
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[QueryParamPageId] = pageId.ToString();
+            query[QueryParams.QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
             var threads = await GetResponseWithType<List<ForumThread>>(uriBuilder.ToString());
@@ -57,8 +52,8 @@ namespace XoW.Services
             var uriBuilder = new UriBuilder(Url.GetThreads);
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[QueryParamId] = forumId;
-            query[QueryParamPageId] = pageId.ToString();
+            query[QueryParams.QueryParamId] = forumId;
+            query[QueryParams.QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
             var threads = await GetResponseWithType<List<ForumThread>>(uriBuilder.ToString());
@@ -71,8 +66,8 @@ namespace XoW.Services
             var uriBuilder = new UriBuilder(Url.GetReplies);
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[QueryParamId] = threadId;
-            query[QueryParamPageId] = pageId.ToString();
+            query[QueryParams.QueryParamId] = threadId;
+            query[QueryParams.QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
             var reply = await GetResponseWithType<ThreadReply>(uriBuilder.ToString());
@@ -85,8 +80,8 @@ namespace XoW.Services
             var uriBuilder = new UriBuilder(Url.GetPoOnlyReplies);
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[QueryParamId] = threadId;
-            query[QueryParamPageId] = pageId.ToString();
+            query[QueryParams.QueryParamId] = threadId;
+            query[QueryParams.QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
             var reply = await GetResponseWithType<ThreadReply>(uriBuilder.ToString());
@@ -99,8 +94,8 @@ namespace XoW.Services
             var uriBuilder = new UriBuilder(Url.GetSubscription);
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[QueryParamUuid] = subscriptionId;
-            query[QueryParamPageId] = pageId.ToString();
+            query[QueryParams.QueryParamUuid] = subscriptionId;
+            query[QueryParams.QueryParamPageId] = pageId.ToString();
             uriBuilder.Query = query.ToString();
 
             var subscriptions = await GetResponseWithType<List<ThreadSubscription>>(uriBuilder.ToString());
@@ -113,8 +108,8 @@ namespace XoW.Services
             var uriBuilder = new UriBuilder(Url.AddSubscription);
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[QueryParamUuid] = subscriptionId;
-            query[QueryParamTid] = tid;
+            query[QueryParams.QueryParamUuid] = subscriptionId;
+            query[QueryParams.QueryParamTid] = tid;
             uriBuilder.Query = query.ToString();
 
             return await GetResponseWithType<string>(uriBuilder.ToString());
@@ -125,8 +120,26 @@ namespace XoW.Services
             var uriBuilder = new UriBuilder(Url.DeleteSubscription);
 
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query[QueryParamUuid] = subscriptionId;
-            query[QueryParamTid] = tid;
+            query[QueryParams.QueryParamUuid] = subscriptionId;
+            query[QueryParams.QueryParamTid] = tid;
+            uriBuilder.Query = query.ToString();
+
+            return await GetResponseWithType<string>(uriBuilder.ToString());
+        }
+
+        /// <summary>
+        /// 搜索暂未开放，先留一个stub在这里，开放后再适配
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        public static async Task<string> SearchThread(string keyword, string page = "1")
+        {
+            var uriBuilder = new UriBuilder(Url.Search);
+
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query[QueryParams.QueryParamKeyword] = keyword;
+            query[QueryParams.QueryParamPageId] = page;
             uriBuilder.Query = query.ToString();
 
             return await GetResponseWithType<string>(uriBuilder.ToString());
@@ -290,13 +303,7 @@ namespace XoW.Services
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
-
-            var responseJsonObject = JToken.Parse(responseString);
-            if (responseJsonObject.SelectToken("success") != null && !responseJsonObject.Value<bool>("success"))
-            {
-                var errorMessage = responseJsonObject.SelectToken("error")?.ToString() ?? responseString;
-                throw new AppException(errorMessage);
-            }
+            HandlePotentialErrorMessage(responseString);
 
             try
             {
@@ -309,5 +316,43 @@ namespace XoW.Services
                 throw new AppException(errorMessage);
             }
         }
+
+        // ReSharper disable InvertIf
+        private static void HandlePotentialErrorMessage(string responseString)
+        {
+            var responseJsonObject = JToken.Parse(responseString);
+            if (responseJsonObject.SelectToken("success") != null && !responseJsonObject.Value<bool>("success"))
+            {
+                var errorMessage = responseJsonObject.SelectToken("error")?.ToString() ?? responseString;
+                throw new AppException(errorMessage);
+            }
+
+            if (responseJsonObject.SelectToken("msg") != null)
+            {
+                var errorMessage = responseJsonObject.SelectToken("msg")?.ToString() ?? responseString;
+                throw new AppException(errorMessage);
+            }
+        }
+    }
+
+    public static class QueryParams
+    {
+        public const string QueryParamId = "id";
+        public const string QueryParamUuid = "uuid";
+        public const string QueryParamPageId = "page";
+        public const string QueryParamTid = "tid";
+        public const string QueryParamKeyword = "q";
+    }
+
+    public static class RequestBodyParamName
+    {
+        public const string FId = "fid";
+        public const string Resto = "resto";
+        public const string Username = "name";
+        public const string EMail = "email";
+        public const string Title = "title";
+        public const string Content = "content";
+        public const string Water = "water";
+        public const string Image = "image";
     }
 }
