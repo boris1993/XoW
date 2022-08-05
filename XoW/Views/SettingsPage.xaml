@@ -43,6 +43,11 @@
                                       Toggled="OnNightModeSwitchToggled"
                                       Loaded="OnNightModeSwitchLoaded" />
                     </StackPanel>
+                </StackPanel>
+                <TextBlock FontSize="20"
+                           FontWeight="Bold"
+                           Text="订阅设定" />
+                <StackPanel Orientation="Vertical">
                     <TextBox x:Name="TextBoxSubscriptionId"
                              VerticalAlignment="Stretch"
                              HorizontalAlignment="Stretch"
