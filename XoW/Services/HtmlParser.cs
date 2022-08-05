@@ -4,6 +4,7 @@ using System.Linq;
 using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Media;
 using HtmlAgilityPack;
 using Microsoft.Toolkit.Uwp.Helpers;
@@ -13,14 +14,14 @@ namespace XoW.Services
 {
     public static class HtmlParser
     {
-        private const string AttributeHyperlink = "href";
+        private const string XPathTextNodeAnywhere = "//text()";
+        private const string XPathBrNodeAnywhere = "//br";
         private const string AttributeStyle = "style";
         private const string AttributeStyleParamColor = "color";
         private const string AttributeStyleParamFontWeight = "font-weight";
-        private const string XPathBrNodeAnywhere = "//br";
-        private const string XPathTextNodeAnywhere = "//text()";
-        private const string XPathAttributeStyle = $"@{AttributeStyle}";
-        private const string XPathAttributeFontWeight = "";
+        private const string XPathANode = "a";
+        private const string AttributeHyperlink = "href";
+        private const string EmailToScheme = "mailto:";
 
         public static List<TextBlock> ParseHtmlIntoTextBlocks(string htmlString)
         {
@@ -48,7 +49,14 @@ namespace XoW.Services
                 }
 
                 var content = htmlDoc.DocumentNode.InnerText;
-                var textBlock = ComponentsBuilder.CreateTextBlock(HtmlEntity.DeEntitize(content.Trim()));
+                var deEntitizeContent = HtmlEntity.DeEntitize(content.Trim());
+                if (string.IsNullOrWhiteSpace(deEntitizeContent))
+                {
+                    continue;
+                }
+
+                var textBlock = ComponentsBuilder.CreateTextBlock(deEntitizeContent);
+                SetEmailHyperLinkInTextBlock(htmlDoc.DocumentNode, textBlock);
 
                 if (shouldBoldForAllTextBlocks)
                 {
@@ -90,12 +98,55 @@ namespace XoW.Services
                 var paramPair = styleParam.Split(":").Select(str => str.Trim()).ToList();
                 switch (paramPair[0])
                 {
-                    case "color":
+                    case AttributeStyleParamColor:
                         textBlockGlobalColor = paramPair[1].FirstCharToUpper().ToColor();
                         break;
-                    case "font-weight":
+                    case AttributeStyleParamFontWeight:
                         shouldBold = paramPair[1].Equals("bold", StringComparison.OrdinalIgnoreCase);
                         break;
+                }
+            }
+        }
+
+        private static void SetEmailHyperLinkInTextBlock(HtmlNode textNode, TextBlock textBlock)
+        {
+            if (textNode.SelectSingleNode(XPathANode) == null)
+            {
+                return;
+            }
+
+            var hrefTarget = textNode.SelectSingleNode(XPathANode).GetAttributeValue(AttributeHyperlink, null);
+            if (hrefTarget == null || !hrefTarget.StartsWith(EmailToScheme))
+            {
+                return;
+            }
+
+            var targetEmailAddress = hrefTarget.Split(EmailToScheme)[1];
+            var textParts = textBlock.Text.Split(targetEmailAddress);
+
+            textBlock.Text = "";
+            foreach (var textPart in textParts)
+            {
+                if (!string.IsNullOrEmpty(textPart))
+                {
+                    textBlock.Inlines.Add(new Run
+                    {
+                        Text = textPart
+                    });
+                }
+                else
+                {
+                    var hyperlink = new Hyperlink
+                    {
+                        NavigateUri = new Uri(hrefTarget)
+                    };
+
+                    hyperlink.Inlines.Add(new Run
+                    {
+                        Text = targetEmailAddress
+                    });
+
+                    textBlock.Inlines.Add(hyperlink);
                 }
             }
         }
