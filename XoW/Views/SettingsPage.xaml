@@ -126,13 +126,12 @@
             </StackPanel>
         </Grid>
 
-        <Grid x:Name="AboutGrid"
-              Grid.Column="1"
+        <Grid Grid.Column="1"
               Padding="20">
             <StackPanel Orientation="Vertical">
-                <TextBlock FontSize="30">
-                        <Span><Bold>关于</Bold></Span>
-                </TextBlock>
+                <TextBlock FontSize="30"
+                           FontWeight="Bold"
+                           Text="关于" />
             </StackPanel>
 
         </Grid>
