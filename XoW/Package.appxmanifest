@@ -49,6 +49,6 @@
 
   <Capabilities>
     <Capability Name="internetClient" />
-    <uap6:Capability Name="graphicsCapture"/>
+    <uap:Capability Name="picturesLibrary"/>
   </Capabilities>
 </Package>

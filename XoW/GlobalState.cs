@@ -4,6 +4,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Media;
 using XoW.Models;
 using XoW.Utils;
+using XoW.Views;
 
 namespace XoW
 {
@@ -19,6 +20,9 @@ namespace XoW
         public static string CurrentThreadId = default;
         public static string CurrentThreadAuthorUserHash = default;
         public static string CdnUrl;
+
+        public static MainPage MainPageObjectReference;
+        public static LargeImageViewUserControl LargeImageViewObjectReference;
 
         public static readonly ObservableCollection<AnoBbsCookie> Cookies = new ObservableCollection<AnoBbsCookie>();
 

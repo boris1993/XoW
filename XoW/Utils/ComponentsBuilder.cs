@@ -29,7 +29,7 @@ namespace XoW.Utils
 
             #region 渲染第一条串
             var headerForTheFirstGrid = BuildThreadHeader(threadReply, true);
-            var contentForTheFirstGrid = BuildThreadContent(threadReply, cdnUrl);
+            var contentForTheFirstGrid = BuildThreadContent(threadReply, cdnUrl, true);
             var firstThreadGrid = BuildThreadParentGrid(threadReply, headerForTheFirstGrid, contentForTheFirstGrid);
 
             gridsInTheListView.Add(firstThreadGrid);
@@ -50,7 +50,7 @@ namespace XoW.Utils
             foreach (var thread in threads)
             {
                 var headerStackPanel = BuildThreadHeader(thread, isForReplies, isForSubscription);
-                var contentGrid = BuildThreadContent(thread, cdnUrl);
+                var contentGrid = BuildThreadContent(thread, cdnUrl, isForReplies);
 
                 var grid = BuildThreadParentGrid(thread, headerStackPanel, contentGrid);
 
@@ -169,17 +169,16 @@ namespace XoW.Utils
         /// </param>
         /// <param name="cdnUrl"></param>
         /// <returns>一个串内容的<see cref="Grid"/></returns>
-        public static Grid BuildThreadContent<T>(T thread, string cdnUrl)
+        public static Grid BuildThreadContent<T>(T thread, string cdnUrl, bool isForReplies = false)
             where T : ForumThread
         {
             var contentTextBlocks = HtmlParser.ParseHtmlIntoTextBlocks(thread.Content);
 
             var contentGridForThisThread = new Grid();
-            // 图片列(1/3)
-            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition());
-            // 内容列(2/3)
-            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition());
-            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition());
+            // 图片列
+            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            // 内容列
+            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // 检查有没有图片
             var hasImage = !string.IsNullOrEmpty(thread.Img);
@@ -189,29 +188,38 @@ namespace XoW.Utils
                 var textBlockForThisRow = contentTextBlocks[currentRow];
 
                 // 图放在内容左边
-                // 所以如果有图，那么内容从第二列开始，横跨两列
-                // 图片占1/3位置，内容占2/3，看起来匀称
+                // 所以如果有图，那么内容从第二列开始
                 var startingColumnOfThisTextBlock = hasImage ? 1 : 0;
-                var columnSpanForThisTextBlock = hasImage ? 2 : 3;
                 contentGridForThisThread.RowDefinitions.Add(new RowDefinition());
                 Grid.SetRow(textBlockForThisRow, currentRow);
                 Grid.SetColumn(textBlockForThisRow, startingColumnOfThisTextBlock);
-                Grid.SetColumnSpan(textBlockForThisRow, columnSpanForThisTextBlock);
                 contentGridForThisThread.Children.Add(textBlockForThisRow);
             }
 
             if (hasImage)
             {
+                var fullSizeImage = new BitmapImage
+                {
+                    UriSource = new Uri($"{cdnUrl}/image/{thread.Img}{thread.Ext}")
+                };
+
                 var image = new Image
                 {
                     Source = new BitmapImage
                     {
                         UriSource = new Uri($"{cdnUrl}/thumb/{thread.Img}{thread.Ext}")
                     },
+                    DataContext = fullSizeImage,
                     Stretch = Stretch.None,
                     VerticalAlignment = VerticalAlignment.Top,
                     Margin = new Thickness(10, 0, 10, 0),
+                    IsTapEnabled = true,
                 };
+
+                if (isForReplies)
+                {
+                    image.Tapped += GlobalState.MainPageObjectReference.OnImageClicked;
+                }
 
                 Grid.SetColumn(image, 0);
                 Grid.SetRow(image, 0);

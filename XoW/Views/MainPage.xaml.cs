@@ -6,6 +6,7 @@ using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using XoW.Models;
@@ -21,15 +22,20 @@ namespace XoW.Views
     public sealed partial class MainPage : Page
     {
         private readonly ObservableCollection<NavigationViewItemBase> _navigationItems = new ObservableCollection<NavigationViewItemBase>();
+        public static event EventHandler<TappedRoutedEventArgs> ImageTappedEventHandler;
 
         private readonly List<string> _nonForumNavigationItems = new List<string>
         {
             Constants.FavouriteThreadNavigationItemName
+
         };
 
         public MainPage()
         {
+            GlobalState.MainPageObjectReference = this;
+
             InitializeComponent();
+            ImageTappedEventHandler += OnImageClicked;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -359,6 +365,25 @@ namespace XoW.Views
                 ComponentContent.SearchThread,
                 ComponentContent.SearchThread,
                 PrimaryButtonClickEventHandler).ShowAsync();
+        }
+
+        public void OnImageClicked(object sender, TappedRoutedEventArgs args)
+        {
+            var fullSizeImage = ((Image)sender).DataContext as BitmapImage;
+            LargeImageView.DataContext = fullSizeImage;
+
+            ContentGrid.Visibility = Visibility.Collapsed;
+            LargeImageView.Visibility = Visibility.Visible;
+        }
+
+        public void OnLargeImageViewCloseButtonClicked(object sender, RoutedEventArgs args)
+        {
+            LargeImageView.DataContext = null;
+
+            ContentGrid.Visibility = Visibility.Visible;
+            LargeImageView.Visibility = Visibility.Collapsed;
+
+            GlobalState.LargeImageViewObjectReference.ResetState();
         }
     }
 }

@@ -15,7 +15,6 @@ namespace XoW.Models
         private string _forumName;
         private string _subscriptionId;
 
-
         public SolidColorBrush BackgroundAndBorderColorBrush
         {
             get => _backgroundAndBorderColorBrush;

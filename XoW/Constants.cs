@@ -252,6 +252,7 @@ namespace XoW
         public const string NewThreadCreatedSuccessfully = "发串大成功";
         public const string NewReplyCreatedSuccessfully = "回复成功";
         public const string ReasonOfReporting = "举报理由";
+        public const string ImageSavedToLocation = "图片已保存到";
 
         public const string CreateThread = "创建新串";
         public const string CreateReply = "创建回复";
@@ -273,6 +274,7 @@ namespace XoW
         public const string Title = "标题";
         public const string Content = "正文";
         public const string ImagePreview = "图片附件预览";
+        public const string SaveImage = "保存图片";
     }
 
     public static class ConfirmationMessage
@@ -290,5 +292,7 @@ namespace XoW
         public const string CookieRequiredForThisForum = "浏览该板块需要拥有饼干";
         public const string SubscriptionIdRequiredForGettingSubscription = "需要有订阅ID才能获取订阅";
         public const string ContentRequiredWhenNoImageAttached = "没有上传文件的时候，必须填写内容";
+        public const string LargeImageLoadFailed = "大图下载失败";
+        public const string UnknownImageFileType = "未知图片格式";
     }
 }

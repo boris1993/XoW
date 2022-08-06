@@ -563,6 +563,12 @@
             <!-- #endregion -->
         </Grid>
 
+        <!-- #region 点击图片后看大图 -->
+        <localViews:LargeImageViewUserControl x:Name="LargeImageView"
+                                              Margin="40, 0, 0, 0"
+                                              Visibility="Collapsed" />
+        <!-- #endregion -->
+
         <localViews:SettingsPage x:Name="SettingsPage"
                                  Visibility="Collapsed" />
 
