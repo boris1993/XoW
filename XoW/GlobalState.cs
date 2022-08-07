@@ -21,10 +21,14 @@ namespace XoW
         public static string CurrentThreadAuthorUserHash = default;
         public static string CdnUrl;
 
+        public static string AiFaDianUsername;
+        public static string AiFaDianApiToken;
+
         public static MainPage MainPageObjectReference;
         public static LargeImageViewUserControl LargeImageViewObjectReference;
 
         public static readonly ObservableCollection<AnoBbsCookie> Cookies = new ObservableCollection<AnoBbsCookie>();
+        public static readonly ObservableCollection<AiFaDianUser> AiFaDianSponsoredUsers = new ObservableCollection<AiFaDianUser>();
 
         public static ObservableObject ObservableObject = new ObservableObject
         {

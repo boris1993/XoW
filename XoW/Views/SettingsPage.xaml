@@ -10,6 +10,9 @@
 
     <UserControl.Resources>
         <localServices:CookieNameConverter x:Key="CookieNameConverter" />
+        <localServices:CollapseItemWhenListIsEmptyConverter x:Key="CollapseItemWhenListIsEmptyConverter" />
+        <localServices:ShowItemWhenListIsEmptyConverter x:Key="ShowItemWhenListIsEmptyConverter" />
+        <localServices:AiFaDianAvatarToThumbConverter x:Key="AiFaDianAvatarToThumbConverter" />
     </UserControl.Resources>
 
     <Grid x:Name="SettingsGrid"
@@ -130,8 +133,43 @@
                 <TextBlock FontSize="30"
                            FontWeight="Bold"
                            Text="关于" />
+                <TextBlock Text="一个开放源代码的，使用UWP构建的X岛客户端。" />
+                <HyperlinkButton NavigateUri="{x:Bind local:Url.GitHubRepo}">
+                    <TextBlock Text="{x:Bind local:ComponentContent.GitHubRepo}" />
+                </HyperlinkButton>
+                <HyperlinkButton NavigateUri="{x:Bind local:Url.AiFaDianHomepage}">
+                    <TextBlock Text="{x:Bind local:ComponentContent.SponsorOnAiFaDian}" />
+                </HyperlinkButton>
+                <TextBlock FontSize="20"
+                           FontWeight="Bold"
+                           Text="赞助了我的肥肥们" />
+                <ListView x:Name="ListViewSponsorList"
+                          Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
+                          SelectionMode="None"
+                          HorizontalAlignment="Stretch"
+                          IsItemClickEnabled="False"
+                          ItemsSource="{x:Bind local:GlobalState.AiFaDianSponsoredUsers, Mode=OneWay}"
+                          Visibility="{x:Bind local:GlobalState.AiFaDianSponsoredUsers, Mode=OneWay, Converter={StaticResource CollapseItemWhenListIsEmptyConverter}}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="localModel:AiFaDianUser">
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0, 2">
+                                <Image Margin="1">
+                                    <Image.Source>
+                                        <BitmapImage UriSource="{x:Bind Avatar, Mode=OneWay, Converter={StaticResource AiFaDianAvatarToThumbConverter}}" />
+                                    </Image.Source>
+                                </Image>
+                                <TextBlock Text="{x:Bind Name, Mode=OneWay}"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <TextBlock x:Name="TextBlockNoSponsorYet"
+                           HorizontalAlignment="Center"
+                           Visibility="{x:Bind local:GlobalState.AiFaDianSponsoredUsers, Mode=OneWay, Converter={StaticResource ShowItemWhenListIsEmptyConverter}}"
+                           Text="暂时还没有人赞助呢......" />
             </StackPanel>
-
         </Grid>
     </Grid>
 </UserControl>

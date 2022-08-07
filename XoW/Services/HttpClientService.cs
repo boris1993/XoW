@@ -10,6 +10,7 @@ namespace XoW.Services
 
         private static readonly object Lock = new object();
         private static HttpClient _httpClient;
+        private static HttpClient _httpClientForThirdParty;
 
         public static HttpClient GetHttpClientInstance()
         {
@@ -25,6 +26,18 @@ namespace XoW.Services
             }
 
             return _httpClient;
+        }
+        
+        public static HttpClient GetHttpClientForThirdPartyInstance(){
+            if (_httpClientForThirdParty is null)
+            {
+                lock (Lock)
+                {
+                    _httpClientForThirdParty = new HttpClient();
+                }
+            }
+
+            return _httpClientForThirdParty;
         }
 
         public static void ApplyCookie(string cookieValue)

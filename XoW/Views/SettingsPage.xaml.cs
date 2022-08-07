@@ -14,7 +14,7 @@ namespace XoW.Views
     {
         public SettingsPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void OnCookieClicked(object sender, ItemClickEventArgs args)
@@ -104,6 +104,11 @@ namespace XoW.Views
             }
 
             GenerateNewSubscriptionId();
+        }
+
+        private async void OnTestButtonClicked(object sender, RoutedEventArgs args)
+        {
+            await AiFaDianApiClient.GetSponsorList();
         }
 
         private static void DeleteCookie(string cookieName)

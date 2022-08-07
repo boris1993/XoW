@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Uwp;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Microsoft.Toolkit.Uwp;
-using Microsoft.Toolkit.Uwp.UI.Controls;
 using XoW.Models;
 using XoW.Services;
 using XoW.Utils;
@@ -216,6 +216,12 @@ namespace XoW.Views
         {
             ResetNewReplyPanel();
             NewReplyPanelGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private void HideLargeImageView()
+        {
+            LargeImageView.Visibility = Visibility.Collapsed;
+            GlobalState.LargeImageViewObjectReference.ResetState();
         }
 
         private void ResetNewThreadPanel()

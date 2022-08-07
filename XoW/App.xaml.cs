@@ -4,6 +4,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using XoW.Services;
 using XoW.Views;
 
 namespace XoW
@@ -22,6 +23,8 @@ namespace XoW
             this.InitializeComponent();
             this.Suspending += OnSuspending;
             this.UnhandledException += OnUnhandledException;
+
+            ConfigurationManager.LoadAppConfig();
         }
 
         /// <summary>

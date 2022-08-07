@@ -86,6 +86,9 @@ namespace XoW
         /// </summary>
         public const string Search = $"{BaseUrl}/Api/search";
 
+        public const string GitHubRepo = "https://github.com/boris1993/XoW";
+
+        public const string AiFaDianHomepage = "https://afdian.net/@xdao4windows";
     }
 
     public static class Constants
@@ -275,6 +278,8 @@ namespace XoW
         public const string Content = "正文";
         public const string ImagePreview = "图片附件预览";
         public const string SaveImage = "保存图片";
+        public const string GitHubRepo = "GitHub仓库";
+        public const string SponsorOnAiFaDian = "在爱发电上赞助我";
     }
 
     public static class ConfirmationMessage
@@ -286,13 +291,13 @@ namespace XoW
 
     public static class ErrorMessage
     {
-        public const string ScreenSnipFailed = "调用系统截图功能失败";
         public const string FileIsNotImage = "选择的文件不是图片";
         public const string QrCodeDecodeFailed = "饼干二维码解析失败";
         public const string CookieRequiredForThisForum = "浏览该板块需要拥有饼干";
-        public const string SubscriptionIdRequiredForGettingSubscription = "需要有订阅ID才能获取订阅";
         public const string ContentRequiredWhenNoImageAttached = "没有上传文件的时候，必须填写内容";
         public const string LargeImageLoadFailed = "大图下载失败";
-        public const string UnknownImageFileType = "未知图片格式";
+        public const string InvalidConfigFile = "AppConfig.xml无效，请联系开发者";
+        public const string InvalidAiFaDianConfig = "爱发电参数无效，加载赞助者失败";
+        public const string AiFaDianApiError = "爱发电API返回了一个错误";
     }
 }

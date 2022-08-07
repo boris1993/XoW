@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using XoW.Models;
 
@@ -31,6 +33,44 @@ namespace XoW.Services
     {
         public object Convert(object value, Type targetType, object parameter, string language) => $"No.{value}";
 
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
+    }
+
+    public class CollapseItemWhenListIsEmptyConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is IList)
+            {
+                var list = value as IList;
+                return list.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+            }
+
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
+    }
+
+    public class ShowItemWhenListIsEmptyConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is IList)
+            {
+                var list = value as IList;
+                return list.Count != 0 ? Visibility.Collapsed : Visibility.Visible;
+            }
+
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
+    }
+
+    public class AiFaDianAvatarToThumbConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language) => new Uri($"{value}?imageView2/1/w/40/h/40");
         public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
     }
 }

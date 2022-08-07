@@ -21,9 +21,9 @@ namespace XoW.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private readonly ObservableCollection<NavigationViewItemBase> _navigationItems = new ObservableCollection<NavigationViewItemBase>();
         public static event EventHandler<TappedRoutedEventArgs> ImageTappedEventHandler;
 
+        private readonly ObservableCollection<NavigationViewItemBase> _navigationItems = new ObservableCollection<NavigationViewItemBase>();
         private readonly List<string> _nonForumNavigationItems = new List<string>
         {
             Constants.FavouriteThreadNavigationItemName
@@ -65,6 +65,8 @@ namespace XoW.Views
 
         private async void NavigationItemInvokedAsync(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
+            HideLargeImageView();
+
             if (args.IsSettingsInvoked)
             {
                 ShowSettingsGrid();

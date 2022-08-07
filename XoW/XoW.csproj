@@ -23,7 +23,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -46,7 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>ARM</PlatformTarget>
@@ -69,7 +69,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>ARM64</PlatformTarget>
@@ -93,7 +93,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -123,6 +123,10 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="GlobalState.cs" />
+    <Compile Include="Models\AiFaDianSponsor.cs" />
+    <Compile Include="Services\AiFaDianApiClient.cs" />
+    <Compile Include="Services\ConfigurationManager.cs" />
+    <Compile Include="DesignTimeData.cs" />
     <Compile Include="Utils\CommonUtils.cs" />
     <Compile Include="Utils\ApplicationConfigurationHelper.cs" />
     <Compile Include="Utils\ComponentsBuilder.cs" />
@@ -171,6 +175,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AppConfig.local.xml" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-400.png" />
@@ -262,10 +267,10 @@
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
-    <DefineConstants>DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
+    <DefineConstants>CODE_ANALYSIS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DefineConstants>DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
+    <DefineConstants>CODE_ANALYSIS</DefineConstants>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
