@@ -147,8 +147,7 @@ namespace XoW.Services
 
         public static async Task PostNewReport(string reportThreadContent)
         {
-            await CreateNewThread(
-                ForumIdDutyRoom,
+            await CreateNewThread(ForumIdDutyRoom,
                 null,
                 null,
                 null,
@@ -163,63 +162,43 @@ namespace XoW.Services
             var uri = new Uri(Url.CreateNewThread);
 
             using var requestBody = new HttpMultipartFormDataContent();
-            requestBody.Add(
-                new HttpStringContent(fid),
-                RequestBodyParamName.FId);
-            requestBody.Add(
-                new HttpStringContent(content),
-                RequestBodyParamName.Content);
-            requestBody.Add(
-                new HttpStringContent(water),
-                RequestBodyParamName.Water);
+            requestBody.Add(new HttpStringContent(fid), RequestBodyParamName.FId);
+            requestBody.Add(new HttpStringContent(content), RequestBodyParamName.Content);
+            requestBody.Add(new HttpStringContent(water), RequestBodyParamName.Water);
 
             if (!string.IsNullOrWhiteSpace(name))
             {
-                requestBody.Add(
-                    new HttpStringContent(name),
-                    RequestBodyParamName.Username);
+                requestBody.Add(new HttpStringContent(name), RequestBodyParamName.Username);
             }
 
             if (!string.IsNullOrWhiteSpace(email))
             {
-                requestBody.Add(
-                    new HttpStringContent(email),
-                    RequestBodyParamName.EMail);
+                requestBody.Add(new HttpStringContent(email), RequestBodyParamName.EMail);
             }
 
             if (!string.IsNullOrWhiteSpace(title))
             {
-                requestBody.Add(
-                    new HttpStringContent(title),
-                    RequestBodyParamName.Title);
+                requestBody.Add(new HttpStringContent(title), RequestBodyParamName.Title);
             }
 
             if (image != null)
             {
                 var imageStream = await image.OpenReadAsync();
                 var fileStreamContent = new HttpStreamContent(imageStream);
-                fileStreamContent.Headers.Add(
-                    HeaderNames.ContentType,
-                    imageStream.ContentType);
-                requestBody.Add(
-                    fileStreamContent,
-                    RequestBodyParamName.Image,
-                    $"/{image.Path.Replace('\\', '/')}");
+                fileStreamContent.Headers.Add(HeaderNames.ContentType, imageStream.ContentType);
+                requestBody.Add(fileStreamContent, RequestBodyParamName.Image, $"/{image.Path.Replace('\\', '/')}");
             }
 
             var httpClient = HttpClientService.GetHttpClientInstance();
 
             var defaultCookie = httpClient.DefaultRequestHeaders.Cookie.Single();
             httpClient.DefaultRequestHeaders.Cookie.Clear();
-            httpClient.DefaultRequestHeaders.Cookie.Add(
-                new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
-                {
-                    Value = cookie.Cookie,
-                });
+            httpClient.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
+            {
+                Value = cookie.Cookie,
+            });
 
-            var response = await httpClient.PostAsync(
-                uri,
-                requestBody);
+            var response = await httpClient.PostAsync(uri, requestBody);
             response.EnsureSuccessStatusCode();
 
             httpClient.DefaultRequestHeaders.Cookie.Clear();
@@ -231,63 +210,43 @@ namespace XoW.Services
             var uri = new Uri(Url.CreateNewReply);
 
             using var requestBody = new HttpMultipartFormDataContent();
-            requestBody.Add(
-                new HttpStringContent(resto),
-                RequestBodyParamName.Resto);
-            requestBody.Add(
-                new HttpStringContent(content),
-                RequestBodyParamName.Content);
-            requestBody.Add(
-                new HttpStringContent(water),
-                RequestBodyParamName.Water);
+            requestBody.Add(new HttpStringContent(resto), RequestBodyParamName.Resto);
+            requestBody.Add(new HttpStringContent(content), RequestBodyParamName.Content);
+            requestBody.Add(new HttpStringContent(water), RequestBodyParamName.Water);
 
             if (!string.IsNullOrWhiteSpace(name))
             {
-                requestBody.Add(
-                    new HttpStringContent(name),
-                    RequestBodyParamName.Username);
+                requestBody.Add(new HttpStringContent(name), RequestBodyParamName.Username);
             }
 
             if (!string.IsNullOrWhiteSpace(email))
             {
-                requestBody.Add(
-                    new HttpStringContent(email),
-                    RequestBodyParamName.EMail);
+                requestBody.Add(new HttpStringContent(email), RequestBodyParamName.EMail);
             }
 
             if (!string.IsNullOrWhiteSpace(title))
             {
-                requestBody.Add(
-                    new HttpStringContent(title),
-                    RequestBodyParamName.Title);
+                requestBody.Add(new HttpStringContent(title), RequestBodyParamName.Title);
             }
 
             if (image != null)
             {
                 var imageStream = await image.OpenReadAsync();
                 var fileStreamContent = new HttpStreamContent(imageStream);
-                fileStreamContent.Headers.Add(
-                    HeaderNames.ContentType,
-                    imageStream.ContentType);
-                requestBody.Add(
-                    fileStreamContent,
-                    RequestBodyParamName.Image,
-                    $"/{image.Path.Replace('\\', '/')}");
+                fileStreamContent.Headers.Add(HeaderNames.ContentType, imageStream.ContentType);
+                requestBody.Add(fileStreamContent, RequestBodyParamName.Image, $"/{image.Path.Replace('\\', '/')}");
             }
 
             var httpClient = HttpClientService.GetHttpClientInstance();
 
             var defaultCookie = httpClient.DefaultRequestHeaders.Cookie.Single();
             httpClient.DefaultRequestHeaders.Cookie.Clear();
-            httpClient.DefaultRequestHeaders.Cookie.Add(
-                new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
-                {
-                    Value = cookie.Cookie,
-                });
+            httpClient.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
+            {
+                Value = cookie.Cookie,
+            });
 
-            var response = await httpClient.PostAsync(
-                uri,
-                requestBody);
+            var response = await httpClient.PostAsync(uri, requestBody);
             response.EnsureSuccessStatusCode();
 
             httpClient.DefaultRequestHeaders.Cookie.Clear();
