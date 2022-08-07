@@ -178,7 +178,7 @@ namespace XoW.Utils
             // 图片列
             contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             // 内容列
-            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { });
 
             // 检查有没有图片
             var hasImage = !string.IsNullOrEmpty(thread.Img);
@@ -190,9 +190,11 @@ namespace XoW.Utils
                 // 图放在内容左边
                 // 所以如果有图，那么内容从第二列开始
                 var startingColumnOfThisTextBlock = hasImage ? 1 : 0;
+                var columnSpanOfThisTextBlock = hasImage ? 1 : 2;
                 contentGridForThisThread.RowDefinitions.Add(new RowDefinition());
                 Grid.SetRow(textBlockForThisRow, currentRow);
                 Grid.SetColumn(textBlockForThisRow, startingColumnOfThisTextBlock);
+                Grid.SetColumnSpan(textBlockForThisRow, columnSpanOfThisTextBlock);
                 contentGridForThisThread.Children.Add(textBlockForThisRow);
             }
 
