@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,30 +20,30 @@ namespace XoW.Utils
         public const string StackPanelForDeleteButton = "StackPanelForDeleteButton";
         public const string ButtonDeleteSubscriptionName = "ButtonDeleteSubscription";
 
-        public static IEnumerable<Grid> BuildGridForThread(IEnumerable<ForumThread> threads, string cdnUrl) => BuildGrids(threads, cdnUrl);
+        public static async Task<IEnumerable<Grid>> BuildGridForThread(IEnumerable<ForumThread> threads, string cdnUrl) => await BuildGrids(threads, cdnUrl);
 
-        public static List<Grid> BuildGridForOnlyReplies(IEnumerable<ForumThread> replies, string cdnUrl) => BuildGrids(replies, cdnUrl, true);
+        public static async Task<List<Grid>> BuildGridForOnlyReplies(IEnumerable<ForumThread> replies, string cdnUrl) => await BuildGrids(replies, cdnUrl, true);
 
-        public static List<Grid> BuildGridForReply(ThreadReply threadReply, string cdnUrl)
+        public async static Task<List<Grid>> BuildGridForReply(ThreadReply threadReply, string cdnUrl)
         {
             var gridsInTheListView = new List<Grid>();
 
             #region 渲染第一条串
             var headerForTheFirstGrid = BuildThreadHeader(threadReply, true);
-            var contentForTheFirstGrid = BuildThreadContent(threadReply, cdnUrl, true);
+            var contentForTheFirstGrid = await BuildThreadContent(threadReply, cdnUrl, true);
             var firstThreadGrid = BuildThreadParentGrid(threadReply, headerForTheFirstGrid, contentForTheFirstGrid);
 
             gridsInTheListView.Add(firstThreadGrid);
             #endregion
 
             #region 渲染回复串
-            gridsInTheListView.AddRange(BuildGrids(threadReply.Replies, cdnUrl, true));
+            gridsInTheListView.AddRange(await BuildGrids(threadReply.Replies, cdnUrl, true));
             #endregion
 
             return gridsInTheListView;
         }
 
-        public static List<Grid> BuildGrids(IEnumerable<ForumThread> threads, string cdnUrl, bool isForReplies = false, bool isForSubscription = false)
+        public static async Task<List<Grid>> BuildGrids(IEnumerable<ForumThread> threads, string cdnUrl, bool isForReplies = false, bool isForSubscription = false)
         {
             var grids = new List<Grid>();
 
@@ -50,7 +51,7 @@ namespace XoW.Utils
             foreach (var thread in threads)
             {
                 var headerStackPanel = BuildThreadHeader(thread, isForReplies, isForSubscription);
-                var contentGrid = BuildThreadContent(thread, cdnUrl, isForReplies);
+                var contentGrid = await BuildThreadContent(thread, cdnUrl, isForReplies);
 
                 var grid = BuildThreadParentGrid(thread, headerStackPanel, contentGrid);
 
@@ -169,10 +170,10 @@ namespace XoW.Utils
         /// </param>
         /// <param name="cdnUrl"></param>
         /// <returns>一个串内容的<see cref="Grid"/></returns>
-        public static Grid BuildThreadContent<T>(T thread, string cdnUrl, bool isForReplies = false)
+        public async static Task<Grid> BuildThreadContent<T>(T thread, string cdnUrl, bool isForReplies = false)
             where T : ForumThread
         {
-            var contentTextBlocks = HtmlParser.ParseHtmlIntoTextBlocks(thread.Content);
+            var contentTextBlocks = await HtmlParser.ParseHtmlIntoTextBlocks(thread.Content);
 
             var contentGridForThisThread = new Grid();
             // 图片列
@@ -260,6 +261,8 @@ namespace XoW.Utils
 
             return parentGridForThisThread;
         }
+
+        public static TextBlock CreateTextBlockForThreadReference(string content) => CreateTextBlockWithDefaultMargin(content, Colors.DarkGreen);
 
         public static TextBlock CreateTextBlockWithDefaultMargin(string content, Color? color = null) => CreateTextBlock(content, color, new Thickness(0, 0, 10, 10));
 

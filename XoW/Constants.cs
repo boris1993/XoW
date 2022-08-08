@@ -86,6 +86,8 @@ namespace XoW
         /// </summary>
         public const string Search = $"{BaseUrl}/Api/search";
 
+        public const string GetThreadReference = $"{BaseUrl}/Home/Forum/ref";
+
         public const string GitHubRepo = "https://github.com/boris1993/XoW";
 
         public const string AiFaDianHomepage = "https://afdian.net/@xdao4windows";

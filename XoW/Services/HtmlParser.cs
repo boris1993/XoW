@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.UI;
@@ -15,7 +17,9 @@ namespace XoW.Services
     public static class HtmlParser
     {
         private const string XPathTextNodeAnywhere = "//text()";
+        private const string XPathBrNode = "br";
         private const string XPathBrNodeAnywhere = "//br";
+        private const string XPathDivWithClassThreadsContent = "//div[@class='h-threads-content']";
         private const string AttributeStyle = "style";
         private const string AttributeStyleParamColor = "color";
         private const string AttributeStyleParamFontWeight = "font-weight";
@@ -23,7 +27,9 @@ namespace XoW.Services
         private const string AttributeHyperlink = "href";
         private const string EmailToScheme = "mailto:";
 
-        public static List<TextBlock> ParseHtmlIntoTextBlocks(string htmlString)
+        private static Regex ThreadReferenceRegex = new Regex(@"^>>(No\.)*\d+$", RegexOptions.Compiled);
+
+        public async static Task<List<TextBlock>> ParseHtmlIntoTextBlocks(string htmlString)
         {
             var rootHtmlDoc = new HtmlDocument();
             rootHtmlDoc.LoadHtml(htmlString);
@@ -34,15 +40,56 @@ namespace XoW.Services
             GetGlobalStyleForAllTextBlocks(firstTextNode, ref shouldBoldForAllTextBlocks, ref textBlockGlobalColor);
 
             var textBlocksForContents = new List<TextBlock>();
-            var linesOfHtmlString = htmlString.Split(Environment.NewLine);
+            var linesOfHtmlString = htmlString.Split(Environment.NewLine).ToList();
+
+            // 一部分换行符不标准，只有\n或\r
+            // 在这里单独处理，将这些带有非标准换行符的行也正确分割
+            for (int i = 0; i < linesOfHtmlString.Count; i++)
+            {
+                var line = linesOfHtmlString[i];
+                if (line.Contains(Environment.NewLine))
+                {
+                    continue;
+                }
+
+                if (line.Contains("\r"))
+                {
+                    var linesSeparated = line.Split("\r");
+                    linesOfHtmlString.RemoveAt(i);
+
+                    var insertLocation = i;
+                    foreach (var newLine in linesSeparated)
+                    {
+                        linesOfHtmlString.Insert(insertLocation, newLine);
+                        insertLocation++;
+                    }
+                }
+
+                if (line.Contains("\n"))
+                {
+                    var linesSeparated = line.Split("\n");
+                    linesOfHtmlString.RemoveAt(i);
+
+                    var insertLocation = i;
+                    foreach (var newLine in linesSeparated)
+                    {
+                        linesOfHtmlString.Insert(insertLocation, newLine);
+                        insertLocation++;
+                    }
+                }
+            }
+
             foreach (var line in linesOfHtmlString)
             {
                 var htmlDoc = new HtmlDocument();
                 htmlDoc.LoadHtml(line);
 
-                if (htmlDoc.DocumentNode.Descendants("br").Any())
+                // 仅删除每行文字末尾的换行符
+                // 如果只有换行符，那么就保留
+                // 以保证显示效果与网页一致
+                if (htmlDoc.DocumentNode.ChildNodes.Count > 1 && htmlDoc.DocumentNode.Descendants("br").Any())
                 {
-                    foreach (var node in htmlDoc.DocumentNode.SelectNodes(XPathBrNodeAnywhere))
+                    foreach (var node in htmlDoc.DocumentNode.SelectNodes(XPathBrNode))
                     {
                         node.Remove();
                     }
@@ -50,12 +97,23 @@ namespace XoW.Services
 
                 var content = htmlDoc.DocumentNode.InnerText;
                 var deEntitizeContent = HtmlEntity.DeEntitize(content.Trim());
-                if (string.IsNullOrWhiteSpace(deEntitizeContent))
-                {
-                    continue;
-                }
 
-                var textBlock = ComponentsBuilder.CreateTextBlock(deEntitizeContent);
+                TextBlock textBlock;
+                var threadReferenceRegexMatch = ThreadReferenceRegex.Match(deEntitizeContent);
+                if (threadReferenceRegexMatch.Success)
+                {
+                    var contentForThisTextBlock = deEntitizeContent;
+
+                    var referencedThreadId = deEntitizeContent.Replace(">", "").Replace("No.", "");
+                    var referencedContent = await GetReferencedThread(referencedThreadId);
+                    contentForThisTextBlock += $"\n{referencedContent}";
+
+                    textBlock = ComponentsBuilder.CreateTextBlock(contentForThisTextBlock, Colors.DarkGreen);
+                }
+                else
+                {
+                    textBlock = ComponentsBuilder.CreateTextBlock(deEntitizeContent);
+                }
                 SetEmailHyperLinkInTextBlock(htmlDoc.DocumentNode, textBlock);
 
                 if (shouldBoldForAllTextBlocks)
@@ -149,6 +207,26 @@ namespace XoW.Services
                     textBlock.Inlines.Add(hyperlink);
                 }
             }
+        }
+
+        private static async Task<string> GetReferencedThread(string threadId)
+        {
+            var refPage = await AnoBbsApiClient.GetReferencedThreadById(threadId);
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(refPage);
+
+            if (htmlDoc.DocumentNode.ChildNodes.Count > 1 && htmlDoc.DocumentNode.Descendants("br").Any())
+            {
+                foreach (var node in htmlDoc.DocumentNode.SelectNodes(XPathBrNodeAnywhere))
+                {
+                    node.Remove();
+                }
+            }
+
+            var refNodeDocument = htmlDoc.DocumentNode.SelectSingleNode(XPathDivWithClassThreadsContent);
+            var innerText = HtmlEntity.DeEntitize(refNodeDocument.InnerText.Trim());
+
+            return innerText;
         }
     }
 }

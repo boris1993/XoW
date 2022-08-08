@@ -253,6 +253,24 @@ namespace XoW.Services
             httpClient.DefaultRequestHeaders.Cookie.Add(defaultCookie);
         }
 
+        public static async Task<string> GetReferencedThreadById(string threadId)
+        {
+            var uriBuilder = new UriBuilder(Url.GetThreadReference);
+
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query[QueryParams.QueryParamId] = threadId;
+            uriBuilder.Query = query.ToString();
+
+            var httpClient = HttpClientService.GetHttpClientInstance();
+
+            var uri = new Uri(uriBuilder.ToString());
+            var response = await httpClient.GetAsync(uri);
+            response.EnsureSuccessStatusCode();
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            return responseString;
+        }
+
         private static async Task<T> GetResponseWithType<T>(string url)
         {
             var httpClient = HttpClientService.GetHttpClientInstance();

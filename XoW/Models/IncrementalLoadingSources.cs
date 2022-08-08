@@ -15,7 +15,7 @@ namespace XoW.Models
             CancellationToken cancellationToken = default)
         {
             var threads = await AnoBbsApiClient.GetTimelineAsync(pageIndex + 1);
-            var gridsInTheListView = ComponentsBuilder.BuildGridForThread(threads, GlobalState.CdnUrl);
+            var gridsInTheListView = await ComponentsBuilder.BuildGridForThread(threads, GlobalState.CdnUrl);
 
             return gridsInTheListView;
         }
@@ -29,7 +29,7 @@ namespace XoW.Models
             CancellationToken cancellationToken = default)
         {
             var threads = await AnoBbsApiClient.GetThreadsAsync(GlobalState.CurrentForumId, pageIndex + 1);
-            var gridsInTheListView = ComponentsBuilder.BuildGridForThread(threads, GlobalState.CdnUrl);
+            var gridsInTheListView = await ComponentsBuilder.BuildGridForThread(threads, GlobalState.CdnUrl);
 
             return gridsInTheListView;
         }
@@ -51,10 +51,10 @@ namespace XoW.Models
             GlobalState.CurrentThreadAuthorUserHash = threadAuthorUserHash;
 
             var grids = actualPageIndex == 1
-                ? ComponentsBuilder.BuildGridForReply(
+                ? await ComponentsBuilder.BuildGridForReply(
                     replies,
                     GlobalState.CdnUrl)
-                : ComponentsBuilder.BuildGridForOnlyReplies(
+                : await ComponentsBuilder.BuildGridForOnlyReplies(
                     replies.Replies.Where(reply => reply.UserHash != "Tips").ToList(),
                     GlobalState.CdnUrl);
 
@@ -70,10 +70,10 @@ namespace XoW.Models
             var actualPageIndex = pageIndex + 1;
             var replies = await AnoBbsApiClient.GetPoOnlyRepliesAsync(GlobalState.CurrentThreadId, actualPageIndex);
             var grids = actualPageIndex == 1
-                ? ComponentsBuilder.BuildGridForReply(
+                ? await ComponentsBuilder.BuildGridForReply(
                     replies,
                     GlobalState.CdnUrl)
-                : ComponentsBuilder.BuildGridForOnlyReplies(
+                : await ComponentsBuilder.BuildGridForOnlyReplies(
                     replies.Replies.Where(reply => reply.UserHash != "Tips").ToList(),
                     GlobalState.CdnUrl);
 
@@ -90,7 +90,7 @@ namespace XoW.Models
             var subscriptions =
                 await AnoBbsApiClient.GetSubscriptionsAsync(GlobalState.ObservableObject.SubscriptionId,
                     actualPageIndex);
-            var grids = ComponentsBuilder.BuildGrids(subscriptions, GlobalState.CdnUrl, isForSubscription: true);
+            var grids = await ComponentsBuilder.BuildGrids(subscriptions, GlobalState.CdnUrl, isForSubscription: true);
 
             return grids;
         }
