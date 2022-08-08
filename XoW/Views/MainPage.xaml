@@ -209,7 +209,24 @@
                           Grid.Row="1"
                           Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
                           SelectionMode="None"
-                          HorizontalAlignment="Stretch" />
+                          HorizontalAlignment="Stretch"
+                          IsRightTapEnabled="True"
+                          RightTapped="{x:Bind OnReplyListViewRightClicked}">
+                    <ListView.Resources>
+                        <MenuFlyout x:Name="ReplyListViewItemFlyout">
+                            <MenuFlyout.Items>
+                                <MenuFlyoutItem x:Name="ReplyThread"
+                                                Text="{x:Bind local:ComponentContent.CreateReply}"
+                                                Click="{x:Bind OnReplyThreadMenuFlyoutClicked}" />
+                                <MenuFlyoutItem x:Name="CopyContent"
+                                                Text="{x:Bind local:ComponentContent.Copy}" />
+                                <MenuFlyoutSeparator />
+                                <MenuFlyoutItem x:Name="ReportThread"
+                                                Text="{x:Bind local:ComponentContent.ReportThread}" />
+                            </MenuFlyout.Items>
+                        </MenuFlyout>
+                    </ListView.Resources>
+                </ListView>
             </Grid>
             <!--#endregion-->
 

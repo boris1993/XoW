@@ -6,6 +6,7 @@ using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
@@ -29,6 +30,8 @@ namespace XoW.Views
             Constants.FavouriteThreadNavigationItemName
 
         };
+
+        private ThreadDataContext rightClickedThreadDataContext;
 
         public MainPage()
         {
@@ -386,6 +389,48 @@ namespace XoW.Views
             LargeImageView.Visibility = Visibility.Collapsed;
 
             GlobalState.LargeImageViewObjectReference.ResetState();
+        }
+
+        private void OnReplyListViewRightClicked(object sender, RightTappedRoutedEventArgs args)
+        {
+            var listView = sender as ListView;
+            ReplyListViewItemFlyout.ShowAt(listView, args.GetPosition(listView));
+
+            ThreadDataContext threadDataContext;
+            if (args.OriginalSource is ListViewItemPresenter)
+            {
+                var listViewItemPresenter = args.OriginalSource as ListViewItemPresenter;
+                var content = listViewItemPresenter.Content as Grid;
+                threadDataContext = content.DataContext as ThreadDataContext;
+            }
+            else if (args.OriginalSource is Image)
+            {
+                var image = args.OriginalSource as Image;
+                var imageParentGrid = image.Parent as Grid;
+                var gridParentStackPanel = imageParentGrid.Parent as StackPanel;
+                var stackPanelParentGrid = gridParentStackPanel.Parent as Grid;
+
+                threadDataContext = stackPanelParentGrid.DataContext as ThreadDataContext;
+            }
+            else if (args.OriginalSource is TextBlock)
+            {
+                var textBlock = args.OriginalSource as TextBlock;
+                var textBlockParentGrid = textBlock.Parent as Grid;
+
+                threadDataContext = textBlockParentGrid.DataContext as ThreadDataContext;
+            }
+            else
+            {
+                throw new AppException(args.OriginalSource.GetType().Name);
+            }
+
+            rightClickedThreadDataContext = threadDataContext;
+        }
+
+        private void OnReplyThreadMenuFlyoutClicked(object sender, RoutedEventArgs args)
+        {
+            TextBoxNewReplyContent.Text = $">>{rightClickedThreadDataContext.ThreadId}\n";
+            ShowNewReplyPanel();
         }
     }
 }

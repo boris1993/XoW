@@ -174,7 +174,11 @@ namespace XoW.Utils
         {
             var contentTextBlocks = HtmlParser.ParseHtmlIntoTextBlocks(thread.Content);
 
-            var contentGridForThisThread = new Grid();
+            var contentGridForThisThread = new Grid
+            {
+                Name = ComponentName.ContentGrid,
+                VerticalAlignment = VerticalAlignment.Top,
+            };
             // 图片列
             contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             // 内容列

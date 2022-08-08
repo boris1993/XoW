@@ -238,6 +238,11 @@ namespace XoW
         public const string SubscriptionId = "subscription_id";
     }
 
+    public static class ComponentName
+    {
+        public const string ContentGrid = "ContentGrid";
+    }
+
     public static class ComponentContent
     {
         public const string Ok = "知道了";
@@ -280,6 +285,7 @@ namespace XoW
         public const string SaveImage = "保存图片";
         public const string GitHubRepo = "GitHub仓库";
         public const string SponsorOnAiFaDian = "在爱发电上赞助我";
+        public const string Copy = "复制";
     }
 
     public static class ConfirmationMessage

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HtmlAgilityPack;
+using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Media;
-using HtmlAgilityPack;
-using Microsoft.Toolkit.Uwp.Helpers;
 using XoW.Utils;
 
 namespace XoW.Services
