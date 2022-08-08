@@ -174,11 +174,7 @@ namespace XoW.Utils
         {
             var contentTextBlocks = HtmlParser.ParseHtmlIntoTextBlocks(thread.Content);
 
-            var contentGridForThisThread = new Grid
-            {
-                Name = ComponentName.ContentGrid,
-                VerticalAlignment = VerticalAlignment.Top,
-            };
+            var contentGridForThisThread = new Grid();
             // 图片列
             contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             // 内容列
@@ -187,19 +183,22 @@ namespace XoW.Utils
             // 检查有没有图片
             var hasImage = !string.IsNullOrEmpty(thread.Img);
 
-            for (int currentRow = 0; currentRow < contentTextBlocks.Count; currentRow++)
+            var stackPanelForContentTextBlocks = new StackPanel
             {
-                var textBlockForThisRow = contentTextBlocks[currentRow];
+                Orientation = Orientation.Vertical
+            };
 
-                // 图放在内容左边
-                // 所以如果有图，那么内容从第二列开始
-                var startingColumnOfThisTextBlock = hasImage ? 1 : 0;
-                var columnSpanOfThisTextBlock = hasImage ? 1 : 2;
-                contentGridForThisThread.RowDefinitions.Add(new RowDefinition());
-                Grid.SetRow(textBlockForThisRow, currentRow);
-                Grid.SetColumn(textBlockForThisRow, startingColumnOfThisTextBlock);
-                Grid.SetColumnSpan(textBlockForThisRow, columnSpanOfThisTextBlock);
-                contentGridForThisThread.Children.Add(textBlockForThisRow);
+            // 图放在内容左边
+            // 所以如果有图，那么内容从第二列开始
+            var startingColumnOfStackPanel = hasImage ? 1 : 0;
+            var columnSpanOfStackPanel = hasImage ? 1 : 2;
+            Grid.SetColumn(stackPanelForContentTextBlocks, startingColumnOfStackPanel);
+            Grid.SetColumnSpan(stackPanelForContentTextBlocks, columnSpanOfStackPanel);
+            contentGridForThisThread.Children.Add(stackPanelForContentTextBlocks);
+
+            foreach (var contentTextBlock in contentTextBlocks)
+            {
+                stackPanelForContentTextBlocks.Children.Add(contentTextBlock);
             }
 
             if (hasImage)
@@ -228,8 +227,6 @@ namespace XoW.Utils
                 }
 
                 Grid.SetColumn(image, 0);
-                Grid.SetRow(image, 0);
-                Grid.SetRowSpan(image, contentGridForThisThread.RowDefinitions.Count);
 
                 contentGridForThisThread.Children.Add(image);
             }
