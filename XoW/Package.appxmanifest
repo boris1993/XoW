@@ -8,11 +8,11 @@
   IgnorableNamespaces="uap mp uap6">
 
   <Identity
-    Name="aea7d179-a22f-4341-969e-2a1548d1e31c"
-    Publisher="CN=boris"
+    Name="25769boris1993.XonWindows"
+    Publisher="CN=8E556DC1-97D1-444A-A266-10E76FE89AC1"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="aea7d179-a22f-4341-969e-2a1548d1e31c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="e2355e69-9875-4842-a9be-063e1a7bcf0c" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>XoW</DisplayName>
