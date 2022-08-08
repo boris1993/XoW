@@ -238,11 +238,6 @@ namespace XoW
         public const string SubscriptionId = "subscription_id";
     }
 
-    public static class ComponentName
-    {
-        public const string ContentGrid = "ContentGrid";
-    }
-
     public static class ComponentContent
     {
         public const string Ok = "知道了";

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI.Xaml;
@@ -31,7 +32,7 @@ namespace XoW.Views
 
         };
 
-        private ThreadDataContext rightClickedThreadDataContext;
+        private Grid rightClickedGrid;
 
         public MainPage()
         {
@@ -396,12 +397,12 @@ namespace XoW.Views
             var listView = sender as ListView;
             ReplyListViewItemFlyout.ShowAt(listView, args.GetPosition(listView));
 
-            ThreadDataContext threadDataContext;
             if (args.OriginalSource is ListViewItemPresenter)
             {
                 var listViewItemPresenter = args.OriginalSource as ListViewItemPresenter;
                 var content = listViewItemPresenter.Content as Grid;
-                threadDataContext = content.DataContext as ThreadDataContext;
+
+                rightClickedGrid = content;
             }
             else if (args.OriginalSource is Image)
             {
@@ -410,27 +411,41 @@ namespace XoW.Views
                 var gridParentStackPanel = imageParentGrid.Parent as StackPanel;
                 var stackPanelParentGrid = gridParentStackPanel.Parent as Grid;
 
-                threadDataContext = stackPanelParentGrid.DataContext as ThreadDataContext;
+                rightClickedGrid = stackPanelParentGrid;
             }
             else if (args.OriginalSource is TextBlock)
             {
                 var textBlock = args.OriginalSource as TextBlock;
-                var textBlockParentGrid = textBlock.Parent as Grid;
+                var textBlockParentStackPanel = textBlock.Parent as StackPanel;
+                var stackPanelParentGrid = textBlockParentStackPanel.Parent as Grid;
 
-                threadDataContext = textBlockParentGrid.DataContext as ThreadDataContext;
+                rightClickedGrid = stackPanelParentGrid;
             }
             else
             {
                 throw new AppException(args.OriginalSource.GetType().Name);
             }
-
-            rightClickedThreadDataContext = threadDataContext;
         }
 
         private void OnReplyThreadMenuFlyoutClicked(object sender, RoutedEventArgs args)
         {
-            TextBoxNewReplyContent.Text = $">>{rightClickedThreadDataContext.ThreadId}\n";
+            var threadDataContext = rightClickedGrid.DataContext as ThreadDataContext;
+            TextBoxNewReplyContent.Text = $">>{threadDataContext.ThreadId}\n";
             ShowNewReplyPanel();
+        }
+
+        private void OnCopyContentMenuFlyoutClicked(object sender, RoutedEventArgs args)
+        {
+            var contentStackPanel = rightClickedGrid.Children.Single(item => item is StackPanel) as StackPanel;
+            var contentTextBlocks = contentStackPanel.Children.Where(item => item is TextBlock).ToList();
+
+            var content = "";
+            contentTextBlocks.ForEach(textBlock => content += ((TextBlock)textBlock).Text);
+
+            var dataPackage = new DataPackage();
+            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            dataPackage.SetText(content);
+            Clipboard.SetContent(dataPackage);
         }
     }
 }
