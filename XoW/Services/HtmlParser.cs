@@ -106,7 +106,7 @@ namespace XoW.Services
 
                     var referencedThreadId = deEntitizeContent.Replace(">", "").Replace("No.", "");
                     var referencedContent = await GetReferencedThread(referencedThreadId);
-                    contentForThisTextBlock += $"\n{referencedContent}";
+                    contentForThisTextBlock += $"\n{referencedContent}\n";
 
                     textBlock = ComponentsBuilder.CreateTextBlock(contentForThisTextBlock, Colors.DarkGreen);
                 }
