@@ -220,10 +220,11 @@
                                                 Click="{x:Bind OnReplyThreadMenuFlyoutClicked}" />
                                 <MenuFlyoutItem x:Name="CopyContent"
                                                 Text="{x:Bind local:ComponentContent.Copy}"
-                                                Click="{x:Bind OnCopyContentMenuFlyoutClicked}"/>
+                                                Click="{x:Bind OnCopyContentMenuFlyoutClicked}" />
                                 <MenuFlyoutSeparator />
                                 <MenuFlyoutItem x:Name="ReportThread"
-                                                Text="{x:Bind local:ComponentContent.ReportThread}" />
+                                                Text="{x:Bind local:ComponentContent.ReportThread}"
+                                                Click="{x:Bind OnReportThreadMenuFlyoutClicked}" />
                             </MenuFlyout.Items>
                         </MenuFlyout>
                     </ListView.Resources>

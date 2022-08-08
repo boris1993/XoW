@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Windows.Storage;
-using Windows.Web.Http;
-using Windows.Web.Http.Headers;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Windows.Storage;
+using Windows.Web.Http;
+using Windows.Web.Http.Headers;
 using XoW.Models;
 
 namespace XoW.Services

@@ -337,7 +337,7 @@ namespace XoW.Views
             TextBoxNewReplyContent.Text += emoticonValue!;
         }
 
-        private async void OnReportThreadButtonClicked(object sender, RoutedEventArgs args) => await new ReportThreadContentDialog().ShowAsync();
+        private async void OnReportThreadButtonClicked(object sender, RoutedEventArgs args) => await new ReportThreadContentDialog(GlobalState.ObservableObject.ThreadId).ShowAsync();
 
         private async void OnGotoThreadButtonClicked(object sender, RoutedEventArgs args)
         {
@@ -446,6 +446,12 @@ namespace XoW.Views
             dataPackage.RequestedOperation = DataPackageOperation.Copy;
             dataPackage.SetText(content);
             Clipboard.SetContent(dataPackage);
+        }
+
+        private async void OnReportThreadMenuFlyoutClicked(object sender, RoutedEventArgs args)
+        {
+            var threadDataContext = rightClickedGrid.DataContext as ThreadDataContext;
+            await new ReportThreadContentDialog(threadDataContext.ThreadId).ShowAsync();
         }
     }
 }

@@ -8,15 +8,18 @@ namespace XoW.Views
 {
     public sealed partial class ReportThreadContentDialog : ContentDialog
     {
-        public ReportThreadContentDialog()
+        private readonly string _threadId;
+
+        public ReportThreadContentDialog(string threadId)
         {
             InitializeComponent();
             RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
+            _threadId = threadId;
         }
 
         private async void ContentDialogPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            var threadId = GlobalState.ObservableObject.ThreadId;
+            var threadId = _threadId;
             var reportReason = TextBoxReportReason.Text;
 
             var newReportThreadContent = $">>{threadId}\n{reportReason}";
