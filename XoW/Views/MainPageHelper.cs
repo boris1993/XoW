@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Uwp;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Microsoft.Toolkit.Uwp;
-using Microsoft.Toolkit.Uwp.UI.Controls;
 using XoW.Models;
 using XoW.Services;
 using XoW.Utils;
@@ -191,7 +191,7 @@ namespace XoW.Views
 
         private async Task HideNewThreadPanel(bool isNewThreadSent = false)
         {
-            if (!isNewThreadSent && !string.IsNullOrWhiteSpace(TextBoxNewThreadContent.Text))
+            if (!isNewThreadSent && NewThreadPanelGrid.Visibility == Visibility.Visible && !string.IsNullOrWhiteSpace(TextBoxNewThreadContent.Text))
             {
                 await new ConfirmationContentDialog(ComponentContent.Notification, ConfirmationMessage.KeepContentConfirmation, secondaryButtonEventHandler: (_, _) => ResetNewThreadPanel(), primaryButtonContent: ComponentContent.KeepingIt, secondaryButtonContent: ComponentContent.DiscardIt).ShowAsync();
             }
@@ -203,7 +203,7 @@ namespace XoW.Views
 
         private async Task HideNewReplyPanel(bool isNewReplySent = false)
         {
-            if (!isNewReplySent && !string.IsNullOrWhiteSpace(TextBoxNewReplyContent.Text))
+            if (!isNewReplySent && NewReplyPanelGrid.Visibility == Visibility.Visible && !string.IsNullOrWhiteSpace(TextBoxNewReplyContent.Text))
             {
                 await new ConfirmationContentDialog(ComponentContent.Notification, ConfirmationMessage.KeepContentConfirmation, secondaryButtonEventHandler: (_, _) => ResetNewReplyPanel(), primaryButtonContent: ComponentContent.KeepingIt, secondaryButtonContent: ComponentContent.DiscardIt).ShowAsync();
             }

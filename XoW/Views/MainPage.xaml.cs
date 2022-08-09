@@ -71,15 +71,14 @@ namespace XoW.Views
         private async void NavigationItemInvokedAsync(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
             HideLargeImageView();
+            await HideNewThreadPanel();
+            await HideNewReplyPanel();
 
             if (args.IsSettingsInvoked)
             {
                 ShowSettingsGrid();
                 return;
             }
-
-            await HideNewThreadPanel();
-            await HideNewReplyPanel();
 
             if (args.InvokedItemContainer.Name == Constants.FavouriteThreadNavigationItemName)
             {
@@ -250,6 +249,8 @@ namespace XoW.Views
             EnableSendButtonAndHideProgressBar(ButtonSendNewThread);
             await HideNewThreadPanel(true);
             ResetNewThreadPanel();
+
+            await RefreshThreads();
         }
 
         private async void OnSendNewReplyButtonClicked(object sender, RoutedEventArgs args)

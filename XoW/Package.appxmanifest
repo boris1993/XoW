@@ -9,7 +9,7 @@
     <Identity
             Name="25769boris1993.XonWindows"
             Publisher="CN=8E556DC1-97D1-444A-A266-10E76FE89AC1"
-            Version="1.0.0.0" />
+            Version="1.0.1.0" />
 
     <mp:PhoneIdentity PhoneProductId="e2355e69-9875-4842-a9be-063e1a7bcf0c"
                       PhonePublisherId="00000000-0000-0000-0000-000000000000" />
