@@ -6,14 +6,13 @@ namespace XoW.Models
 {
     public class ObservableObject : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private SolidColorBrush _backgroundAndBorderColorBrush;
-        private SolidColorBrush _listViewBackgroundColorBrush;
         private string _currentCookie;
-        private string _threadId;
         private string _forumName;
+        private SolidColorBrush _listViewBackgroundColorBrush;
         private string _subscriptionId;
+        private string _threadId;
 
         public SolidColorBrush BackgroundAndBorderColorBrush
         {
@@ -56,7 +55,7 @@ namespace XoW.Models
 
         public string ThreadId
         {
-            get { return _threadId; }
+            get => _threadId;
             set
             {
                 if (_threadId != value)
@@ -93,7 +92,8 @@ namespace XoW.Models
             }
         }
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

@@ -27,8 +27,9 @@ namespace XoW.Services
 
             return _httpClient;
         }
-        
-        public static HttpClient GetHttpClientForThirdPartyInstance(){
+
+        public static HttpClient GetHttpClientForThirdPartyInstance()
+        {
             if (_httpClientForThirdParty is null)
             {
                 lock (Lock)
@@ -44,7 +45,7 @@ namespace XoW.Services
         {
             var cookie = new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
             {
-                Value = cookieValue,
+                Value = cookieValue
             };
 
             GetHttpClientInstance().DefaultRequestHeaders.Cookie.Clear();

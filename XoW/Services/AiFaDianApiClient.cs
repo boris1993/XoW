@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Web.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Windows.Web.Http;
 using XoW.Models;
 using XoW.Utils;
+using UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding;
 
 namespace XoW.Services
 {
@@ -15,7 +16,7 @@ namespace XoW.Services
     {
         private const string QuerySponsor = "https://afdian.net/api/open/query-sponsor";
 
-        private static JsonSerializerSettings defaultSerializerSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings DefaultSerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new DefaultContractResolver
             {
@@ -51,7 +52,7 @@ namespace XoW.Services
                 {"page", page.ToString()}
             };
 
-            var paramsJsonString = JsonConvert.SerializeObject(aiFaDianRequestParams, defaultSerializerSettings);
+            var paramsJsonString = JsonConvert.SerializeObject(aiFaDianRequestParams, DefaultSerializerSettings);
             var currentTimestamp = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds();
 
             var stringForCalculatingMd5 = $"{token}params{paramsJsonString}ts{currentTimestamp}user_id{userId}";
@@ -65,7 +66,7 @@ namespace XoW.Services
                 Sign = signature
             };
 
-            using var requestBodyContent = new HttpStringContent(JsonConvert.SerializeObject(aiFaDianRequestBody, defaultSerializerSettings), Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json");
+            using var requestBodyContent = new HttpStringContent(JsonConvert.SerializeObject(aiFaDianRequestBody, DefaultSerializerSettings), UnicodeEncoding.Utf8, "application/json");
 
             var httpClient = HttpClientService.GetHttpClientForThirdPartyInstance();
             var uri = new Uri(QuerySponsor);

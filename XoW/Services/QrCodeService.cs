@@ -23,7 +23,7 @@ namespace XoW.Services
                 {
                     _barcodeReader = new BarcodeReader
                     {
-                        AutoRotate = true,
+                        AutoRotate = true
                     };
                 }
             }
@@ -39,11 +39,7 @@ namespace XoW.Services
             var bitmap = new BitmapImage();
             await bitmap.SetSourceAsync(stream);
             var bytes = await GetByteArrayFromStream(stream);
-            var decodeResult = barcodeDecoder.Decode(
-                bytes,
-                bitmap.PixelWidth,
-                bitmap.PixelHeight,
-                RGBLuminanceSource.BitmapFormat.Unknown);
+            var decodeResult = barcodeDecoder.Decode(bytes, bitmap.PixelWidth, bitmap.PixelHeight, RGBLuminanceSource.BitmapFormat.Unknown);
 
             if (decodeResult == null)
             {

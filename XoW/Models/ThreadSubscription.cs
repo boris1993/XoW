@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 
-
-
 namespace XoW.Models
 {
     public class ThreadSubscription : ForumThread

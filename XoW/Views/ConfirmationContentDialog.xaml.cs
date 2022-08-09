@@ -8,14 +8,7 @@ namespace XoW.Views
 {
     public sealed partial class ConfirmationContentDialog : ContentDialog
     {
-        public ConfirmationContentDialog(
-            string title,
-            string content = null,
-            Color? foreGroundColor = null,
-            TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> primaryButtonEventHandler = null,
-            TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> secondaryButtonEventHandler = null,
-            string primaryButtonContent = null,
-            string secondaryButtonContent = null)
+        public ConfirmationContentDialog(string title, string content = null, Color? foreGroundColor = null, TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> primaryButtonEventHandler = null, TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> secondaryButtonEventHandler = null, string primaryButtonContent = null, string secondaryButtonContent = null)
         {
             InitializeComponent();
             RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
@@ -24,7 +17,9 @@ namespace XoW.Views
             PrimaryButtonText = primaryButtonContent ?? ComponentContent.Confirm;
             SecondaryButtonText = secondaryButtonContent ?? ComponentContent.Cancel;
 
-            Foreground = foreGroundColor != null ? new SolidColorBrush((Color)foreGroundColor) : new SolidColorBrush(Colors.Black);
+            Foreground = foreGroundColor != null
+                ? new SolidColorBrush((Color)foreGroundColor)
+                : new SolidColorBrush(Colors.Black);
 
             if (primaryButtonEventHandler != null)
             {

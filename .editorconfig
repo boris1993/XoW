@@ -59,7 +59,7 @@ csharp_style_prefer_parameter_null_checking = true:suggestion
 
 # Modifier preferences
 csharp_prefer_static_local_function = true:suggestion
-csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async
 
 # Code-block preferences
 csharp_prefer_braces = true:silent
@@ -185,6 +185,7 @@ resharper_csharp_wrap_arguments_style = chop_if_long
 resharper_csharp_wrap_before_invocation_rpar = false
 resharper_csharp_wrap_lines = false
 resharper_csharp_wrap_parameters_style = chop_if_long
+resharper_csharp_wrap_ternary_expr_style = chop_always
 resharper_force_chop_compound_if_expression = false
 resharper_keep_existing_expr_member_arrangement = false
 resharper_keep_existing_invocation_parens_arrangement = false

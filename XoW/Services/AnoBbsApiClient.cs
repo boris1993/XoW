@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Windows.Storage;
 using Windows.Web.Http;
 using Windows.Web.Http.Headers;
+using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using XoW.Models;
 
 namespace XoW.Services
@@ -16,7 +16,7 @@ namespace XoW.Services
     public static class AnoBbsApiClient
     {
         /// <summary>
-        /// 值班室版面ID
+        ///     值班室版面ID
         /// </summary>
         private const string ForumIdDutyRoom = "18";
 
@@ -128,7 +128,7 @@ namespace XoW.Services
         }
 
         /// <summary>
-        /// 搜索暂未开放，先留一个stub在这里，开放后再适配
+        ///     搜索暂未开放，先留一个stub在这里，开放后再适配
         /// </summary>
         /// <param name="keyword"></param>
         /// <param name="page"></param>
@@ -145,8 +145,7 @@ namespace XoW.Services
             return await GetResponseWithType<string>(uriBuilder.ToString());
         }
 
-        public static async Task PostNewReport(string reportThreadContent)
-        {
+        public static async Task PostNewReport(string reportThreadContent) =>
             await CreateNewThread(ForumIdDutyRoom,
                 null,
                 null,
@@ -155,7 +154,6 @@ namespace XoW.Services
                 "0",
                 GlobalState.Cookies.Single(cookie => cookie.Name == GlobalState.ObservableObject.CurrentCookie),
                 null);
-        }
 
         public static async Task CreateNewThread(string fid, string name, string email, string title, string content, string water, AnoBbsCookie cookie, StorageFile image)
         {
@@ -195,7 +193,7 @@ namespace XoW.Services
             httpClient.DefaultRequestHeaders.Cookie.Clear();
             httpClient.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
             {
-                Value = cookie.Cookie,
+                Value = cookie.Cookie
             });
 
             var response = await httpClient.PostAsync(uri, requestBody);
@@ -243,7 +241,7 @@ namespace XoW.Services
             httpClient.DefaultRequestHeaders.Cookie.Clear();
             httpClient.DefaultRequestHeaders.Cookie.Add(new HttpCookiePairHeaderValue(Constants.CookieNameUserHash)
             {
-                Value = cookie.Cookie,
+                Value = cookie.Cookie
             });
 
             var response = await httpClient.PostAsync(uri, requestBody);

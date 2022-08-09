@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
-using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Media;
+using HtmlAgilityPack;
+using Microsoft.Toolkit.Uwp.Helpers;
 using XoW.Utils;
 
 namespace XoW.Services
@@ -27,15 +27,15 @@ namespace XoW.Services
         private const string AttributeHyperlink = "href";
         private const string EmailToScheme = "mailto:";
 
-        private static Regex ThreadReferenceRegex = new Regex(@"^>>(No\.)*\d+$", RegexOptions.Compiled);
+        private static readonly Regex ThreadReferenceRegex = new Regex(@"^>>(No\.)*\d+$", RegexOptions.Compiled);
 
-        public async static Task<List<TextBlock>> ParseHtmlIntoTextBlocks(string htmlString)
+        public static async Task<List<TextBlock>> ParseHtmlIntoTextBlocks(string htmlString)
         {
             var rootHtmlDoc = new HtmlDocument();
             rootHtmlDoc.LoadHtml(htmlString);
             var firstTextNode = rootHtmlDoc.DocumentNode.SelectNodes(XPathTextNodeAnywhere).FirstOrDefault();
 
-            bool shouldBoldForAllTextBlocks = false;
+            var shouldBoldForAllTextBlocks = false;
             Color? textBlockGlobalColor = null;
             GetGlobalStyleForAllTextBlocks(firstTextNode, ref shouldBoldForAllTextBlocks, ref textBlockGlobalColor);
 
@@ -44,7 +44,7 @@ namespace XoW.Services
 
             // 一部分换行符不标准，只有\n或\r
             // 在这里单独处理，将这些带有非标准换行符的行也正确分割
-            for (int i = 0; i < linesOfHtmlString.Count; i++)
+            for (var i = 0; i < linesOfHtmlString.Count; i++)
             {
                 var line = linesOfHtmlString[i];
                 if (line.Contains(Environment.NewLine))

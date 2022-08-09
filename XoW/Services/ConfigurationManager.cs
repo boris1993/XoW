@@ -1,6 +1,6 @@
 ﻿using System;
+using Windows.Data.Xml.Dom;
 using Windows.Storage;
-using XmlDocument = Windows.Data.Xml.Dom.XmlDocument;
 
 namespace XoW.Services
 {

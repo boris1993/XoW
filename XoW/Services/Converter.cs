@@ -9,7 +9,10 @@ namespace XoW.Services
 {
     public class CookieNameConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, string language) => string.IsNullOrEmpty((string)value) ? Constants.NoCookieSelected : value.ToString();
+        public object Convert(object value, Type targetType, object parameter, string language) =>
+            string.IsNullOrEmpty((string)value)
+                ? Constants.NoCookieSelected
+                : value.ToString();
 
         public object ConvertBack(object value, Type targetType, object parameter, string language) => null;
     }
@@ -40,10 +43,11 @@ namespace XoW.Services
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is IList)
+            if (value is IList list)
             {
-                var list = value as IList;
-                return list.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+                return list.Count == 0
+                    ? Visibility.Collapsed
+                    : Visibility.Visible;
             }
 
             return Visibility.Visible;
@@ -56,10 +60,11 @@ namespace XoW.Services
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is IList)
+            if (value is IList list)
             {
-                var list = value as IList;
-                return list.Count != 0 ? Visibility.Collapsed : Visibility.Visible;
+                return list.Count != 0
+                    ? Visibility.Collapsed
+                    : Visibility.Visible;
             }
 
             return Visibility.Visible;

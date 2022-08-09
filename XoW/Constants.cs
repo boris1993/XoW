@@ -5,84 +5,84 @@ namespace XoW
     public static class Url
     {
         /// <summary>
-        /// X岛域名
+        ///     X岛域名
         /// </summary>
         private const string DomainName = "www.nmbxd1.com";
 
         private const string BaseUrl = $"https://{DomainName}";
 
         /// <summary>
-        /// 获取CDN列表
+        ///     获取CDN列表
         /// </summary>
         public const string GetCdn = $"{BaseUrl}/Api/getCdnPath";
 
         /// <summary>
-        /// 获取板块列表
+        ///     获取板块列表
         /// </summary>
         public const string GetForums = $"{BaseUrl}/Api/getForumList";
 
         /// <summary>
-        /// 获取时间线<br/>
-        /// 参数page为分页页码
+        ///     获取时间线<br />
+        ///     参数page为分页页码
         /// </summary>
         public const string GetTimeline = $"{BaseUrl}/Api/Timeline";
 
         /// <summary>
-        /// 获取板块中的串<br/>
-        /// 参数id为板块ID<br/>
-        /// 参数page为分页页码
+        ///     获取板块中的串<br />
+        ///     参数id为板块ID<br />
+        ///     参数page为分页页码
         /// </summary>
         public const string GetThreads = $"{BaseUrl}/Api/showf";
 
         /// <summary>
-        /// 获取串和回复<br/>
-        /// 参数id为串号<br/>
-        /// 参数page为分页页码
+        ///     获取串和回复<br />
+        ///     参数id为串号<br />
+        ///     参数page为分页页码
         /// </summary>
         public const string GetReplies = $"{BaseUrl}/Api/thread";
 
         /// <summary>
-        /// 只看po<br/>
-        /// 参数id为串号<br/>
-        /// 参数page为分页页码
+        ///     只看po<br />
+        ///     参数id为串号<br />
+        ///     参数page为分页页码
         /// </summary>
         public const string GetPoOnlyReplies = $"{BaseUrl}/Api/po";
 
         /// <summary>
-        /// 获取订阅<br/>
-        /// 参数uuid为订阅ID<br/>
-        /// 参数page为分页页码
+        ///     获取订阅<br />
+        ///     参数uuid为订阅ID<br />
+        ///     参数page为分页页码
         /// </summary>
         public const string GetSubscription = $"{BaseUrl}/Api/feed";
 
         /// <summary>
-        /// 添加订阅<br/>
-        /// 参数uuid为订阅ID<br/>
-        /// 参数tid为串ID
+        ///     添加订阅<br />
+        ///     参数uuid为订阅ID<br />
+        ///     参数tid为串ID
         /// </summary>
         public const string AddSubscription = $"{BaseUrl}/Api/addFeed";
 
         /// <summary>
-        /// 删除订阅<br/>
-        /// 参数uuid为订阅ID<br/>
-        /// 参数tid为串ID
+        ///     删除订阅<br />
+        ///     参数uuid为订阅ID<br />
+        ///     参数tid为串ID
         /// </summary>
         public const string DeleteSubscription = $"{BaseUrl}/Api/delFeed";
 
         /// <summary>
-        /// 发新串<br/>
+        ///     发新串<br />
         /// </summary>
         public const string CreateNewThread = $"{BaseUrl}/Home/Forum/doPostThread.html";
 
         /// <summary>
-        /// 发回复
+        ///     发回复
         /// </summary>
         public const string CreateNewReply = $"{BaseUrl}/Home/Forum/doReplyThread.html";
 
         /// <summary>
-        /// 搜索<br/>
-        /// 参数<c>q</c>为关键词<br/>
-        /// 参数<c>page</c>为页码<br/>
+        ///     搜索<br />
+        ///     参数<c>q</c>为关键词<br />
+        ///     参数<c>page</c>为页码<br />
         /// </summary>
         public const string Search = $"{BaseUrl}/Api/search";
 
@@ -110,15 +110,15 @@ namespace XoW
         public const string Po = "(PO)";
 
         /// <summary>
-        /// 用于启动系统截图功能的URI<br/>
-        /// 文档：<see href="https://docs.microsoft.com/zh-cn/windows/uwp/launch-resume/launch-screen-snipping"/>
+        ///     用于启动系统截图功能的URI<br />
+        ///     文档：<see href="https://docs.microsoft.com/zh-cn/windows/uwp/launch-resume/launch-screen-snipping" />
         /// </summary>
         public const string SystemUriStartScreenClip = "ms-screenclip:edit?clippingMode=Rectangle";
 
         /// <summary>
-        /// 颜文字列表
-        /// key为名字
-        /// value为实际的颜文字
+        ///     颜文字列表
+        ///     key为名字
+        ///     value为实际的颜文字
         /// </summary>
         public static readonly Dictionary<string, string> Emoticons = new Dictionary<string, string>
         {
@@ -228,7 +228,7 @@ namespace XoW
             },
             {"防剧透", "[h] [/h]"},
             {"骰子", "[n]"},
-            {"高级骰子", "[n,m]"},
+            {"高级骰子", "[n,m]"}
         };
     }
 

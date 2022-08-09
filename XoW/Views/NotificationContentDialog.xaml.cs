@@ -11,7 +11,9 @@ namespace XoW.Views
         {
             InitializeComponent();
             RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
-            Title = isErrorPopup ? ComponentContent.Error : ComponentContent.Notification;
+            Title = isErrorPopup
+                ? ComponentContent.Error
+                : ComponentContent.Notification;
             Content = content;
         }
     }

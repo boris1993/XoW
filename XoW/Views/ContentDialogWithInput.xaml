@@ -12,10 +12,10 @@
     <ContentDialog.Resources>
         <localService:SetButtonStateByContentExistenceConverter x:Key="SetButtonStateByContentExistenceConverter" />
     </ContentDialog.Resources>
-    
+
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Center">
         <TextBox x:Name="TextBoxInput"
-                 IsSpellCheckEnabled="False"/>
+                 IsSpellCheckEnabled="False" />
     </Grid>
 </ContentDialog>

@@ -11,8 +11,8 @@ namespace XoW
     public static class GlobalState
     {
         /// <summary>
-        /// 版名 -> (版ID, 权限级别)
-        /// 目前已知权限级别2代表需要cookie
+        ///     版名 -> (版ID, 权限级别)
+        ///     目前已知权限级别2代表需要cookie
         /// </summary>
         public static Dictionary<string, (string forumId, string permissionLevel)> ForumAndIdLookup = default;
 

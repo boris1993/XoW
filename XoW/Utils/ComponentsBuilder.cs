@@ -24,7 +24,7 @@ namespace XoW.Utils
 
         public static async Task<List<Grid>> BuildGridForOnlyReplies(IEnumerable<ForumThread> replies, string cdnUrl) => await BuildGrids(replies, cdnUrl, true);
 
-        public async static Task<List<Grid>> BuildGridForReply(ThreadReply threadReply, string cdnUrl)
+        public static async Task<List<Grid>> BuildGridForReply(ThreadReply threadReply, string cdnUrl)
         {
             var gridsInTheListView = new List<Grid>();
 
@@ -62,15 +62,15 @@ namespace XoW.Utils
         }
 
         /// <summary>
-        /// 构建Grid中串头的部分，即串号、饼干、标题、版名、发串时间、SAGE标识
+        ///     构建Grid中串头的部分，即串号、饼干、标题、版名、发串时间、SAGE标识
         /// </summary>
-        /// <typeparam name="T">类型限定为<see cref="ForumThread"/>及其派生类</typeparam>
+        /// <typeparam name="T">类型限定为<see cref="ForumThread" />及其派生类</typeparam>
         /// <param name="thread">
-        /// 一个串或一个回复的对象，即一个<see cref="ForumThread"/>或一个<see cref="ThreadReply"/>对象
+        ///     一个串或一个回复的对象，即一个<see cref="ForumThread" />或一个<see cref="ThreadReply" />对象
         /// </param>
         /// <param name="isForReplies"></param>
         /// <param name="isForSubscription"></param>
-        /// <returns>一个串头的<see cref="StackPanel"/></returns>
+        /// <returns>一个串头的<see cref="StackPanel" /></returns>
         private static Grid BuildThreadHeader<T>(T thread, bool isForReplies = false, bool isForSubscription = false)
             where T : ForumThread
         {
@@ -78,22 +78,22 @@ namespace XoW.Utils
             {
                 Name = ThreadHeaderParentGrid,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch
             };
             threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition
             {
-                Width = GridLength.Auto,
+                Width = GridLength.Auto
             });
             threadHeaderParentGrid.ColumnDefinitions.Add(new ColumnDefinition
             {
-                Width = new GridLength(1, GridUnitType.Star),
+                Width = new GridLength(1, GridUnitType.Star)
             });
 
             var threadHeaderStackPanel = new StackPanel
             {
                 Name = ThreadInfoStackPanel,
                 Orientation = Orientation.Horizontal,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Stretch
             };
             Grid.SetColumn(threadHeaderStackPanel, 0);
             threadHeaderParentGrid.Children.Add(threadHeaderStackPanel);
@@ -102,7 +102,9 @@ namespace XoW.Utils
             threadHeaderStackPanel.Children.Add(textBlockThreadId);
 
             var isSentByAdmin = thread.Admin == "1";
-            var textBlockColor = isSentByAdmin ? Colors.Red : Colors.DimGray;
+            var textBlockColor = isSentByAdmin
+                ? Colors.Red
+                : Colors.DimGray;
             var textBlockUserHash = CreateTextBlockWithDefaultMargin(thread.UserHash, textBlockColor);
             threadHeaderStackPanel.Children.Add(textBlockUserHash);
 
@@ -162,24 +164,28 @@ namespace XoW.Utils
         }
 
         /// <summary>
-        /// 构建Grid中串内容的部分，包括图片和正文
+        ///     构建Grid中串内容的部分，包括图片和正文
         /// </summary>
-        /// <typeparam name="T">类型限定为<see cref="ForumThread"/>及其派生类</typeparam>
+        /// <typeparam name="T">类型限定为<see cref="ForumThread" />及其派生类</typeparam>
         /// <param name="thread">
-        /// 一个串或一个回复的对象，即一个<see cref="ForumThread"/>或一个<see cref="ThreadReply"/>对象
+        ///     一个串或一个回复的对象，即一个<see cref="ForumThread" />或一个<see cref="ThreadReply" />对象
         /// </param>
         /// <param name="cdnUrl"></param>
-        /// <returns>一个串内容的<see cref="Grid"/></returns>
-        public async static Task<Grid> BuildThreadContent<T>(T thread, string cdnUrl, bool isForReplies = false)
+        /// <param name="isForReplies"></param>
+        /// <returns>一个串内容的<see cref="Grid" /></returns>
+        public static async Task<Grid> BuildThreadContent<T>(T thread, string cdnUrl, bool isForReplies = false)
             where T : ForumThread
         {
             var contentTextBlocks = await HtmlParser.ParseHtmlIntoTextBlocks(thread.Content);
 
             var contentGridForThisThread = new Grid();
             // 图片列
-            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition
+            {
+                Width = GridLength.Auto
+            });
             // 内容列
-            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition { });
+            contentGridForThisThread.ColumnDefinitions.Add(new ColumnDefinition());
 
             // 检查有没有图片
             var hasImage = !string.IsNullOrEmpty(thread.Img);
@@ -191,8 +197,12 @@ namespace XoW.Utils
 
             // 图放在内容左边
             // 所以如果有图，那么内容从第二列开始
-            var startingColumnOfStackPanel = hasImage ? 1 : 0;
-            var columnSpanOfStackPanel = hasImage ? 1 : 2;
+            var startingColumnOfStackPanel = hasImage
+                ? 1
+                : 0;
+            var columnSpanOfStackPanel = hasImage
+                ? 1
+                : 2;
             Grid.SetColumn(stackPanelForContentTextBlocks, startingColumnOfStackPanel);
             Grid.SetColumnSpan(stackPanelForContentTextBlocks, columnSpanOfStackPanel);
             contentGridForThisThread.Children.Add(stackPanelForContentTextBlocks);
@@ -219,7 +229,7 @@ namespace XoW.Utils
                     Stretch = Stretch.None,
                     VerticalAlignment = VerticalAlignment.Top,
                     Margin = new Thickness(10, 0, 10, 0),
-                    IsTapEnabled = true,
+                    IsTapEnabled = true
                 };
 
                 if (isForReplies)
@@ -244,8 +254,8 @@ namespace XoW.Utils
                 DataContext = new ThreadDataContext
                 {
                     ThreadId = thread.Id,
-                    ThreadAuthorUserHash = thread.UserHash,
-                },
+                    ThreadAuthorUserHash = thread.UserHash
+                }
             };
 
             var stackPanel = new StackPanel

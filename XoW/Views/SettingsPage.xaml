@@ -156,7 +156,8 @@
                                         Margin="0, 2">
                                 <Image Margin="1">
                                     <Image.Source>
-                                        <BitmapImage UriSource="{x:Bind Avatar, Mode=OneWay, Converter={StaticResource AiFaDianAvatarToThumbConverter}}" />
+                                        <BitmapImage
+                                            UriSource="{x:Bind Avatar, Mode=OneWay, Converter={StaticResource AiFaDianAvatarToThumbConverter}}" />
                                     </Image.Source>
                                 </Image>
                                 <TextBlock Text="{x:Bind Name, Mode=OneWay}"

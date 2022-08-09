@@ -53,12 +53,11 @@ namespace XoW.Utils
                 return;
             }
 
-            var parsedCookies = cookieListComposite.Select(
-                    cookie => new AnoBbsCookie
-                    {
-                        Name = cookie.Key,
-                        Cookie = cookie.Value.ToString(),
-                    })
+            var parsedCookies = cookieListComposite.Select(cookie => new AnoBbsCookie
+                {
+                    Name = cookie.Key,
+                    Cookie = cookie.Value.ToString()
+                })
                 .ToList();
 
             parsedCookies.ForEach(cookie => GlobalState.Cookies.Add(cookie));
@@ -70,6 +69,9 @@ namespace XoW.Utils
 
         public static void SetSubscriptionId(string subscriptionId) => LocalSettings.Values[ApplicationSettingsKey.SubscriptionId] = subscriptionId;
 
-        public static string GetSubscriptionId() => LocalSettings.Values.ContainsKey(ApplicationSettingsKey.SubscriptionId) ? LocalSettings.Values[ApplicationSettingsKey.SubscriptionId].ToString() : null;
+        public static string GetSubscriptionId() =>
+            LocalSettings.Values.ContainsKey(ApplicationSettingsKey.SubscriptionId)
+                ? LocalSettings.Values[ApplicationSettingsKey.SubscriptionId].ToString()
+                : null;
     }
 }

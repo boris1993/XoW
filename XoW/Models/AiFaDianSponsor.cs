@@ -13,17 +13,17 @@ namespace XoW.Models
     public class AiFaDianResponse<T>
     {
         /// <summary>
-        /// Error Code
+        ///     Error Code
         /// </summary>
         public int Ec { get; set; }
 
         /// <summary>
-        /// Error Message
+        ///     Error Message
         /// </summary>
         public string Em { get; set; }
 
         /// <summary>
-        /// Data
+        ///     Data
         /// </summary>
         public T Data { get; set; }
     }

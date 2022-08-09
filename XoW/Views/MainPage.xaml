@@ -45,9 +45,6 @@
                         <ColumnDefinition Width="0.5*" />
                         <ColumnDefinition Width="0.5*" />
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal"
                                 Grid.Column="0"
@@ -580,7 +577,7 @@
                      VerticalAlignment="Top" />
 
         <NavigationView Name="ForumListNavigation"
-                        PaneTitle="{x:Bind local:Constants.ForumName, Mode=OneTime}"
+                        PaneTitle="{x:Bind local:Constants.ForumName}"
                         PaneDisplayMode="LeftCompact"
                         IsBackButtonVisible="Collapsed"
                         ItemInvoked="NavigationItemInvokedAsync"

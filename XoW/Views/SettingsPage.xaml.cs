@@ -46,19 +46,16 @@ namespace XoW.Views
             }
         }
 
-        private async void OnDeleteCookieButtonClicked(object sender, RoutedEventArgs args)
-        {
-            await new ConfirmationContentDialog(
-                ConfirmationMessage.DeleteCookieConfirmation,
-                primaryButtonEventHandler: (_sender, _args) =>
+        private async void OnDeleteCookieButtonClicked(object sender, RoutedEventArgs args) =>
+            await new ConfirmationContentDialog(ConfirmationMessage.DeleteCookieConfirmation,
+                primaryButtonEventHandler: (_, _) =>
                 {
                     var cookieName = ((Button)sender).DataContext?.ToString();
                     DeleteCookie(cookieName);
                 }).ShowAsync();
-        }
 
         /// <summary>
-        /// 保存是否开启夜间模式的配置，并设定应用全局主题
+        ///     保存是否开启夜间模式的配置，并设定应用全局主题
         /// </summary>
         private void OnNightModeSwitchToggled(object sender, RoutedEventArgs args)
         {
@@ -67,20 +64,26 @@ namespace XoW.Views
 
             #region 设定应用全局主题
             var frameworkElementRoot = Window.Current.Content as FrameworkElement;
-            frameworkElementRoot.RequestedTheme = isDarkModeEnabled ? ElementTheme.Dark : ElementTheme.Light;
+            frameworkElementRoot.RequestedTheme = isDarkModeEnabled
+                ? ElementTheme.Dark
+                : ElementTheme.Light;
             #endregion
 
             #region 设定部分手动指定颜色的控件的新颜色
-            var borderAndBackgroundColor = isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.LightGray);
+            var borderAndBackgroundColor = isDarkModeEnabled
+                ? new SolidColorBrush(Colors.Black)
+                : new SolidColorBrush(Colors.LightGray);
             GlobalState.ObservableObject.BackgroundAndBorderColorBrush = borderAndBackgroundColor;
 
-            var listViewBackgroundColor = isDarkModeEnabled ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
+            var listViewBackgroundColor = isDarkModeEnabled
+                ? new SolidColorBrush(Colors.Black)
+                : new SolidColorBrush(Colors.White);
             GlobalState.ObservableObject.ListViewBackgroundColorBrush = listViewBackgroundColor;
             #endregion
         }
 
         /// <summary>
-        /// 应用加载时会触发此事件，此时载入是否开启夜间模式的设定
+        ///     应用加载时会触发此事件，此时载入是否开启夜间模式的设定
         /// </summary>
         private void OnNightModeSwitchLoaded(object sender, RoutedEventArgs args)
         {
@@ -94,21 +97,12 @@ namespace XoW.Views
         {
             if (!string.IsNullOrEmpty(GlobalState.ObservableObject.SubscriptionId))
             {
-                await new ConfirmationContentDialog(
-                    ConfirmationMessage.GenerateNewSubscriptionIdConfirmationTitle,
-                    ConfirmationMessage.GenerateNewSubscriptionIdConfirmationContent,
-                    Colors.Red,
-                    (_, _) => GenerateNewSubscriptionId()).ShowAsync();
+                await new ConfirmationContentDialog(ConfirmationMessage.GenerateNewSubscriptionIdConfirmationTitle, ConfirmationMessage.GenerateNewSubscriptionIdConfirmationContent, Colors.Red, (_, _) => GenerateNewSubscriptionId()).ShowAsync();
 
                 return;
             }
 
             GenerateNewSubscriptionId();
-        }
-
-        private async void OnTestButtonClicked(object sender, RoutedEventArgs args)
-        {
-            await AiFaDianApiClient.GetSponsorList();
         }
 
         private static void DeleteCookie(string cookieName)
