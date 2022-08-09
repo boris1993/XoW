@@ -9,10 +9,10 @@ namespace XoW.Views
     {
         public NotificationContentDialog(bool isErrorPopup, string content)
         {
-            this.InitializeComponent();
-            this.RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
-            this.Title = isErrorPopup ? ComponentContent.Error : ComponentContent.Notification;
-            this.Content = content;
+            InitializeComponent();
+            RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
+            Title = isErrorPopup ? ComponentContent.Error : ComponentContent.Notification;
+            Content = content;
         }
     }
 }

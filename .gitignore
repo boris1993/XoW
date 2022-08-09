@@ -8,7 +8,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # Local config file
-AppConfig.local.xml
+AppConfig.xml
 
 # User-specific files
 *.rsuser

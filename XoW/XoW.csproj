@@ -176,7 +176,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AppConfig.local.xml" />
+    <Content Include="AppConfig.xml" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-400.png" />
