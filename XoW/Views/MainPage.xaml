@@ -297,14 +297,6 @@
                                     ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateThread}">
                                 <SymbolIcon Symbol="Send" />
                             </Button>
-                            <Button x:Name="ButtonSaveScratch"
-                                    Margin="0, 0, 5, 0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Stretch"
-                                    Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
-                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.SaveScratch}">
-                                <SymbolIcon Symbol="Save" />
-                            </Button>
                         </StackPanel>
                     </Grid>
                     <Grid HorizontalAlignment="Stretch"
@@ -469,14 +461,6 @@
                                     Click="{x:Bind OnSendNewReplyButtonClicked}"
                                     ToolTipService.ToolTip="{x:Bind local:ComponentContent.CreateReply}">
                                 <SymbolIcon Symbol="Send" />
-                            </Button>
-                            <Button x:Name="ButtonSaveReplyScratch"
-                                    Margin="0, 0, 5, 0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Stretch"
-                                    Click="{x:Bind OnCloseNewThreadPanelButtonClicked}"
-                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.SaveScratch}">
-                                <SymbolIcon Symbol="Save" />
                             </Button>
                         </StackPanel>
                     </Grid>

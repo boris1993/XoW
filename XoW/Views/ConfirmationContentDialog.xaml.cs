@@ -8,12 +8,21 @@ namespace XoW.Views
 {
     public sealed partial class ConfirmationContentDialog : ContentDialog
     {
-        public ConfirmationContentDialog(string title, string content = null, Color? foreGroundColor = null, TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> primaryButtonEventHandler = null, TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> secondaryButtonEventHandler = null)
+        public ConfirmationContentDialog(
+            string title,
+            string content = null,
+            Color? foreGroundColor = null,
+            TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> primaryButtonEventHandler = null,
+            TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> secondaryButtonEventHandler = null,
+            string primaryButtonContent = null,
+            string secondaryButtonContent = null)
         {
             InitializeComponent();
             RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
             Title = title;
             Content = content;
+            PrimaryButtonText = primaryButtonContent ?? ComponentContent.Confirm;
+            SecondaryButtonText = secondaryButtonContent ?? ComponentContent.Cancel;
 
             Foreground = foreGroundColor != null ? new SolidColorBrush((Color)foreGroundColor) : new SolidColorBrush(Colors.Black);
 
@@ -24,7 +33,7 @@ namespace XoW.Views
 
             if (secondaryButtonEventHandler != null)
             {
-                SecondaryButtonClick += primaryButtonEventHandler;
+                SecondaryButtonClick += secondaryButtonEventHandler;
             }
         }
     }

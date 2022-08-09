@@ -77,8 +77,8 @@ namespace XoW.Views
                 return;
             }
 
-            HideNewThreadPanel();
-            HideNewReplyPanel();
+            await HideNewThreadPanel();
+            await HideNewReplyPanel();
 
             if (args.InvokedItemContainer.Name == Constants.FavouriteThreadNavigationItemName)
             {
@@ -136,13 +136,13 @@ namespace XoW.Views
 
         private void OnCreateNewThreadButtonClicked(object sender, RoutedEventArgs args) => ShowNewThreadPanel();
 
-        private void OnCloseNewThreadPanelButtonClicked(object sender, RoutedEventArgs args) => HideNewThreadPanel();
+        private async void OnCloseNewThreadPanelButtonClicked(object sender, RoutedEventArgs args) => await HideNewThreadPanel();
 
         private async void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => await RefreshReplies();
 
         private void OnCreateReplyButtonClicked(object sender, RoutedEventArgs args) => ShowNewReplyPanel();
 
-        private void OnCloseNewReplyPanelButtonClicked(object sender, RoutedEventArgs args) => HideNewReplyPanel();
+        private async void OnCloseNewReplyPanelButtonClicked(object sender, RoutedEventArgs args) => await HideNewReplyPanel();
 
         private async void OnPoOnlyButtonClicked(object sender, RoutedEventArgs args) => await RefreshPoOnlyReplies();
 
@@ -266,7 +266,7 @@ namespace XoW.Views
                 ComponentContent.NewThreadCreatedSuccessfully).ShowAsync();
 
             EnableSendButtonAndHideProgressBar(ButtonSendNewThread);
-            HideNewThreadPanel();
+            await HideNewThreadPanel(true);
             ResetNewThreadPanel();
         }
 
@@ -306,7 +306,7 @@ namespace XoW.Views
                 ComponentContent.NewReplyCreatedSuccessfully).ShowAsync();
 
             EnableSendButtonAndHideProgressBar(ButtonSendNewReply);
-            HideNewReplyPanel();
+            await HideNewReplyPanel(true);
 
             await RefreshReplies();
         }

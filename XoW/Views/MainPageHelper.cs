@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Uwp;
@@ -201,9 +202,18 @@ namespace XoW.Views
             NewThreadPanelGrid.Visibility = Visibility.Visible;
         }
 
-        private void HideNewThreadPanel()
+        private async Task HideNewThreadPanel(bool isNewThreadSent = false)
         {
-            ResetNewThreadPanel();
+            if (!isNewThreadSent && !string.IsNullOrWhiteSpace(TextBoxNewThreadContent.Text))
+            {
+                await new ConfirmationContentDialog(
+                    ComponentContent.Notification,
+                    ConfirmationMessage.KeepContentConfirmation,
+                    secondaryButtonEventHandler: (_, _) => ResetNewThreadPanel(),
+                    primaryButtonContent: ComponentContent.KeepingIt,
+                    secondaryButtonContent: ComponentContent.DiscardIt).ShowAsync();
+            }
+
             NewThreadPanelGrid.Visibility = Visibility.Collapsed;
         }
 
@@ -212,9 +222,18 @@ namespace XoW.Views
             NewReplyPanelGrid.Visibility = Visibility.Visible;
         }
 
-        private void HideNewReplyPanel()
+        private async Task HideNewReplyPanel(bool isNewReplySent = false)
         {
-            ResetNewReplyPanel();
+            if (!isNewReplySent && !string.IsNullOrWhiteSpace(TextBoxNewReplyContent.Text))
+            {
+                await new ConfirmationContentDialog(
+                    ComponentContent.Notification,
+                    ConfirmationMessage.KeepContentConfirmation,
+                    secondaryButtonEventHandler: (_, _) => ResetNewReplyPanel(),
+                    primaryButtonContent: ComponentContent.KeepingIt,
+                    secondaryButtonContent: ComponentContent.DiscardIt).ShowAsync();
+            }
+
             NewReplyPanelGrid.Visibility = Visibility.Collapsed;
         }
 
