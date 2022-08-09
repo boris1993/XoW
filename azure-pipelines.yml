@@ -22,6 +22,18 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: DownloadSecureFile@1
+  name: AppConfig
+  displayName: Download AppConfig.xml from Secure File
+  inputs:
+    secureFile: AppConfig.xml
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Agent.TempDirectory)'
+    Contents: AppConfig.xml
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
 - task: VSBuild@1
   inputs:
     platform: 'x86'
