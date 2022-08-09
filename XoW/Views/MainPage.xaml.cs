@@ -287,6 +287,7 @@ namespace XoW.Views
 
             EnableSendButtonAndHideProgressBar(ButtonSendNewReply);
             await HideNewReplyPanel(true);
+            ResetNewReplyPanel();
 
             await RefreshReplies();
         }
