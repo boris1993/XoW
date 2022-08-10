@@ -415,7 +415,7 @@ namespace XoW.Views
             var contentTextBlocks = contentStackPanel.Children.Where(item => item is TextBlock).ToList();
 
             var content = "";
-            contentTextBlocks.ForEach(textBlock => content += ((TextBlock)textBlock).Text);
+            contentTextBlocks.ForEach(textBlock => content += $"{((TextBlock)textBlock).Text}\n");
 
             var dataPackage = new DataPackage();
             dataPackage.RequestedOperation = DataPackageOperation.Copy;
