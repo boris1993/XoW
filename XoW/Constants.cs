@@ -300,6 +300,7 @@ namespace XoW
         public const string FileIsNotImage = "选择的文件不是图片";
         public const string QrCodeDecodeFailed = "饼干二维码解析失败";
         public const string CookieRequiredForThisForum = "浏览该板块需要拥有饼干";
+        public const string CookieRequiredForCreatingThread = "发串和发回复需要拥有饼干";
         public const string ContentRequiredWhenNoImageAttached = "没有上传文件的时候，必须填写内容";
         public const string LargeImageLoadFailed = "大图下载失败";
         public const string InvalidConfigFile = "AppConfig.xml无效，请联系开发者";

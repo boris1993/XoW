@@ -132,13 +132,31 @@ namespace XoW.Views
             await RefreshThreads();
         }
 
-        private void OnCreateNewThreadButtonClicked(object sender, RoutedEventArgs args) => ShowNewThreadPanel();
+        private async void OnCreateNewThreadButtonClicked(object sender, RoutedEventArgs args)
+        {
+            if (string.IsNullOrEmpty(GlobalState.ObservableObject.CurrentCookie))
+            {
+                await new NotificationContentDialog(true, ErrorMessage.CookieRequiredForCreatingThread).ShowAsync();
+                return;
+            }
+
+            ShowNewThreadPanel();
+        }
 
         private async void OnCloseNewThreadPanelButtonClicked(object sender, RoutedEventArgs args) => await HideNewThreadPanel();
 
         private async void OnRefreshRepliesButtonClicked(object sender, RoutedEventArgs args) => await RefreshReplies();
 
-        private void OnCreateReplyButtonClicked(object sender, RoutedEventArgs args) => ShowNewReplyPanel();
+        private async void OnCreateReplyButtonClicked(object sender, RoutedEventArgs args)
+        {
+            if (string.IsNullOrEmpty(GlobalState.ObservableObject.CurrentCookie))
+            {
+                await new NotificationContentDialog(true, ErrorMessage.CookieRequiredForCreatingThread).ShowAsync();
+                return;
+            }
+
+            ShowNewReplyPanel();
+        }
 
         private async void OnCloseNewReplyPanelButtonClicked(object sender, RoutedEventArgs args) => await HideNewReplyPanel();
 
