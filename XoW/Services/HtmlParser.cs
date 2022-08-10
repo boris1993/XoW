@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using HtmlAgilityPack;
+using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Media;
-using HtmlAgilityPack;
-using Microsoft.Toolkit.Uwp.Helpers;
 using XoW.Utils;
 
 namespace XoW.Services
@@ -27,7 +27,7 @@ namespace XoW.Services
         private const string AttributeHyperlink = "href";
         private const string EmailToScheme = "mailto:";
 
-        private static readonly Regex ThreadReferenceRegex = new Regex(@"^>>(No\.)*\d+$", RegexOptions.Compiled);
+        private static readonly Regex ThreadReferenceRegex = new Regex(@"^>> *(No\.)*\d+$", RegexOptions.Compiled);
 
         public static async Task<List<TextBlock>> ParseHtmlIntoTextBlocks(string htmlString)
         {
@@ -104,7 +104,7 @@ namespace XoW.Services
                 {
                     var contentForThisTextBlock = deEntitizeContent;
 
-                    var referencedThreadId = deEntitizeContent.Replace(">", "").Replace("No.", "");
+                    var referencedThreadId = deEntitizeContent.Replace(">", "").Replace("No.", "").Trim();
                     var referencedContent = await GetReferencedThread(referencedThreadId);
                     contentForThisTextBlock += $"\n{referencedContent}\n";
 
