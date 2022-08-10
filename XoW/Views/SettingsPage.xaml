@@ -143,6 +143,7 @@
                 <TextBlock FontSize="20"
                            FontWeight="Bold"
                            Text="赞助了我的肥肥们" />
+                <TextBlock Text="爱发电API可能存在延迟，无法实时显示赞助过的肥哥们，对此我表示很抱歉......" />
                 <ListView x:Name="ListViewSponsorList"
                           Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
                           SelectionMode="None"
