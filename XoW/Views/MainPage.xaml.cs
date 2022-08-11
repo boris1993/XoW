@@ -446,5 +446,21 @@ namespace XoW.Views
             var threadDataContext = rightClickedGrid.DataContext as ThreadDataContext;
             await new ReportThreadContentDialog(threadDataContext.ThreadId).ShowAsync();
         }
+
+        private async void OnRepliesGotoPageButtonClicked(object sender, RoutedEventArgs args)
+        {
+            async void PrimaryButtonEventHandler(ContentDialog contentDialogSender, ContentDialogButtonClickEventArgs _)
+            {
+                var textBox = contentDialogSender.FindName("TextBoxInput") as TextBox;
+                var targetPageNumber = int.Parse(textBox!.Text.Trim());
+
+                await RefreshReplies(targetPageNumber);
+                ResetAndShowRepliesPanel();
+            }
+
+            void TextBoxBeforeTextChangeEventHandler(TextBox textBoxSender, TextBoxBeforeTextChangingEventArgs args) => args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
+
+            await new ContentDialogWithInput(ComponentContent.GotoPagePopupTitle, ComponentContent.Go, PrimaryButtonEventHandler, TextBoxBeforeTextChangeEventHandler).ShowAsync();
+        }
     }
 }

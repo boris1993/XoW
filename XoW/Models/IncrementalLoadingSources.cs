@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
 using Microsoft.Toolkit.Collections;
+using Windows.UI.Xaml.Controls;
 using XoW.Services;
 using XoW.Utils;
 
@@ -33,9 +33,22 @@ namespace XoW.Models
 
     public class ThreadReplySource : IIncrementalSource<Grid>
     {
+        private int _pageIndex;
+
+        public ThreadReplySource()
+        {
+            _pageIndex = 1;
+        }
+
+        public ThreadReplySource(int pageIndex)
+        {
+            _pageIndex = pageIndex;
+        }
+
         public async Task<IEnumerable<Grid>> GetPagedItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default)
         {
-            var actualPageIndex = pageIndex + 1;
+            var actualPageIndex = _pageIndex + pageIndex;
+
             var replies = await AnoBbsApiClient.GetRepliesAsync(GlobalState.CurrentThreadId, actualPageIndex);
             var threadId = replies.Id;
             var threadAuthorUserHash = replies.UserHash;
@@ -46,6 +59,8 @@ namespace XoW.Models
             var grids = actualPageIndex == 1
                 ? await ComponentsBuilder.BuildGridForReply(replies, GlobalState.CdnUrl)
                 : await ComponentsBuilder.BuildGridForOnlyReplies(replies.Replies.Where(reply => reply.UserHash != "Tips").ToList(), GlobalState.CdnUrl);
+
+            GlobalState.ObservableObject.CurrentPageNumber = actualPageIndex;
 
             return grids;
         }

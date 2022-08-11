@@ -248,6 +248,7 @@ namespace XoW
         public const string SendReport = "提交举报";
         public const string KeepingIt = "留着吧";
         public const string DiscardIt = "不要了";
+        public const string Go = "走起！";
 
         public const string Notification = "提示";
         public const string Error = "错误";
@@ -285,6 +286,8 @@ namespace XoW
         public const string GitHubRepo = "GitHub仓库";
         public const string SponsorOnAiFaDian = "在爱发电上赞助我";
         public const string Copy = "复制";
+        public const string GotoPage = "跳到指定页";
+        public const string GotoPagePopupTitle = "跳到页码";
     }
 
     public static class ConfirmationMessage
