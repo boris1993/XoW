@@ -261,6 +261,7 @@ namespace XoW
         public const string NewReplyCreatedSuccessfully = "回复成功";
         public const string ReasonOfReporting = "举报理由";
         public const string ImageSavedToLocation = "图片已保存到";
+        public const string NoMoreReplies = "没有了，一条也没有了";
 
         public const string CreateThread = "创建新串";
         public const string CreateReply = "创建回复";

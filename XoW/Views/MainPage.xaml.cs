@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Microsoft.Toolkit.Uwp;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -461,6 +462,16 @@ namespace XoW.Views
             void TextBoxBeforeTextChangeEventHandler(TextBox textBoxSender, TextBoxBeforeTextChangingEventArgs args) => args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
 
             await new ContentDialogWithInput(ComponentContent.GotoPagePopupTitle, ComponentContent.Go, PrimaryButtonEventHandler, TextBoxBeforeTextChangeEventHandler).ShowAsync();
+        }
+
+        private async void OnLoadMoreRepliesButtonClicked(object sender, RoutedEventArgs args)
+        {
+            MainPageProgressBar.Visibility = Visibility.Visible;
+
+            var repliesListViewSource = RepliesListView.ItemsSource as IncrementalLoadingCollection<ThreadReplySource, Grid>;
+            await repliesListViewSource.LoadMoreItemsAsync(default);
+
+            MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
     }
 }
