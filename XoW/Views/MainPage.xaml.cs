@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Microsoft.Toolkit.Uwp;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
@@ -468,7 +468,7 @@ namespace XoW.Views
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
-            var repliesListViewSource = RepliesListView.ItemsSource as IncrementalLoadingCollection<ThreadReplySource, Grid>;
+            var repliesListViewSource = RepliesListView.ItemsSource as ISupportIncrementalLoading;
             await repliesListViewSource.LoadMoreItemsAsync(default);
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
