@@ -102,9 +102,11 @@ namespace XoW.Utils
             threadHeaderStackPanel.Children.Add(textBlockThreadId);
 
             var isSentByAdmin = thread.Admin == "1";
-            var textBlockColor = isSentByAdmin
-                ? Colors.Red
-                : Colors.DimGray;
+            Color? textBlockColor = null;
+            if (isSentByAdmin)
+            {
+                textBlockColor = Colors.Red;
+            }
             var textBlockUserHash = CreateTextBlockWithDefaultMargin(thread.UserHash, textBlockColor);
             threadHeaderStackPanel.Children.Add(textBlockUserHash);
 
@@ -250,7 +252,9 @@ namespace XoW.Utils
         {
             var parentGridForThisThread = new Grid
             {
-                Margin = new Thickness(5),
+                Padding = new Thickness(5),
+                BorderBrush = new SolidColorBrush(Colors.DarkGray),
+                BorderThickness = new Thickness(0, 0, 0, 2),
                 DataContext = new ThreadDataContext
                 {
                     ThreadId = thread.Id,
@@ -282,10 +286,14 @@ namespace XoW.Utils
             {
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
-                Foreground = new SolidColorBrush(color ?? Colors.DimGray),
                 Text = content,
                 TextWrapping = TextWrapping.Wrap
             };
+
+            if (color != null)
+            {
+                textBlock.Foreground = new SolidColorBrush((Color)color);
+            }
 
             if (margin != null)
             {

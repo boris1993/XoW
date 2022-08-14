@@ -113,6 +113,8 @@
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment"
                                     Value="Stretch" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>
@@ -209,6 +211,14 @@
                           HorizontalAlignment="Stretch"
                           IsRightTapEnabled="True"
                           RightTapped="{x:Bind OnReplyListViewRightClicked}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.Resources>
                         <MenuFlyout x:Name="ReplyListViewItemFlyout">
                             <MenuFlyout.Items>
