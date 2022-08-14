@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
 using Microsoft.Toolkit.Collections;
+using Windows.UI.Xaml.Controls;
 using XoW.Services;
 using XoW.Utils;
+using XoW.Views;
 
 namespace XoW.Models
 {
@@ -33,20 +35,39 @@ namespace XoW.Models
 
     public class ThreadReplySource : IIncrementalSource<Grid>
     {
+        private int _pageIndex;
+
+        public ThreadReplySource()
+        {
+            _pageIndex = 1;
+        }
+
+        public ThreadReplySource(int pageIndex)
+        {
+            _pageIndex = pageIndex;
+        }
+
         public async Task<IEnumerable<Grid>> GetPagedItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default)
         {
-            var actualPageIndex = pageIndex + 1;
-            var replies = await AnoBbsApiClient.GetRepliesAsync(GlobalState.CurrentThreadId, actualPageIndex);
+            var replies = await AnoBbsApiClient.GetRepliesAsync(GlobalState.CurrentThreadId, _pageIndex);
             var threadId = replies.Id;
             var threadAuthorUserHash = replies.UserHash;
 
             GlobalState.ObservableObject.ThreadId = threadId;
             GlobalState.CurrentThreadAuthorUserHash = threadAuthorUserHash;
 
-            var grids = actualPageIndex == 1
+            var grids = _pageIndex == 1
                 ? await ComponentsBuilder.BuildGridForReply(replies, GlobalState.CdnUrl)
                 : await ComponentsBuilder.BuildGridForOnlyReplies(replies.Replies.Where(reply => reply.UserHash != "Tips").ToList(), GlobalState.CdnUrl);
 
+            if (!grids.Any())
+            {
+                await new NotificationContentDialog(false, ComponentContent.NoMoreReplies).ShowAsync();
+                return grids;
+            }
+
+            GlobalState.ObservableObject.CurrentPageNumber = _pageIndex;
+            _pageIndex++;
             return grids;
         }
     }

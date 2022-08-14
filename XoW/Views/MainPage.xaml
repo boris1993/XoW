@@ -127,10 +127,12 @@
                   BorderBrush="{x:Bind local:GlobalState.ObservableObject.BackgroundAndBorderColorBrush, Mode=OneWay}"
                   BorderThickness="0, 0, 10, 10"
                   Grid.Column="1"
-                  Visibility="Collapsed">
+                  Visibility="Collapsed"
+                  d:Visibility="Visible">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid x:Name="ReplyTopBarGrid"
@@ -150,7 +152,29 @@
                         <TextBlock FontWeight="Bold"
                                    FontSize="20"
                                    VerticalAlignment="Center"
-                                   Text="{x:Bind local:GlobalState.ObservableObject.ThreadId, Mode=OneWay, Converter={StaticResource ThreadIdConverter}}" />
+                                   Text="{x:Bind local:GlobalState.ObservableObject.ThreadId, Mode=OneWay, Converter={StaticResource ThreadIdConverter}}"
+                                   d:Text="No.5000002" />
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="5, 5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Text="已加载到第" />
+                            <Button x:Name="ButtonRepliesGotoPage"
+                                    Margin="5, 0"
+                                    Width="{x:Bind Height}"
+                                    BorderBrush="Black"
+                                    BorderThickness="1.5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Click="{x:Bind OnRepliesGotoPageButtonClicked}"
+                                    Content="{x:Bind local:GlobalState.ObservableObject.CurrentPageNumber, Mode=OneWay}"
+                                    ToolTipService.ToolTip="{x:Bind local:ComponentContent.GotoPage}" />
+                            <TextBlock VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Text="页" />
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                                 x:Name="ReplyTopBar"
@@ -189,7 +213,7 @@
                                       HorizontalAlignment="Right"
                                       VerticalAlignment="Stretch"
                                       Checked="{x:Bind OnPoOnlyButtonClicked}"
-                                      Unchecked="{x:Bind RefreshReplies}"
+                                      Unchecked="{x:Bind RefreshRepliesForXamlBinding}"
                                       ToolTipService.ToolTip="{x:Bind local:ComponentContent.PoOnlyTooltip}"
                                       Content="PO" />
                         <Button x:Name="ButtonReportThread"
@@ -200,16 +224,18 @@
                                 ToolTipService.ToolTip="{x:Bind local:ComponentContent.ReportThread}">
                             <SymbolIcon Symbol="Flag" />
                         </Button>
-
                     </StackPanel>
                 </Grid>
 
                 <ListView x:Name="RepliesListView"
                           Grid.Row="1"
                           Background="{x:Bind local:GlobalState.ObservableObject.ListViewBackgroundColorBrush, Mode=OneWay}"
+                          BorderBrush="{x:Bind local:GlobalState.ObservableObject.BackgroundAndBorderColorBrush, Mode=OneWay}"
+                          BorderThickness="0, 0, 0, 10"
                           SelectionMode="None"
                           HorizontalAlignment="Stretch"
                           IsRightTapEnabled="True"
+                          IncrementalLoadingTrigger="None"
                           RightTapped="{x:Bind OnReplyListViewRightClicked}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
@@ -236,6 +262,14 @@
                         </MenuFlyout>
                     </ListView.Resources>
                 </ListView>
+
+                <Button x:Name="ButtonLoadMoreReplies"
+                        Grid.Row="2"
+                        Content="加载更多回复"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Click="{x:Bind OnLoadMoreRepliesButtonClicked}" />
             </Grid>
             <!--#endregion-->
 

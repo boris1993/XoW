@@ -129,9 +129,15 @@ namespace XoW.Views
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private async Task RefreshReplies()
+        private async Task RefreshRepliesForXamlBinding()
         {
-            var incrementalLoadingCollection = new IncrementalLoadingCollection<ThreadReplySource, Grid>();
+            await RefreshReplies();
+        }
+
+        private async Task RefreshReplies(int pageNumber = 1)
+        {
+            var threadReplySource = new ThreadReplySource(pageNumber);
+            var incrementalLoadingCollection = new IncrementalLoadingCollection<ThreadReplySource, Grid>(threadReplySource);
             await incrementalLoadingCollection.RefreshAsync();
             RepliesListView.ItemsSource = incrementalLoadingCollection;
         }

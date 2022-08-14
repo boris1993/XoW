@@ -248,6 +248,7 @@ namespace XoW
         public const string SendReport = "提交举报";
         public const string KeepingIt = "留着吧";
         public const string DiscardIt = "不要了";
+        public const string Go = "走起！";
 
         public const string Notification = "提示";
         public const string Error = "错误";
@@ -260,6 +261,7 @@ namespace XoW
         public const string NewReplyCreatedSuccessfully = "回复成功";
         public const string ReasonOfReporting = "举报理由";
         public const string ImageSavedToLocation = "图片已保存到";
+        public const string NoMoreReplies = "没有了，一条也没有了";
 
         public const string CreateThread = "创建新串";
         public const string CreateReply = "创建回复";
@@ -285,6 +287,8 @@ namespace XoW
         public const string GitHubRepo = "GitHub仓库";
         public const string SponsorOnAiFaDian = "在爱发电上赞助我";
         public const string Copy = "复制";
+        public const string GotoPage = "跳到指定页";
+        public const string GotoPagePopupTitle = "跳到页码";
     }
 
     public static class ConfirmationMessage

@@ -13,6 +13,7 @@ namespace XoW.Models
         private SolidColorBrush _listViewBackgroundColorBrush;
         private string _subscriptionId;
         private string _threadId;
+        private int _currentPageNumber;
 
         public SolidColorBrush BackgroundAndBorderColorBrush
         {
@@ -87,6 +88,19 @@ namespace XoW.Models
                 if (_subscriptionId != value)
                 {
                     _subscriptionId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int CurrentPageNumber
+        {
+            get => _currentPageNumber;
+            set
+            {
+                if (_currentPageNumber != value)
+                {
+                    _currentPageNumber = value;
                     OnPropertyChanged();
                 }
             }

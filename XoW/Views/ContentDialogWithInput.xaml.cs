@@ -6,7 +6,7 @@ namespace XoW.Views
 {
     public sealed partial class ContentDialogWithInput : ContentDialog
     {
-        public ContentDialogWithInput(string title, string primaryButtonText, TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> primaryButtonEventHandler = null)
+        public ContentDialogWithInput(string title, string primaryButtonText, TypedEventHandler<ContentDialog, ContentDialogButtonClickEventArgs> primaryButtonEventHandler = null, TypedEventHandler<TextBox, TextBoxBeforeTextChangingEventArgs> beforeTextChangingEventHandler = null)
         {
             InitializeComponent();
             RequestedTheme = ((FrameworkElement)Window.Current.Content).RequestedTheme;
@@ -17,6 +17,11 @@ namespace XoW.Views
             if (primaryButtonEventHandler != null)
             {
                 PrimaryButtonClick += primaryButtonEventHandler;
+            }
+
+            if (beforeTextChangingEventHandler != null)
+            {
+                TextBoxInput.BeforeTextChanging += beforeTextChangingEventHandler;
             }
         }
     }
