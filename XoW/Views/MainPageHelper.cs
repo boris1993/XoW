@@ -136,17 +136,25 @@ namespace XoW.Views
 
         private async Task RefreshReplies(int pageNumber = 1)
         {
+            MainPageProgressBar.Visibility = Visibility.Visible;
+
             var threadReplySource = new ThreadReplySource(pageNumber);
             var incrementalLoadingCollection = new IncrementalLoadingCollection<ThreadReplySource, Grid>(threadReplySource);
             await incrementalLoadingCollection.RefreshAsync();
             RepliesListView.ItemsSource = incrementalLoadingCollection;
+
+            MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
         private async Task RefreshPoOnlyReplies()
         {
+            MainPageProgressBar.Visibility = Visibility.Visible;
+
             var incrementalLoadingCollection = new IncrementalLoadingCollection<PoOnlyThreadReplySource, Grid>();
             await incrementalLoadingCollection.RefreshAsync();
             RepliesListView.ItemsSource = incrementalLoadingCollection;
+
+            MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
         private async Task RefreshSubscriptions()
