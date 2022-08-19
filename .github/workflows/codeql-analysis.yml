@@ -48,8 +48,8 @@ jobs:
       env:
         APP_CONFIG_XML: ${{ secrets.APP_CONFIG_XML }}
       run: |
-        echo "Adding AppConfig.xml to $env:GITHUB_WORKSPACE";
-        $filePath = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath "AppConfig.xml";
+        echo "Adding AppConfig.xml to $($env:GITHUB_WORKSPACE)\XoW";
+        $filePath = Join-Path -Path "$($env:GITHUB_WORKSPACE)\XoW" -ChildPath "AppConfig.xml";
         $encodedBytes = [System.Convert]::FromBase64String($env:APP_CONFIG_XML);
         Set-Content $filePath -Value $encodedBytes -AsByteStream;
 
