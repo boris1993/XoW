@@ -43,6 +43,16 @@ jobs:
         echo "Installing certificate from $($env:RUNNER_TEMP)\cert.pfx";
         Import-PfxCertificate -FilePath "$($env:RUNNER_TEMP)\cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String $env:SIGNING_CERTIFICATE_PASSWORD -Force -AsPlainText);
 
+    - name: Add AppConfig.xml to working directory
+      shell: pwsh
+      env:
+        APP_CONFIG_XML: ${{ secrets.APP_CONFIG_XML }}
+      run: |
+        echo "Adding AppConfig.xml to $env:GITHUB_WORKSPACE";
+        $filePath = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath "AppConfig.xml";
+        $encodedBytes = [System.Convert]::FromBase64String($env:APP_CONFIG_XML);
+        Set-Content $filePath -Value $encodedBytes -AsByteStream;
+
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
 
