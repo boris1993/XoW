@@ -30,6 +30,19 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
+    - name: Install signing certificate
+      shell: pwsh
+      env: 
+        PFX_CONTENT: ${{ secrets.SIGNING_CERTIFICATE }}
+        SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
+      run: |
+        echo "Saving the certificate to $($env:RUNNER_TEMP)";
+        $pfxPath = Join-Path -Path $env:RUNNER_TEMP -ChildPath "cert.pfx";
+        $encodedBytes = [System.Convert]::FromBase64String($env:PFX_CONTENT);
+        Set-Content $pfxPath -Value $encodedBytes -AsByteStream;
+        echo "Installing certificate from $($env:RUNNER_TEMP)\cert.pfx";
+        Import-PfxCertificate -FilePath "$($env:RUNNER_TEMP)\cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String $env:SIGNING_CERTIFICATE_PASSWORD -Force -AsPlainText);
+
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
 
