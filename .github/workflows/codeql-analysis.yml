@@ -56,7 +56,7 @@ jobs:
 
     - name: Build
       env:
-        SOLUTION: "**\\*.sln"
+        SOLUTION: "XoW.sln"
         BUILD_ARGS: "/nologo"
         BUILD_PLATFORM: "x86|x64|ARM|ARM64"
         BUILD_CONFIGURATION: "Release"
