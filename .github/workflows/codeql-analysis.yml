@@ -55,10 +55,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1
   
     - name: Build
-      env:
-        SOLUTION: XoW.sln
-        BUILD_ARGS: /nr:false /restore
-      run: msbuild $env:SOLUTION $env:BUILD_ARGS /p:AppxBundlePlatforms="x64" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:configuration="Release" /p:VisualStudioVersion="17.0"
+      run: msbuild "XoW.sln" /restore /nr:false /p:AppxBundlePlatforms="x64" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:configuration="Release" /p:VisualStudioVersion="17.0"
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
