@@ -1,6 +1,6 @@
 # X岛 on Windows
 
-[![CodeQL](https://github.com/boris1993/XoW/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/boris1993/XoW/actions/workflows/codeql-analysis.yml)
+[![Code analysis](https://github.com/boris1993/XoW/actions/workflows/code_analysis.yml/badge.svg)](https://github.com/boris1993/XoW/actions/workflows/code_analysis.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fboris1993%2FXoW.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fboris1993%2FXoW?ref=badge_shield)
 
 一个开放源代码的X岛客户端，基于UWP开发。
@@ -9,6 +9,6 @@
 
 # 开放源代码许可
 
-该项目根据[MPL 2.0协议](LICENSE.txt)开放源代码。
+该项目根据[MPL 2.0协议](LICENSE.txt)开放源代码。在此基础之上，该代码禁止用于一切有关于“阿苇岛匿名版”的开发。
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fboris1993%2FXoW.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fboris1993%2FXoW?ref=badge_large)
