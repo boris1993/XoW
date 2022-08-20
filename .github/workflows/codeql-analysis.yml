@@ -60,7 +60,7 @@ jobs:
         BUILD_ARGS: "/nologo"
         BUILD_PLATFORM: "x86|x64|ARM|ARM64"
         BUILD_CONFIGURATION: "Release"
-      run: msbuild "$env:SOLUTION" "$env:BUILD_ARGS" /p:AppxBundlePlatforms="$env:BUILD_PLATFORM" /p:AppxBundle=Always /p:Configuration=$env:BUILD_CONFIGURATION
+      run: msbuild $env:SOLUTION $env:BUILD_ARGS /p:AppxBundlePlatforms="$env:BUILD_PLATFORM" /p:AppxBundle=Always /p:Configuration=$env:BUILD_CONFIGURATION
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
