@@ -53,14 +53,11 @@ jobs:
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
-      
-    - name: Setup NuGet
-      uses: nuget/setup-nuget@v1
   
     - name: Build
       env:
-        SOLUTION: "XoW.sln"
-        BUILD_ARGS: "/nr:false /restore"
+        SOLUTION: XoW.sln
+        BUILD_ARGS: /nr:false /restore
       run: msbuild $env:SOLUTION $env:BUILD_ARGS /p:AppxBundlePlatforms="x64" /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:configuration="Release" /p:VisualStudioVersion="17.0"
 
     - name: Perform CodeQL Analysis
