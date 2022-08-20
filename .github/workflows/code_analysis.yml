@@ -3,10 +3,10 @@ name: Code analysis
 on:
   push:
     branches: [ "master" ]
-    paths: [ 'XoW.sln', 'XoW/**', '..github/workflows/code_analysis.yml' ]
+    paths: [ 'XoW.sln', 'XoW/**', '.github/workflows/code_analysis.yml' ]
   pull_request:
     types: [ opened, synchronize, reopened ]
-    paths: [ 'XoW.sln', 'XoW/**', '..github/workflows/code_analysis.yml' ]
+    paths: [ 'XoW.sln', 'XoW/**', '.github/workflows/code_analysis.yml' ]
   workflow_dispatch: 
 
 jobs:
@@ -77,7 +77,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"boris1993_XoW" /o:"boris1993-github" /d:sonar.login="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io"
-          msbuild "XoW.sln" /restore /t:Rebuild /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:AppxBundlePlatforms="x86|x64|ARM|ARM64" /p:configuration="Debug"
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="$env:SONAR_TOKEN"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"boris1993_XoW" /o:"boris1993-github" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          msbuild "XoW.sln" /restore /m /t:Rebuild /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:AppxBundlePlatforms="x86|x64|ARM|ARM64" /p:configuration="Debug"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
     
