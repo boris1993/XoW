@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Code analysis
     runs-on: windows-latest
     steps:
       - name: Set up JDK 11
