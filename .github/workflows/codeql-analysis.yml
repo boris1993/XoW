@@ -3,8 +3,10 @@ name: "CodeQL"
 on:
   push:
     branches: [ "master" ]
+    paths: ['XoW.sln', 'XoW/**']
   pull_request:
     branches: [ "master" ]
+    paths: ['XoW.sln', 'XoW/**']
 
 jobs:
   analyze:
