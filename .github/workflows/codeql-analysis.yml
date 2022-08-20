@@ -17,8 +17,6 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        language: [ 'csharp' ]
 
     steps:
     - name: Checkout repository
@@ -28,7 +26,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        languages: ${{ matrix.language }}
+        languages: 'csharp'
 
     - name: Install signing certificate
       shell: pwsh
@@ -53,8 +51,16 @@ jobs:
         $encodedBytes = [System.Convert]::FromBase64String($env:APP_CONFIG_XML);
         Set-Content $filePath -Value $encodedBytes -AsByteStream;
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Build
+      env:
+        SOLUTION: "**\\*.sln"
+        BUILD_ARGS: "/nologo"
+        BUILD_PLATFORM: "x86|x64|ARM|ARM64"
+        BUILD_CONFIGURATION: "Release"
+      run: msbuild "$env:SOLUTION" "$env:BUILD_ARGS" /p:AppxBundlePlatforms="$env:BUILD_PLATFORM" /p:AppxBundle=Always /p:Configuration=$env:BUILD_CONFIGURATION
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
