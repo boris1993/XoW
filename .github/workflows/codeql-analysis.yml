@@ -10,15 +10,12 @@ on:
 
 jobs:
   analyze:
-    name: Analyze
+    name: CodeQL Analyze
     runs-on: windows-latest
     permissions:
       actions: read
       contents: read
       security-events: write
-
-    strategy:
-      fail-fast: false
 
     steps:
     - name: Checkout repository
