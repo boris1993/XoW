@@ -1,0 +1,18 @@
+name: Sync to GitEE
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  sync:
+    name: Sync to GitEE
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync to GitEE
+        uses: wearerequired/git-mirror-action@master
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
+        with:
+          source-repo: git@github.com:boris1993/XoW
+          destination-repo: git@gitee.com:boris1993/XoW
