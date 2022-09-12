@@ -473,5 +473,33 @@ namespace XoW.Views
 
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
+
+        private async void OnLoadAllRepliesButtonClicked(object sender, RoutedEventArgs args)
+        {
+            if (GlobalState.ObservableObject.CurrentPageNumber == GlobalState.ObservableObject.TotalPageNumber)
+            {
+                return;
+            }
+
+            async void PrimaryButtonEventHandler(ContentDialog contentDialogSender, ContentDialogButtonClickEventArgs args)
+            {
+                MainPageProgressBar.Visibility = Visibility.Visible;
+
+                var repliesListViewSource = RepliesListView.ItemsSource as ISupportIncrementalLoading;
+                while (GlobalState.ObservableObject.CurrentPageNumber < GlobalState.ObservableObject.TotalPageNumber)
+                {
+                    await repliesListViewSource.LoadMoreItemsAsync(default);
+                }
+
+                MainPageProgressBar.Visibility = Visibility.Collapsed;
+            }
+
+            var confirmationDialog = new ConfirmationContentDialog(
+                ComponentContent.Notification,
+                ConfirmationMessage.LoadAllRepliesConfirmation,
+                primaryButtonEventHandler: PrimaryButtonEventHandler);
+
+            await confirmationDialog.ShowAsync();
+        }
     }
 }

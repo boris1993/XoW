@@ -297,6 +297,7 @@ namespace XoW
         public const string GenerateNewSubscriptionIdConfirmationTitle = "确定要生成新的订阅ID吗？";
         public const string GenerateNewSubscriptionIdConfirmationContent = "如果没有备份的话，你将会永久丢失当前的订阅ID！";
         public const string KeepContentConfirmation = "要保留当前的内容吗？";
+        public const string LoadAllRepliesConfirmation = "确定要一次性载入所有回复吗？\n如果有很多回复的话，一次性全部加载会对服务器造成较大压力，确定要继续加载吗？";
     }
 
     public static class ErrorMessage

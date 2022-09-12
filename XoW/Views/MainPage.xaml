@@ -269,13 +269,31 @@
                     </ListView.Resources>
                 </ListView>
 
-                <Button x:Name="ButtonLoadMoreReplies"
-                        Grid.Row="2"
-                        Content="加载更多回复"
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Click="{x:Bind OnLoadMoreRepliesButtonClicked}" />
+
+                <Grid Grid.Row="2"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="ButtonLoadMoreReplies"
+                            Grid.Column="0"
+                            Content="加载更多回复"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Margin="0,0,5,0"
+                            Click="{x:Bind OnLoadMoreRepliesButtonClicked}" />
+                    <Button x:Name="ButtonLoadAllReplies"
+                            Grid.Column="1"
+                            Content="加载全部回复"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Click="{x:Bind OnLoadAllRepliesButtonClicked}" />
+                </Grid>
+
             </Grid>
             <!--#endregion-->
 
