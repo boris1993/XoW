@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Web.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Windows.Web.Http;
 using XoW.Models;
 using XoW.Utils;
 using UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding;
@@ -47,7 +47,6 @@ namespace XoW.Services
 
             var aiFaDianRequestParams = new Dictionary<string, string>
             {
-                {"user_id", userId},
                 {"token", token},
                 {"page", page.ToString()}
             };
