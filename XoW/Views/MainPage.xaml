@@ -171,6 +171,12 @@
                                     Click="{x:Bind OnRepliesGotoPageButtonClicked}"
                                     Content="{x:Bind local:GlobalState.ObservableObject.CurrentPageNumber, Mode=OneWay}"
                                     ToolTipService.ToolTip="{x:Bind local:ComponentContent.GotoPage}" />
+                            <TextBlock x:Name="TextBlockTotalPageNumber"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold">
+                                <Run Text="/" />
+                                <Run Text="{x:Bind local:GlobalState.ObservableObject.TotalPageNumber, Mode=OneWay}" />
+                            </TextBlock>
                             <TextBlock VerticalAlignment="Center"
                                        FontWeight="Bold"
                                        Text="页" />

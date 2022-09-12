@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Windows.Storage;
-using Windows.Web.Http;
-using Windows.Web.Http.Headers;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Windows.Storage;
+using Windows.Web.Http;
+using Windows.Web.Http.Headers;
 using XoW.Models;
 
 namespace XoW.Services
@@ -19,6 +19,11 @@ namespace XoW.Services
         ///     值班室版面ID
         /// </summary>
         private const string ForumIdDutyRoom = "18";
+
+        /// <summary>
+        /// 每页回复数量
+        /// </summary>
+        private static double _pageSize = 19;
 
         public static async Task<List<CdnUrl>> GetCdnAsync()
         {
@@ -71,6 +76,8 @@ namespace XoW.Services
             uriBuilder.Query = query.ToString();
 
             var reply = await GetResponseWithType<ThreadReply>(uriBuilder.ToString());
+
+            GlobalState.ObservableObject.TotalPageNumber = (int)Math.Ceiling(reply.ReplyCount / _pageSize);
 
             return reply;
         }
