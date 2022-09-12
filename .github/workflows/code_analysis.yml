@@ -4,9 +4,6 @@ on:
   push:
     branches: [ "master" ]
     paths: [ 'XoW.sln', 'XoW/**', '.github/workflows/code_analysis.yml' ]
-  pull_request:
-    types: [ opened, synchronize, reopened ]
-    paths: [ 'XoW.sln', 'XoW/**', '.github/workflows/code_analysis.yml' ]
   workflow_dispatch: 
 
 jobs:
