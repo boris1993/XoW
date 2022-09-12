@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -118,9 +119,11 @@ namespace XoW.Utils
             }
 
             var textBlockTitle = CreateTextBlockWithDefaultMargin(thread.Title, Colors.Red);
+            textBlockTitle.FontWeight = FontWeights.Bold;
             threadHeaderStackPanel.Children.Add(textBlockTitle);
 
             var textBlockUserName = CreateTextBlockWithDefaultMargin(thread.Name, Colors.DarkGreen);
+            textBlockUserName.FontWeight = FontWeights.Bold;
             threadHeaderStackPanel.Children.Add(textBlockUserName);
 
             var forumName = GlobalState.ForumAndIdLookup.Where(f => f.Value.forumId == thread.FId).Select(f => f.Key).FirstOrDefault();
