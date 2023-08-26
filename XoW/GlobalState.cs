@@ -24,6 +24,8 @@ namespace XoW
         public static string AiFaDianUsername;
         public static string AiFaDianApiToken;
 
+        public static bool isPoOnly;
+
         public static MainPage MainPageObjectReference;
         public static LargeImageViewUserControl LargeImageViewObjectReference;
 

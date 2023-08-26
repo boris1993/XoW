@@ -103,7 +103,7 @@ namespace XoW.Models
 
         public async Task<IEnumerable<Grid>> GetPagedItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken = default)
         {
-            var actualPageIndex = pageIndex + 1;
+            var actualPageIndex = PageIndex == 0 ? 1 : PageIndex;
             var replies = await AnoBbsApiClient.GetPoOnlyRepliesAsync(GlobalState.CurrentThreadId, actualPageIndex);
             var grids = actualPageIndex == 1
                 ? await ComponentsBuilder.BuildGridForReply(replies, GlobalState.CdnUrl)

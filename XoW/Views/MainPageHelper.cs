@@ -146,11 +146,12 @@ namespace XoW.Views
             MainPageProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private async Task RefreshPoOnlyReplies()
+        private async Task RefreshPoOnlyReplies(int pageNumber = 1)
         {
             MainPageProgressBar.Visibility = Visibility.Visible;
 
-            var incrementalLoadingCollection = new IncrementalLoadingCollection<PoOnlyThreadReplySource, Grid>();
+            var poOnlyThreadReplySource = new PoOnlyThreadReplySource(pageNumber);
+            var incrementalLoadingCollection = new IncrementalLoadingCollection<PoOnlyThreadReplySource, Grid>(poOnlyThreadReplySource);
             await incrementalLoadingCollection.RefreshAsync();
             RepliesListView.ItemsSource = incrementalLoadingCollection;
 
@@ -185,7 +186,7 @@ namespace XoW.Views
 
         private void ResetAndShowRepliesPanel()
         {
-            ButtonPoOnly.IsChecked = false;
+            ButtonPoOnly.IsChecked = GlobalState.isPoOnly;
             ContentRepliesGrid.Visibility = Visibility.Visible;
         }
 

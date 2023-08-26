@@ -115,6 +115,7 @@ namespace XoW.Views
                 throw new AppException("串的DataContext为null");
             }
 
+            GlobalState.isPoOnly = false;
             GlobalState.CurrentThreadId = dataContext.ThreadId;
             await RefreshReplies();
             ResetAndShowRepliesPanel();
@@ -161,7 +162,11 @@ namespace XoW.Views
 
         private async void OnCloseNewReplyPanelButtonClicked(object sender, RoutedEventArgs args) => await HideNewReplyPanel();
 
-        private async void OnPoOnlyButtonClicked(object sender, RoutedEventArgs args) => await RefreshPoOnlyReplies();
+        private async void OnPoOnlyButtonClicked(object sender, RoutedEventArgs args)
+        {
+            GlobalState.isPoOnly = true;
+            await RefreshPoOnlyReplies();
+        }
 
         private async void OnAddSubscriptionButtonClicked(object sender, RoutedEventArgs args)
         {
@@ -455,7 +460,15 @@ namespace XoW.Views
                 var textBox = contentDialogSender.FindName("TextBoxInput") as TextBox;
                 var targetPageNumber = int.Parse(textBox!.Text.Trim());
 
-                await RefreshReplies(targetPageNumber);
+                if (GlobalState.isPoOnly)
+                {
+                    await RefreshPoOnlyReplies(targetPageNumber);
+                }
+                else
+                {
+                    await RefreshReplies(targetPageNumber);
+                }
+
                 ResetAndShowRepliesPanel();
             }
 
