@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
 using Windows.Storage;
 
@@ -8,7 +9,7 @@ namespace XoW.Services
     {
         private const string ConfigFileName = "AppConfig.xml";
 
-        public static async void LoadAppConfig()
+        public static async Task LoadAppConfig()
         {
             var configFileUri = new Uri($"ms-appx:///{ConfigFileName}");
             var configFile = await StorageFile.GetFileFromApplicationUriAsync(configFileUri);

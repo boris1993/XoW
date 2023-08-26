@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace XoW
 {
@@ -120,7 +121,7 @@ namespace XoW
         ///     key为名字
         ///     value为实际的颜文字
         /// </summary>
-        public static readonly Dictionary<string, string> Emoticons = new Dictionary<string, string>
+        public static readonly ImmutableDictionary<string, string> Emoticons = new Dictionary<string, string>
         {
             {"|∀ﾟ", "|∀ﾟ"},
             {"(´ﾟДﾟ`)", "(´ﾟДﾟ`)"},
@@ -229,7 +230,7 @@ namespace XoW
             {"防剧透", "[h] [/h]"},
             {"骰子", "[n]"},
             {"高级骰子", "[n,m]"}
-        };
+        }.ToImmutableDictionary();
     }
 
     public static class ApplicationSettingsKey
