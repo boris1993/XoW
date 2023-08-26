@@ -92,6 +92,7 @@ namespace XoW.Services
             uriBuilder.Query = query.ToString();
 
             var reply = await GetResponseWithType<ThreadReply>(uriBuilder.ToString());
+            GlobalState.ObservableObject.TotalPageNumber = (int)Math.Ceiling(reply.ReplyCount / _pageSize);
 
             return reply;
         }
