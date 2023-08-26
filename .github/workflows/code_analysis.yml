@@ -54,7 +54,7 @@ jobs:
           $encodedBytes = [System.Convert]::FromBase64String($env:PFX_CONTENT);
           Set-Content $pfxPath -Value $encodedBytes -AsByteStream;
           echo "Installing certificate from $($env:RUNNER_TEMP)\cert.pfx";
-          Import-PfxCertificate -FilePath "$($env:RUNNER_TEMP)\cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String $env:SIGNING_CERTIFICATE_PASSWORD -Force -AsPlainText);
+          Import-PfxCertificate -FilePath "$($env:RUNNER_TEMP)\cert.pfx" -CertStoreLocation Cert:\CurrentUser\My;
 
       - name: Add AppConfig.xml to working directory
         shell: pwsh
