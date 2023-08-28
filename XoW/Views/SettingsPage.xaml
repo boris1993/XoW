@@ -163,10 +163,10 @@
                                 <Image Margin="1"
                                        Stretch="None">
                                     <Image.Source>
-                                        <BitmapImage UriSource="{x:Bind Avatar, Mode=OneWay, Converter={StaticResource AiFaDianAvatarToThumbConverter}}" />
+                                        <BitmapImage UriSource="{x:Bind Avatar, Mode=OneTime, Converter={StaticResource AiFaDianAvatarToThumbConverter}}" />
                                     </Image.Source>
                                 </Image>
-                                <TextBlock Text="{x:Bind Name, Mode=OneWay}"
+                                <TextBlock Text="{x:Bind Name, Mode=OneTime}"
                                            VerticalAlignment="Center" />
                             </StackPanel>
                         </DataTemplate>
