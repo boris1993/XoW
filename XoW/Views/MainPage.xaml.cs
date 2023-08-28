@@ -286,7 +286,7 @@ namespace XoW.Views
             }
 
             var resto = GlobalState.ObservableObject.ThreadId;
-            var selectedCookie = (AnoBbsCookie)NewThreadCookieSelectionComboBox.SelectedItem;
+            var selectedCookie = (AnoBbsCookie)NewReplyCookieSelectionComboBox.SelectedItem;
             var username = TextBoxNewReplyUserName.Text;
             var email = TextBoxNewReplyEmail.Text;
             var title = TextBoxNewReplyTitle.Text;
