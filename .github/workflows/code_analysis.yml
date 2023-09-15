@@ -11,7 +11,7 @@ jobs:
     name: Code analysis
     runs-on: windows-latest
     steps:
-      - name: Set up JDK 11
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'liberica'

@@ -1,0 +1,59 @@
+name: Code analysis
+
+on:
+  push:
+    branches: [ "master" ]
+    paths: [ 'XoW.sln', 'XoW/**', '.github/workflows/build.yml' ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build packages
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install signing certificate
+        shell: pwsh
+        env:
+          PFX_CONTENT: ${{ secrets.SIGNING_CERTIFICATE }}
+          SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
+        run: |
+          echo "Saving the certificate to $($env:RUNNER_TEMP)";
+          $pfxPath = Join-Path -Path $env:RUNNER_TEMP -ChildPath "cert.pfx";
+          $encodedBytes = [System.Convert]::FromBase64String($env:PFX_CONTENT);
+          Set-Content $pfxPath -Value $encodedBytes -AsByteStream;
+          echo "Installing certificate from $($env:RUNNER_TEMP)\cert.pfx";
+          Import-PfxCertificate -FilePath "$($env:RUNNER_TEMP)\cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String $env:SIGNING_CERTIFICATE_PASSWORD -Force -AsPlainText);
+
+      - name: Add AppConfig.xml to working directory
+        shell: pwsh
+        env:
+          APP_CONFIG_XML: ${{ secrets.APP_CONFIG_XML }}
+        run: |
+          echo "Adding AppConfig.xml to $($env:GITHUB_WORKSPACE)\XoW";
+          $filePath = Join-Path -Path "$($env:GITHUB_WORKSPACE)\XoW" -ChildPath "AppConfig.xml";
+          $encodedBytes = [System.Convert]::FromBase64String($env:APP_CONFIG_XML);
+          Set-Content $filePath -Value $encodedBytes -AsByteStream;
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+
+      - name: Build packages
+        shell: pwsh
+        run: >-
+          msbuild
+          "XoW.sln"
+          /restore
+          /m
+          /t:Rebuild
+          /nr:false
+          /p:AppxBundle=Always
+          /p:AppxPackageDir=".\AppPackages"
+          /p:UapAppxPackageBuildMode=StoreAndSideload
+          /p:AppxBundlePlatforms="x86|x64|ARM|ARM64"
+          /p:configuration="Release"
+          /p:VisualStudioVersion="17.0"
+
+      - shell: pwsh
+        run: dir
