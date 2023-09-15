@@ -46,8 +46,9 @@ jobs:
           "XoW.sln"
           /restore
           /m
-          /t:Rebuild
-          /nr:false
+          /verbosity:minimal
+          /target:Rebuild
+          /nodeReuse:false
           /p:AppxBundle=Always
           /p:AppxPackageDir=".\AppPackages"
           /p:UapAppxPackageBuildMode=StoreAndSideload
