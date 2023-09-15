@@ -44,7 +44,11 @@ namespace XoW.Utils
             return gridsInTheListView;
         }
 
-        public static async Task<List<Grid>> BuildGrids(IEnumerable<ForumThread> threads, string cdnUrl, bool isForReplies = false, bool isForSubscription = false)
+        public static async Task<List<Grid>> BuildGrids(
+            IEnumerable<ForumThread> threads,
+            string cdnUrl,
+            bool isForReplies = false,
+            bool isForSubscription = false)
         {
             var grids = new List<Grid>();
 
@@ -178,10 +182,11 @@ namespace XoW.Utils
         /// <param name="cdnUrl"></param>
         /// <param name="isForReplies"></param>
         /// <returns>一个串内容的<see cref="Grid" /></returns>
-        public static async Task<Grid> BuildThreadContent<T>(T thread, string cdnUrl, bool isForReplies = false)
+        private static async Task<Grid> BuildThreadContent<T>(T thread, string cdnUrl, bool isForReplies = false)
             where T : ForumThread
         {
-            var contentTextBlocks = await HtmlParser.ParseHtmlIntoTextBlocks(thread.Content);
+            // 在渲染回复的面板启用文字选择
+            var contentTextBlocks = await HtmlParser.ParseHtmlIntoTextBlocks(thread.Content, isForReplies);
 
             var contentGridForThisThread = new Grid();
             // 图片列
@@ -281,16 +286,21 @@ namespace XoW.Utils
 
         public static TextBlock CreateTextBlockForThreadReference(string content) => CreateTextBlockWithDefaultMargin(content, Colors.DarkGreen);
 
-        public static TextBlock CreateTextBlockWithDefaultMargin(string content, Color? color = null) => CreateTextBlock(content, color, new Thickness(0, 0, 10, 10));
+        private static TextBlock CreateTextBlockWithDefaultMargin(string content, Color? color = null) => CreateTextBlock(content, color, new Thickness(0, 0, 10, 10));
 
-        public static TextBlock CreateTextBlock(string content, Color? color = null, Thickness? margin = null)
+        public static TextBlock CreateTextBlock(
+            string content,
+            Color? color = null,
+            Thickness? margin = null,
+            bool textSelectionEnabled = false)
         {
             var textBlock = new TextBlock
             {
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 Text = content,
-                TextWrapping = TextWrapping.Wrap
+                TextWrapping = TextWrapping.Wrap,
+                IsTextSelectionEnabled = textSelectionEnabled,
             };
 
             if (color != null)

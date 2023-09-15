@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
-using Microsoft.Toolkit.Uwp.Helpers;
 using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Media;
+using HtmlAgilityPack;
+using Microsoft.Toolkit.Uwp.Helpers;
 using XoW.Utils;
 
 namespace XoW.Services
@@ -29,7 +29,7 @@ namespace XoW.Services
 
         private static readonly Regex ThreadReferenceRegex = new Regex(@"^>> *(No\.)*\d+$", RegexOptions.Compiled);
 
-        public static async Task<List<TextBlock>> ParseHtmlIntoTextBlocks(string htmlString)
+        public static async Task<List<TextBlock>> ParseHtmlIntoTextBlocks(string htmlString, bool textSelectionEnabled = false)
         {
             var rootHtmlDoc = new HtmlDocument();
             rootHtmlDoc.LoadHtml(htmlString);
@@ -108,11 +108,11 @@ namespace XoW.Services
                     var referencedContent = await GetReferencedThread(referencedThreadId);
                     contentForThisTextBlock += $"\n{referencedContent}\n";
 
-                    textBlock = ComponentsBuilder.CreateTextBlock(contentForThisTextBlock, Colors.DarkGreen);
+                    textBlock = ComponentsBuilder.CreateTextBlock(contentForThisTextBlock, Colors.DarkGreen, textSelectionEnabled: textSelectionEnabled);
                 }
                 else
                 {
-                    textBlock = ComponentsBuilder.CreateTextBlock(deEntitizeContent);
+                    textBlock = ComponentsBuilder.CreateTextBlock(deEntitizeContent, textSelectionEnabled: textSelectionEnabled);
                 }
                 SetEmailHyperLinkInTextBlock(htmlDoc.DocumentNode, textBlock);
 
