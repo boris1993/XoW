@@ -11,7 +11,7 @@ jobs:
     name: Build packages
     runs-on: windows-latest
     env:
-      APP_PACKAGES_DIRECTORY: $pwd\AppPackages
+      APP_PACKAGES_DIRECTORY: $($pwd)\AppPackages
     steps:
       - uses: actions/checkout@v3
           
@@ -71,10 +71,7 @@ jobs:
         shell: pwsh
         run: |
           [xml]$manifest = Get-Content "$pwd\XoW\Package.appxmanifest"
-          echo "VERSION=$manifest.Package.Identity.Version" >> $env:GITHUB_ENV
-      
-      - shell: pwsh
-        run: tree ${{ env.APP_PACKAGES_DIRECTORY }} /f
+          echo "VERSION=$($manifest.Package.Identity.Version)" >> $env:GITHUB_ENV
 
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v3
