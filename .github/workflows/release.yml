@@ -12,14 +12,6 @@ jobs:
       APP_PACKAGES_DIRECTORY: $pwd\AppPackages
     steps:
       - uses: actions/checkout@v3
-
-      - name: Cache nuget packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
             
       - name: Bump version
         shell: pwsh
@@ -76,7 +68,6 @@ jobs:
           /verbosity:minimal
           /target:Rebuild
           /nodeReuse:false
-          /p:RestoreLockedMode=true
           /p:AppxBundle=Always
           /p:AppxPackageDir="${{ env.APP_PACKAGES_DIRECTORY }}"
           /p:UapAppxPackageBuildMode=StoreAndSideload
