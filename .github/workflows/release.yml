@@ -1,0 +1,91 @@
+name: Build packages
+
+on:
+  push:
+    tags: [ "v*.*.*" ]
+
+jobs:
+  build:
+    name: Build packages
+    runs-on: windows-latest
+    env:
+      APP_PACKAGES_DIRECTORY: $pwd\AppPackages
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache nuget packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+            
+      - name: Bump version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $tag = $tag.substring(1)
+          [xml]$manifest = Get-Content "$pwd\XoW\Package.appxmanifest"
+          $manifest.Package.Identity.Version = $tag
+          $manifest.save("$pwd\XoW\Package.appxmanifest")
+
+      - name: Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -a -m "chore: bump version"
+          git push origin HEAD:master
+
+      - name: Install signing certificate
+        shell: pwsh
+        env:
+          PFX_CONTENT: ${{ secrets.SIGNING_CERTIFICATE }}
+          SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
+        run: |
+          echo "Saving the certificate to $($env:RUNNER_TEMP)";
+          $pfxPath = Join-Path -Path $env:RUNNER_TEMP -ChildPath "cert.pfx";
+          $encodedBytes = [System.Convert]::FromBase64String($env:PFX_CONTENT);
+          Set-Content $pfxPath -Value $encodedBytes -AsByteStream;
+          echo "Installing certificate from $($env:RUNNER_TEMP)\cert.pfx";
+          Import-PfxCertificate -FilePath "$($env:RUNNER_TEMP)\cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String $env:SIGNING_CERTIFICATE_PASSWORD -Force -AsPlainText);
+
+      - name: Add AppConfig.xml to working directory
+        shell: pwsh
+        env:
+          APP_CONFIG_XML: ${{ secrets.APP_CONFIG_XML }}
+        run: |
+          echo "Adding AppConfig.xml to $($env:GITHUB_WORKSPACE)\XoW";
+          $filePath = Join-Path -Path "$($env:GITHUB_WORKSPACE)\XoW" -ChildPath "AppConfig.xml";
+          $encodedBytes = [System.Convert]::FromBase64String($env:APP_CONFIG_XML);
+          Set-Content $filePath -Value $encodedBytes -AsByteStream;
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+
+      - name: Build packages
+        shell: pwsh
+        run: >-
+          msbuild
+          "XoW.sln"
+          /restore
+          /m
+          /verbosity:minimal
+          /target:Rebuild
+          /nodeReuse:false
+          /p:AppxBundle=Always
+          /p:AppxPackageDir="${{ env.APP_PACKAGES_DIRECTORY }}"
+          /p:AppxPackageDir="$pwd\AppPackages"
+          /p:UapAppxPackageBuildMode=StoreAndSideload
+          /p:AppxBundlePlatforms="x86|x64|ARM|ARM64"
+          /p:configuration="Release"
+          /p:VisualStudioVersion="17.0"
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Packages
+          path: |
+            $($env:RUNNER_TEMP)\cert.pfx
+            AppPackages\XoW_${{ env.VERSION }}_Test\XoW_${{ env.VERSION }}_x86_x64_arm_arm64.msixbundle
+            AppPackages\XoW_${{ env.VERSION }}_x86_x64_arm_arm64_bundle.msixupload
