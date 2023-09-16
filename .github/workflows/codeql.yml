@@ -58,6 +58,28 @@ jobs:
         # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
 
+    - name: Install signing certificate
+      shell: pwsh
+      env:
+        PFX_CONTENT: ${{ secrets.SIGNING_CERTIFICATE }}
+        SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
+      run: |
+        echo "Saving the certificate to $($env:RUNNER_TEMP)";
+        $pfxPath = Join-Path -Path $env:RUNNER_TEMP -ChildPath "cert.pfx";
+        $encodedBytes = [System.Convert]::FromBase64String($env:PFX_CONTENT);
+        Set-Content $pfxPath -Value $encodedBytes -AsByteStream;
+        echo "Installing certificate from $($env:RUNNER_TEMP)\cert.pfx";
+        Import-PfxCertificate -FilePath "$($env:RUNNER_TEMP)\cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String $env:SIGNING_CERTIFICATE_PASSWORD -Force -AsPlainText);
+
+    - name: Add AppConfig.xml to working directory
+      shell: pwsh
+      env:
+        APP_CONFIG_XML: ${{ secrets.APP_CONFIG_XML }}
+      run: |
+        echo "Adding AppConfig.xml to $($env:GITHUB_WORKSPACE)\XoW";
+        $filePath = Join-Path -Path "$($env:GITHUB_WORKSPACE)\XoW" -ChildPath "AppConfig.xml";
+        $encodedBytes = [System.Convert]::FromBase64String($env:APP_CONFIG_XML);
+        Set-Content $filePath -Value $encodedBytes -AsByteStream;
 
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
     # If this step fails, then you should remove it and run the build manually (see below)
