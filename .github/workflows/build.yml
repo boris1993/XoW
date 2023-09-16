@@ -78,5 +78,5 @@ jobs:
         with:
           name: Packages
           path: |
-            XoW_${{ env.VERSION }}_Test\XoW_${{ env.VERSION }}_x86_x64_arm_arm64.msixbundle
-            XoW_${{ env.VERSION }}_x86_x64_arm_arm64_bundle.msixupload
+            AppPackages\XoW_${{ env.VERSION }}_Test\XoW_${{ env.VERSION }}_x86_x64_arm_arm64.msixbundle
+            AppPackages\XoW_${{ env.VERSION }}_x86_x64_arm_arm64_bundle.msixupload
