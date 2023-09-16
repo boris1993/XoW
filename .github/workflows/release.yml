@@ -26,10 +26,12 @@ jobs:
         run: |
           $tag = "${{ github.ref_name }}"
           $tag = $tag.substring(1)
+          $version = "$($tag).0"
           [xml]$manifest = Get-Content "$pwd\XoW\Package.appxmanifest"
-          $manifest.Package.Identity.Version = "$($tag).0"
+          $manifest.Package.Identity.Version = "$($version)"
           $manifest.save("$pwd\XoW\Package.appxmanifest")
-
+          echo "VERSION=$($version)" >> $env:GITHUB_ENV
+          
       - name: Push changes
         run: |
           git config --global user.name "github-actions[bot]"
