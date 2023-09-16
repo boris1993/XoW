@@ -38,6 +38,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Cache nuget packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
     - name: Install signing certificate
       shell: pwsh
       env:
