@@ -49,6 +49,7 @@ jobs:
           Set-Content $pfxPath -Value $encodedBytes -AsByteStream;
           echo "Installing certificate from $($env:RUNNER_TEMP)\cert.pfx";
           Import-PfxCertificate -FilePath "$($env:RUNNER_TEMP)\cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString -String $env:SIGNING_CERTIFICATE_PASSWORD -Force -AsPlainText);
+          echo "$CERT_PATH=$($pfxPath -replace '\\','/')" >> $env:GITHUB_ENV
 
       - name: Add AppConfig.xml to working directory
         shell: pwsh
@@ -73,6 +74,7 @@ jobs:
           /verbosity:minimal
           /target:Rebuild
           /nodeReuse:false
+          /p:RestoreLockedMode=true
           /p:AppxBundle=Always
           /p:AppxPackageDir="${{ env.APP_PACKAGES_DIRECTORY }}"
           /p:AppxPackageDir="$pwd\AppPackages"
@@ -81,11 +83,10 @@ jobs:
           /p:configuration="Release"
           /p:VisualStudioVersion="17.0"
 
-      - name: Upload workflow artifacts
-        uses: actions/upload-artifact@v3
+      - name: Upload release artifacts
+        uses: softprops/action-gh-release@v1
         with:
-          name: Packages
-          path: |
-            $($env:RUNNER_TEMP)\cert.pfx
-            AppPackages\XoW_${{ env.VERSION }}_Test\XoW_${{ env.VERSION }}_x86_x64_arm_arm64.msixbundle
-            AppPackages\XoW_${{ env.VERSION }}_x86_x64_arm_arm64_bundle.msixupload
+          files: |
+            ${{ env.CERT_PATH }}
+            ./XoW/AppPackages/XoW_${{ env.VERSION }}_Test/XoW_${{ env.VERSION }}_x86_x64_arm_arm64.msixbundle
+            ./XoW/AppPackages/XoW_${{ env.VERSION }}_x86_x64_arm_arm64_bundle.msixupload
