@@ -27,7 +27,7 @@ jobs:
           $tag = "${{ github.ref_name }}"
           $tag = $tag.substring(1)
           [xml]$manifest = Get-Content "$pwd\XoW\Package.appxmanifest"
-          $manifest.Package.Identity.Version = $tag
+          $manifest.Package.Identity.Version = "$($tag).0"
           $manifest.save("$pwd\XoW\Package.appxmanifest")
 
       - name: Push changes
