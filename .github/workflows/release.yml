@@ -79,7 +79,6 @@ jobs:
           /p:RestoreLockedMode=true
           /p:AppxBundle=Always
           /p:AppxPackageDir="${{ env.APP_PACKAGES_DIRECTORY }}"
-          /p:AppxPackageDir="$pwd\AppPackages"
           /p:UapAppxPackageBuildMode=StoreAndSideload
           /p:AppxBundlePlatforms="x86|x64|ARM|ARM64"
           /p:configuration="Release"
