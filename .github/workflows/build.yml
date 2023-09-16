@@ -11,7 +11,7 @@ jobs:
     name: Build packages
     runs-on: windows-latest
     env:
-      APP_PACKAGES_DIRECTORY: $($pwd)\AppPackages
+      APP_PACKAGES_DIRECTORY: $pwd\AppPackages
     steps:
       - uses: actions/checkout@v3
           
