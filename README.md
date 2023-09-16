@@ -1,7 +1,9 @@
 # X岛 on Windows
 
+[![Build packages](https://github.com/boris1993/XoW/actions/workflows/build.yml/badge.svg)](https://github.com/boris1993/XoW/actions/workflows/build.yml)
 [![Code analysis](https://github.com/boris1993/XoW/actions/workflows/code_analysis.yml/badge.svg)](https://github.com/boris1993/XoW/actions/workflows/code_analysis.yml)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fboris1993%2FXoW.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fboris1993%2FXoW?ref=badge_shield)
+[![GitHub release](https://img.shields.io/github/v/release/boris1993/XoW)](https://github.com/boris1993/XoW/releases/latest)
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=boris1993_XoW&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=boris1993_XoW)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=boris1993_XoW&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=boris1993_XoW)
