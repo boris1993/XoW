@@ -69,10 +69,10 @@ jobs:
       - shell: pwsh
         run: dir ${{ env.APP_PACKAGES_DIRECTORY }}
 
-#      - name: Upload workflow artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: Packages
-#          path: |
-#            .\AppPackages\XoW_*_Test\XoW_*.msixbundle
-#            .\AppPackages\XoW_*.msixupload
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Packages
+          path: |
+            ${{ env.APP_PACKAGES_DIRECTORY }}\XoW_*_Test\XoW_*.msixbundle
+            ${{ env.APP_PACKAGES_DIRECTORY }}\XoW_*.msixupload
