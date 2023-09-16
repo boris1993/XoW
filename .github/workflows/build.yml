@@ -59,6 +59,7 @@ jobs:
           /verbosity:minimal
           /target:Rebuild
           /nodeReuse:false
+          /p:RestoreLockedMode=true
           /p:AppxBundle=Always
           /p:AppxPackageDir="${{ env.APP_PACKAGES_DIRECTORY }}"
           /p:UapAppxPackageBuildMode=StoreAndSideload
