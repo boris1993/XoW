@@ -66,14 +66,20 @@ jobs:
           /p:AppxBundlePlatforms="x86|x64|ARM|ARM64"
           /p:configuration="Release"
           /p:VisualStudioVersion="17.0"
-          
+      
+      - name: Load package version
+        shell: pwsh
+        run: |
+          [xml]$manifest = Get-Content "$pwd\XoW\Package.appxmanifest"
+          echo "VERSION=$manifest.Package.Identity.Version" >> $env:GITHUB_ENV
+      
       - shell: pwsh
-        run: dir ${{ env.APP_PACKAGES_DIRECTORY }}
+        run: tree ${{ env.APP_PACKAGES_DIRECTORY }} /f
 
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Packages
           path: |
-            ${{ env.APP_PACKAGES_DIRECTORY }}\XoW_*_Test\XoW_*.msixbundle
-            ${{ env.APP_PACKAGES_DIRECTORY }}\XoW_*.msixupload
+            ${{ env.APP_PACKAGES_DIRECTORY }}\XoW_${{ env.VERSION }}_Test\XoW_${{ env.VERSION }}_x86_x64_arm_arm64.msixbundle
+            ${{ env.APP_PACKAGES_DIRECTORY }}\XoW_${{ env.VERSION }}_x86_x64_arm_arm64_bundle.msixupload
