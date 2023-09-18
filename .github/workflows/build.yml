@@ -13,7 +13,7 @@ jobs:
     env:
       APP_PACKAGES_DIRECTORY: $pwd\AppPackages
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install signing certificate
         shell: pwsh
