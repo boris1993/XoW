@@ -6,6 +6,8 @@ using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Documents;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using XoW.Models;
@@ -294,14 +296,78 @@ namespace XoW.Utils
             Thickness? margin = null,
             bool textSelectionEnabled = false)
         {
-            var textBlock = new TextBlock
+            TextBlock textBlock;
+            if (!content.Contains("[h]"))
             {
-                VerticalAlignment = VerticalAlignment.Top,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                Text = content,
-                TextWrapping = TextWrapping.Wrap,
-                IsTextSelectionEnabled = textSelectionEnabled,
-            };
+                textBlock = new TextBlock
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    Text = content,
+                    TextWrapping = TextWrapping.Wrap,
+                    IsTextSelectionEnabled = textSelectionEnabled,
+                };
+            }
+            else
+            {
+                textBlock = new TextBlock
+                {
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    TextWrapping = TextWrapping.Wrap,
+                    IsTextSelectionEnabled = textSelectionEnabled,
+                    DataContext = new TextBlockDataContext { },
+                };
+
+                int indexOfRun = 0;
+                var totalLength = content.Length;
+                var enteredHiddenBlock = false;
+                Run run;
+                while (content.Length > 0)
+                {
+                    var indexOfBeginHideMark = content.IndexOf("[h]");
+                    if (!enteredHiddenBlock && indexOfBeginHideMark >= 0)
+                    {
+                        run = new Run
+                        {
+                            Text = content.Substring(0, indexOfBeginHideMark),
+                        };
+
+                        textBlock.Inlines.Add(run);
+                        content = content.Substring(indexOfBeginHideMark + 3);
+
+                        enteredHiddenBlock = true;
+                        indexOfRun++;
+                        continue;
+                    }
+
+                    var indexOfEndHideMark = content.IndexOf("[/h]");
+                    if (indexOfEndHideMark > 0)
+                    {
+                        var text = content.Substring(0, indexOfEndHideMark);
+                        run = new Run
+                        {
+                            Text = new string('█', text.Length),
+                        };
+
+                        textBlock.Inlines.Add(run);
+                        content = content.Substring(indexOfEndHideMark + 4);
+                        (textBlock.DataContext as TextBlockDataContext).IndexAndOriginalTextOfHiddenContent.Add(indexOfRun, text);
+
+                        enteredHiddenBlock = false;
+                        indexOfRun++;
+                        continue;
+                    }
+
+                    run = new Run
+                    {
+                        Text = content,
+                    };
+                    textBlock.Inlines.Add(run);
+                    indexOfRun++;
+                    break;
+                }
+            }
 
             if (color != null)
             {
@@ -313,7 +379,40 @@ namespace XoW.Utils
                 textBlock.Margin = (Thickness)margin;
             }
 
+            textBlock.PointerEntered += UnhidingContent;
+            textBlock.PointerExited += HidingContent;
+
             return textBlock;
         }
+
+        private static void HidingContent(object sender, PointerRoutedEventArgs pointerRoutedEventArgs)
+        {
+            var textBlock = sender as TextBlock;
+            if (textBlock.DataContext is TextBlockDataContext dataContext)
+            {
+                foreach (var indexAndOriginalText in dataContext.IndexAndOriginalTextOfHiddenContent)
+                {
+                    var textLength = indexAndOriginalText.Value.Length;
+                    (textBlock.Inlines.ElementAt(indexAndOriginalText.Key) as Run).Text = new string('█', textLength);
+                }
+            }
+        }
+
+        private static void UnhidingContent(object sender, PointerRoutedEventArgs pointerRoutedEventArgs)
+        {
+            var textBlock = sender as TextBlock;
+            if (textBlock.DataContext is TextBlockDataContext dataContext)
+            {
+                foreach (var indexAndOriginalText in dataContext.IndexAndOriginalTextOfHiddenContent)
+                {
+                    (textBlock.Inlines.ElementAt(indexAndOriginalText.Key) as Run).Text = indexAndOriginalText.Value;
+                }
+            }
+        }
+    }
+
+    class TextBlockDataContext
+    {
+        public Dictionary<int, string> IndexAndOriginalTextOfHiddenContent = new Dictionary<int, string>();
     }
 }
