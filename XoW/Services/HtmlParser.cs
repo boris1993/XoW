@@ -63,7 +63,7 @@ namespace XoW.Services
                         linesOfHtmlString.Insert(insertLocation, newLine);
                         insertLocation++;
                     }
-                    //FIXME: i = i + linesOfHtmlString.size
+                    i = i + linesOfHtmlString.Count();
                 }
 
                 if (line.Contains("\n"))
@@ -77,7 +77,7 @@ namespace XoW.Services
                         linesOfHtmlString.Insert(insertLocation, newLine);
                         insertLocation++;
                     }
-                    //FIXME: i = i + linesOfHtmlString.size
+                    i = i + linesOfHtmlString.Count();
                 }
             }
 
