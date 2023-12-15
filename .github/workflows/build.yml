@@ -65,7 +65,7 @@ jobs:
           echo "VERSION=$($manifest.Package.Identity.Version)" >> $env:GITHUB_ENV
 
       - name: Upload workflow artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Packages
           path: |
