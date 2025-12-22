@@ -28,7 +28,7 @@ jobs:
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
-    runs-on: windows-latest
+    runs-on: windows-2022
     permissions:
       actions: read
       contents: read
@@ -90,16 +90,6 @@ jobs:
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
-
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v3
-
-    - name: Add UWP workload
-      run: choco install visualstudio2022-workload-universal
-
-    - name: Restore solution
-      shell: pwsh
-      run: nuget restore XoW.sln
 
     - name: Build
       run: |
