@@ -40,6 +40,8 @@ jobs:
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
+        with:
+          vs-version: '[18.0,]'
 
       - name: Build packages
         shell: pwsh
@@ -56,7 +58,7 @@ jobs:
           /p:UapAppxPackageBuildMode=StoreAndSideload
           /p:AppxBundlePlatforms="x86|x64|ARM|ARM64"
           /p:configuration="Release"
-          /p:VisualStudioVersion="18.1"
+          /p:VisualStudioVersion="18.0"
       
       - name: Load package version
         shell: pwsh
