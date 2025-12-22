@@ -41,6 +41,10 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Restore solution
+        shell: pwsh
+        run: nuget restore XoW.sln
+
       - name: Build packages
         shell: pwsh
         run: >-
@@ -56,7 +60,6 @@ jobs:
           /p:UapAppxPackageBuildMode=StoreAndSideload
           /p:AppxBundlePlatforms="x86|x64|ARM|ARM64"
           /p:configuration="Release"
-          /p:VisualStudioVersion="17.0"
       
       - name: Load package version
         shell: pwsh
