@@ -93,7 +93,7 @@ jobs:
 
     - name: Build
       run: |
-        msbuild "XoW.sln" /restore /m /t:Rebuild /nr:false /verbosity:minimal /p:RestoreLockedMode=true /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:AppxBundlePlatforms="x86|x64|ARM" /p:configuration="Debug" /p:VisualStudioVersion="17.0"
+        msbuild "XoW.sln" /restore /m /t:Rebuild /nr:false /verbosity:minimal /p:RestoreLockedMode=true /p:AppxBundle=Always /p:UapAppxPackageBuildMode=StoreUpload /p:AppxBundlePlatforms="x86|x64|ARM" /p:configuration="Debug" /p:VisualStudioVersion="18.1"
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

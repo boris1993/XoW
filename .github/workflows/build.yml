@@ -56,7 +56,7 @@ jobs:
           /p:UapAppxPackageBuildMode=StoreAndSideload
           /p:AppxBundlePlatforms="x86|x64|ARM|ARM64"
           /p:configuration="Release"
-          /p:VisualStudioVersion="17.0"
+          /p:VisualStudioVersion="18.1"
       
       - name: Load package version
         shell: pwsh
