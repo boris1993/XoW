@@ -90,8 +90,6 @@ jobs:
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
-      with:
-        vs-version: '[18.0,]'
 
     - name: Build
       run: |
