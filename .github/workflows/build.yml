@@ -39,7 +39,13 @@ jobs:
           Set-Content $filePath -Value $encodedBytes -AsByteStream;
 
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
+        uses: microsoft/setup-msbuild@v1
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+
+      - name: Add UWP workload
+        run: choco install visualstudio2022-workload-universal
 
       - name: Restore solution
         shell: pwsh
