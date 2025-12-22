@@ -14,7 +14,7 @@ namespace XoW.Services
 {
     public static class AiFaDianApiClient
     {
-        private const string QuerySponsor = "https://afdian.net/api/open/query-sponsor";
+        private const string QuerySponsor = "https://afdian.com/api/open/query-sponsor";
 
         private static readonly JsonSerializerSettings DefaultSerializerSettings = new JsonSerializerSettings
         {
