@@ -76,7 +76,7 @@ jobs:
           /p:VisualStudioVersion="17.0"
 
       - name: Upload release artifacts
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             ./AppPackages/XoW_${{ env.VERSION }}_Test/XoW_${{ env.VERSION }}_x86_x64_arm64.cer
