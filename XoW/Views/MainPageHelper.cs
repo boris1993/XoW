@@ -34,6 +34,22 @@ namespace XoW.Views
                 HttpClientService.ApplyCookie(currentCookieValue);
             }
 
+            //region 启动时设定正确的主题
+            var isDarkThemeEnabled = ApplicationConfigurationHelper.IsDarkThemeEnabled();
+            var frameworkElementRoot = Window.Current.Content as FrameworkElement;
+            if (frameworkElementRoot != null)
+            {
+                frameworkElementRoot.RequestedTheme = isDarkThemeEnabled ? ElementTheme.Dark : ElementTheme.Light;
+            }
+
+            GlobalState.ObservableObject.BackgroundAndBorderColorBrush = isDarkThemeEnabled
+                ? new SolidColorBrush(Windows.UI.Colors.Black)
+                : new SolidColorBrush(Windows.UI.Colors.LightGray);
+            GlobalState.ObservableObject.ListViewBackgroundColorBrush = isDarkThemeEnabled
+                ? new SolidColorBrush(Windows.UI.Colors.Black)
+                : new SolidColorBrush(Windows.UI.Colors.White);
+            //endregion
+
             CreateEmoticonButtons(NewThreadEmoticonWrapPanel, OnNewThreadEmoticonButtonClicked);
             CreateEmoticonButtons(NewReplyEmoticonWrapPanel, OnNewReplyEmoticonButtonClicked);
         }

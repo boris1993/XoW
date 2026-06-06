@@ -54,10 +54,10 @@ namespace XoW.Utils
             }
 
             var parsedCookies = cookieListComposite.Select(cookie => new AnoBbsCookie
-                {
-                    Name = cookie.Key,
-                    Cookie = cookie.Value.ToString()
-                })
+            {
+                Name = cookie.Key,
+                Cookie = cookie.Value.ToString()
+            })
                 .ToList();
 
             parsedCookies.ForEach(cookie => GlobalState.Cookies.Add(cookie));
@@ -65,7 +65,26 @@ namespace XoW.Utils
 
         public static void SetDarkThemeEnabled(bool isDarkThemeEnabled) => LocalSettings.Values[ApplicationSettingsKey.DarkThemeSelected] = isDarkThemeEnabled;
 
-        public static bool IsDarkThemeEnabled() => LocalSettings.Values.ContainsKey(ApplicationSettingsKey.DarkThemeSelected) && (bool)LocalSettings.Values[ApplicationSettingsKey.DarkThemeSelected];
+        public static bool IsDarkThemeEnabled()
+        {
+            if (!LocalSettings.Values.ContainsKey(ApplicationSettingsKey.DarkThemeSelected))
+            {
+                return false;
+            }
+
+            var raw = LocalSettings.Values[ApplicationSettingsKey.DarkThemeSelected];
+            if (raw is bool b)
+            {
+                return b;
+            }
+
+            if (bool.TryParse(raw.ToString(), out var parsed))
+            {
+                return parsed;
+            }
+
+            return false;
+        }
 
         public static void SetSubscriptionId(string subscriptionId) => LocalSettings.Values[ApplicationSettingsKey.SubscriptionId] = subscriptionId;
 
