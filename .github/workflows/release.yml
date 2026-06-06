@@ -71,7 +71,7 @@ jobs:
           /p:AppxBundle=Always
           /p:AppxPackageDir="${{ env.APP_PACKAGES_DIRECTORY }}"
           /p:UapAppxPackageBuildMode=StoreAndSideload
-          /p:AppxBundlePlatforms="x86|x64|ARM|ARM64"
+          /p:AppxBundlePlatforms="x86|x64|ARM64"
           /p:configuration="Release"
           /p:VisualStudioVersion="17.0"
 
@@ -79,6 +79,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./AppPackages/XoW_${{ env.VERSION }}_Test/XoW_${{ env.VERSION }}_x86_x64_arm_arm64.cer
-            ./AppPackages/XoW_${{ env.VERSION }}_Test/XoW_${{ env.VERSION }}_x86_x64_arm_arm64.msixbundle
-            ./AppPackages/XoW_${{ env.VERSION }}_x86_x64_arm_arm64_bundle.msixupload
+            ./AppPackages/XoW_${{ env.VERSION }}_Test/XoW_${{ env.VERSION }}_x86_x64_arm64.cer
+            ./AppPackages/XoW_${{ env.VERSION }}_Test/XoW_${{ env.VERSION }}_x86_x64_arm64.msixbundle
+            ./AppPackages/XoW_${{ env.VERSION }}_x86_x64_arm64_bundle.msixupload
