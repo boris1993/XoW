@@ -62,24 +62,8 @@ namespace XoW.Views
             var isDarkModeEnabled = ((ToggleSwitch)sender).IsOn;
             ApplicationConfigurationHelper.SetDarkThemeEnabled(isDarkModeEnabled);
 
-            #region 设定应用全局主题
-            var frameworkElementRoot = Window.Current.Content as FrameworkElement;
-            frameworkElementRoot.RequestedTheme = isDarkModeEnabled
-                ? ElementTheme.Dark
-                : ElementTheme.Light;
-            #endregion
-
-            #region 设定部分手动指定颜色的控件的新颜色
-            var borderAndBackgroundColor = isDarkModeEnabled
-                ? new SolidColorBrush(Colors.Black)
-                : new SolidColorBrush(Colors.LightGray);
-            GlobalState.ObservableObject.BackgroundAndBorderColorBrush = borderAndBackgroundColor;
-
-            var listViewBackgroundColor = isDarkModeEnabled
-                ? new SolidColorBrush(Colors.Black)
-                : new SolidColorBrush(Colors.White);
-            GlobalState.ObservableObject.ListViewBackgroundColorBrush = listViewBackgroundColor;
-            #endregion
+            // Apply theme changes via centralized helper
+            ThemeHelper.ApplyTheme(isDarkModeEnabled);
         }
 
         /// <summary>
